@@ -1,7 +1,33 @@
+imagem1
+ {
+   position: absolute;
+   top:0%;
+   right:10%;
+   left: 10%;
+ }
+
+ nav
+ {
+   position: absolute;
+   top: 30%;
+   right: 30%;
+   left: 30%;
+ }
+
+.button
+{
+  color: yellow;
+  background-color: red;
+  display: inline-block;
+  width: 10%;
+  height: 10%;
+  padding: 10% 10%;
+}
+
 section
 {
   position: absolute;
   top: 50%;
-  right: 33%;
-  left: 33%;
+  right: 10%;
+  left: 10%;
 }
