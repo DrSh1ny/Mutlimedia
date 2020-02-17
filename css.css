@@ -6,22 +6,40 @@ imagem1
    left: 10%;
  }
 
- nav
- {
-   position: absolute;
-   top: 30%;
-   right: 30%;
-   left: 30%;
- }
 
-.button
+
+menu
 {
+  position: absolute;
+  top: 30%;
+  right: 10%;
+  left: 10%;
+}
+
+#bt1
+{
+  position: absolute;
+  left:0%;
+  right: 90%;
   color: yellow;
-  background-color: red;
-  display: inline-block;
-  width: 10%;
-  height: 10%;
-  padding: 10% 10%;
+  background-color: green;
+
+}
+#bt2
+{
+  position: absolute;
+  left:30%;
+  right: 50%;
+  color: yellow;
+  background-color: green;
+}
+#bt3
+{
+  position: absolute;
+  left:90%;
+  right: 0%;
+  color: yellow;
+  background-color: green;
 }
 
 section
