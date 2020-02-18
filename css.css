@@ -90,3 +90,65 @@ main
    left: 0px;
 
  }
+
+.car
+{
+  position: absolute;
+  display: block;
+
+  top:  0%;
+  left: 0%;
+}
+
+ #img1
+ {
+  animation-name: car1;
+  animation-duration: 15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+ }
+
+
+ #img2
+ {
+   animation-name: car2;
+   animation-duration: 15s;
+   animation-timing-function: linear;
+   animation-iteration-count: infinite;
+ }
+
+
+ #img3
+ {
+   animation-name: car3;
+   animation-duration: 15s;
+   animation-timing-function: linear;
+   animation-iteration-count: infinite;
+ }
+
+ @keyframes car1
+ {
+   0% {opacity: 1;}
+   30% {opacity:1;}
+   35% {opacity:0;}
+   95% {opacity: 0;}
+}
+
+@keyframes car2
+{
+  0% {opacity: 0;}
+  30% {opacity:0;}
+  35% {opacity:1;}
+  60% {opacity: 1;}
+  66% {opacity: 0;}
+  100% {opacity: 0;}
+}
+
+@keyframes car3
+{
+  0% {opacity: 0;}
+  60%{opacity: 0;}
+  66%{opacity: 1;}
+  95% {opacity: 1;}
+  100% {opacity: 0;}
+}
