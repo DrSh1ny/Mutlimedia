@@ -38,6 +38,22 @@ nav
 
   width: 15%;
   height: 70%;
+
+  transition-property: all;
+  transition-duration: 0.6s;
+
+}
+
+.bt:hover
+{
+  background-color: #bebeda;
+
+}
+
+.bt:active
+{
+  background-color: #0e0e35;
+  color:white;
 }
 
 main
