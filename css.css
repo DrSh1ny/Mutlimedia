@@ -17,8 +17,8 @@ nav
   display: block;
   position: absolute;
   top: 40%;
-  left: 10%;
-  right: 10%;
+  left: 12.5%;
+  right: 12.5%;
   bottom: 50%;
 
 
@@ -39,3 +39,54 @@ nav
   width: 15%;
   height: 70%;
 }
+
+main
+{
+  display: block;
+  position: absolute;
+  top: 7%;
+  left: 33%;
+  right: 33%;
+  bottom: 63%;
+
+
+  background: radial-gradient(circle farthest-corner at 30% 60%, #8d8db1, 30%, #1a1a3c, 92%,#07071b);
+}
+
+#svg
+{
+
+  position: absolute;
+  left: 0%;
+}
+
+#slogan
+ {
+
+   line-height:  120%;
+   position: absolute;
+   display: block;
+   top: 33%;
+   bottom: 20%;
+   left: 65%;
+   right: 3%;
+
+   text-align: justify;
+   font-size: 75%;
+   color: white;
+
+ }
+
+ #logo
+ {
+   display: block;
+   overflow: hidden;
+ }
+
+ #track
+ {
+   position: fixed;
+   top: -100px;
+   left: 0px;
+
+ }
