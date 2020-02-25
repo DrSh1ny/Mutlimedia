@@ -4,7 +4,7 @@ Base:
   -fisica do jogo
   -Assets (plataformas, inimigos,backgrounds,som)
   -menu (modo historia,ajuda,creditos)
-  -Introducao à historia básica
+  -Introducao à historia **básica**
 
 
 Extra:
@@ -12,5 +12,3 @@ Extra:
   -Cutscenes
   -Logo Intro
   -Highscores (servidor/cookies)
-
-  
