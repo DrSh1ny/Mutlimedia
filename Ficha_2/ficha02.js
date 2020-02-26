@@ -19,7 +19,7 @@ function main()
 	var iteracoes=6;
 
 	var cor1="#03a78b";
-	var cor2="#c36998"
+	var cor2="#c36998";
 
 	var bounds=[];
 	var shapes=[];
@@ -28,10 +28,10 @@ function main()
 	var collisionCount=0;
 	var inclusionCount=0;
 
-	bounds.push(new Rectangle(-1000,0,1000,1000))
-	bounds.push(new Rectangle(cw,0,1000,1000))
-	bounds.push(new Rectangle(0,-1000,1000,1000))
-	bounds.push(new Rectangle(0,ch,1000,1000))
+	bounds.push(new Rectangle(-1000,0,1000,1000));
+	bounds.push(new Rectangle(cw,0,1000,1000));
+	bounds.push(new Rectangle(0,-1000,1000,1000));
+	bounds.push(new Rectangle(0,ch,1000,1000));
 
 	for(let i=0;i<iteracoes;i++){
 		var val=true;
