@@ -69,7 +69,3 @@ class Circle extends Shape
     ctx.fill();
 	}
 }
-
-
-
-/* add your code */

@@ -16,54 +16,61 @@ function main()
 
 	/* add your code */
 	var maxDim=50;
-	var iteracoes=1000;
+	var iteracoes=6;
 
 	var cor1="#03a78b";
 	var cor2="#c36998"
 
+	var bounds=[];
 	var shapes=[];
 
-	shapes.push(new Rectangle(-1000,0,1000,1000))
-	shapes.push(new Rectangle(cw,0,1000,1000))
-	shapes.push(new Rectangle(0,-1000,1000,1000))
-	shapes.push(new Rectangle(0,ch,1000,1000))
 
+	var collisionCount=0;
+	var inclusionCount=0;
 
-	for(let i=0,onezero=0;i<iteracoes;i++){
-		var val=false;
-		while(val!=true){
+	bounds.push(new Rectangle(-1000,0,1000,1000))
+	bounds.push(new Rectangle(cw,0,1000,1000))
+	bounds.push(new Rectangle(0,-1000,1000,1000))
+	bounds.push(new Rectangle(0,ch,1000,1000))
+
+	for(let i=0;i<iteracoes;i++){
+		var val=true;
+		while(val==true){
+			var comp=Math.floor(Math.random()*maxDim+1);
+			var larg=Math.floor(Math.random()*maxDim+1);
+
+			console.log(comp + " " + larg);
 			var x=Math.floor(Math.random()*cw);
 			var y=Math.floor(Math.random()*ch);
-			var dim=Math.floor(Math.random()*maxDim);
 
-			//decide between a rectangle and a circle
-			onezero=Math.floor(Math.random()+0.5);
+			var onezero=Math.floor(Math.random()+0.5);
 
-			switch (onezero) {
-				case 0:
-
-					var novo=new Circle(x,y,dim);
-
-					if(checkCollision(shapes,novo)==false){
-						shapes.push(novo);
-						novo.draw(cor1);
-						val=true;
-					}
-					break;
-
-				case 1:
-
-					var novo=new Rectangle(x,y,dim,dim);
-
-					if(checkCollision(shapes,novo)==false){
-						shapes.push(novo);
-						novo.draw(cor2);
-						val=true;
-					}
-					break;
-				}
+			if(onezero==0){
+				var novo=new Circle(x,y,comp);
 			}
+			else {
+				var novo=new Rectangle(x,y,comp,larg);
+			}
+
+
+			if(checkCollision(bounds,novo)==0){
+				if(onezero==0){
+					novo.draw(cor1);
+				}
+				else {
+					novo.draw(cor2);
+				}
+
+				collisionCount+=checkCollision(shapes,novo);
+				inclusionCount+=checkInclusion(shapes,novo);
+				shapes.push(novo);
+
+				val=false;
+			}
+
 		}
+	}
+	console.log(collisionCount + " "+inclusionCount);
 }
 
 
@@ -74,21 +81,49 @@ function collision(shapeA,shapeB)
 	if(((shapeA.right > shapeB.left) && (shapeA.left< shapeB.right) && (shapeA.bot> shapeB.top) && (shapeA.top < shapeB.bot))){
 		collided=true;
 	}
-	console.log(collided);
+
 	return collided;
+}
+
+function inclusion(shapeA,shapeB)
+{
+	var Bincluded=false;
+	var Aincluded=false;
+
+	if(((shapeA.right > shapeB.right) && (shapeA.left< shapeB.left) && (shapeA.bot> shapeB.bot) && (shapeA.top < shapeB.top))){
+		Bincluded=true;
+	}
+
+	if(((shapeB.right > shapeA.right) && (shapeB.left< shapeA.left) && (shapeB.bot> shapeA.bot) && (shapeB.top < shapeA.top))){
+		Aincluded=true;
+	}
+
+
+	return Bincluded||Aincluded;
 }
 
 
 function checkCollision(shapes,shapeA)
 {
+	var count=0;
 	var arrayLength = shapes.length;
 	for (let i=0; i < arrayLength; i++) {
-		var val=collision(shapes[i],shapeA);
-		if(val==true)
-		{
-			return true;
+		if(collision(shapes[i],shapeA)==true){
+			count++;
 		}
-
 	}
-	return false;
+	return count;
+}
+
+
+function checkInclusion(shapes,shapeA)
+{
+	var count=0;
+	var arrayLength = shapes.length;
+	for (let i=0; i < arrayLength; i++) {
+		if(inclusion(shapes[i],shapeA)==true){
+			count++;
+		}
+	}
+	return count;
 }
