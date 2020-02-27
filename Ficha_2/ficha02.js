@@ -16,7 +16,7 @@ function main()
 
 	/* add your code */
 	var maxDim=50;
-	var iteracoes=6;
+	var iteracoes=20;
 
 	var cor1="#03a78b";
 	var cor2="#c36998";
@@ -28,6 +28,8 @@ function main()
 	var collisionCount=0;
 	var inclusionCount=0;
 
+
+	//bounds.push(new Rectangle(100,100,300,300));
 	bounds.push(new Rectangle(-1000,0,1000,1000));
 	bounds.push(new Rectangle(cw,0,1000,1000));
 	bounds.push(new Rectangle(0,-1000,1000,1000));
@@ -39,7 +41,7 @@ function main()
 			var comp=Math.floor(Math.random()*maxDim+1);
 			var larg=Math.floor(Math.random()*maxDim+1);
 
-			console.log(comp + " " + larg);
+			//console.log(comp + " " + larg);
 			var x=Math.floor(Math.random()*cw);
 			var y=Math.floor(Math.random()*ch);
 
@@ -70,7 +72,7 @@ function main()
 
 		}
 	}
-	console.log(collisionCount + " "+inclusionCount);
+	console.log("Numero de Interseções: "+collisionCount + "\tNumero de Inclusões: "+inclusionCount);
 }
 
 
