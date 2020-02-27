@@ -18,8 +18,8 @@ function main()
 	var maxDim=50;
 	var iteracoes=20;
 
-	var cor1="#03a78b";
-	var cor2="#c36998";
+	var cor1="blue";	//cor do retangulo
+	var cor2="red"; //cor do circulo
 
 	var bounds=[];
 	var shapes=[];
