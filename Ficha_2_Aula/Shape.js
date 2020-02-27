@@ -8,6 +8,8 @@ class Shape
 		this.y = y;
 
 
+
+
 	}
 
 	toString()
@@ -26,21 +28,17 @@ class Rectangle extends Shape
 		this.comp=comp;
 
 
-		//for collision detection
-		//computed prior to detection (not ideal, could be only if necessary)
-		this.left=this.x;
-		this.right=this.x+this.larg;
-		this.top=this.y;
-		this.bot=this.y+this.comp;
 	}
 
-	draw(cor)
+	draw(cor,ctx)
 	{
-		var canvas = document.getElementById("myCanvas");
-		var ctx = canvas.getContext("2d");
 
 		ctx.fillStyle = cor;
 		ctx.fillRect(this.x, this.y, this.comp, this.larg);
+	}
+
+	hitbox(){
+		return [x,x+comp,y,y+larg];
 	}
 }
 
@@ -53,22 +51,24 @@ class Circle extends Shape
 		super(x,y);
 		this.raio=raio;
 
-		//for collision detection
-		//computed prior to detection (not ideal, could be only if necessary)
-		this.left=this.x-raio;
-		this.right=this.x+this.raio;
-		this.top=this.y-raio;
-		this.bot=this.y+this.raio;
+		
+
+
 	}
 
-	draw(cor)
+	draw(cor,ctx)
 	{
-		var canvas = document.getElementById("myCanvas");
-		var ctx = canvas.getContext("2d");
+
 
 		ctx.beginPath();
     ctx.arc(this.x, this.y, this.raio, 0, 2 * Math.PI, false);
     ctx.fillStyle = cor;
     ctx.fill();
 	}
+
+	hitbox(){
+		return [x-raio,x+raio,y-raio,y+raio];
+
+	}
+
 }
