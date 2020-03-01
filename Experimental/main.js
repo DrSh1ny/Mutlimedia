@@ -14,8 +14,9 @@ function main()
 	var cw = canvas.width;
 	var ch = canvas.height;
 
-	setInterval(function(){ alert("Hello"); }, 3000);
-
+	var monstro=new Monster();
+	window.setTimeInterval(monstro.render(ctx,monstro.image,monstro.state),250);
+	window.setTimeInterval(monstro.changeState(),1000);
 
 }
 

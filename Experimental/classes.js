@@ -39,8 +39,8 @@ changeState(){
 }
 
 render(context,image,state){
+    window.requestAnimationFrame();
     context.clearRect(0, 0, 64, 64);
-    sleep(1000);
     image.onload=function(){
     context.drawImage(image,64*state, 0, 64, 64,0, 0, 64, 64);
   }
