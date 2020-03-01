@@ -14,6 +14,7 @@ function main()
 	var cw = canvas.width;
 	var ch = canvas.height;
 
+<<<<<<< HEAD
 	var monstro=new Monster();
 	window.setTimeInterval(monstro.render(ctx,monstro.image,monstro.state),250);
 	window.setTimeInterval(monstro.changeState(),1000);
@@ -24,3 +25,8 @@ function main()
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+=======
+	
+
+}
+>>>>>>> 83e0cbf9cc7ac034f378175cbfd17e8389ab76d9
