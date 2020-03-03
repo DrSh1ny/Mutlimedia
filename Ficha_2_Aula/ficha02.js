@@ -19,7 +19,7 @@ function main()
 
 
 	var n=5;
-	var maxDim=300;
+	var maxDim=200;
 
 	var shapes=[];
 	//var threshold=0.5;
@@ -51,6 +51,7 @@ function main()
 			novo.draw(corRectangle,ctx);
 
 		}
+		
 		shapes.push(novo);
 
 	}
@@ -79,7 +80,7 @@ function colisao(shapes)
 			let hitB=shapeB.hitbox();
 
 
-			if(hitA[2]>hitB[3] || shapeA.bot<shapeB.top || shapeA.left>shapeB.right || shapeA.right<shapeB.left){
+			if(hitA[2]>hitB[3] || hitA[3]<hitB[2] || hitA[0]>hitB[1] || hitA[1]<hitB[0]){
 				continue;
 			}
 
@@ -101,13 +102,20 @@ function inclusao(shapes)
 			let shapeB=shapes[j];
 
 
-			if((shapeA.top>shapeB.bot && shapeA.bot<shapeB.top && shapeA.left>shapeB.right || shapeA.right<shapeB.left)){
+			let hitA=shapeA.hitbox();
+			let hitB=shapeB.hitbox();
+
+			if(hitA[0]>hitB[0] && hitA[1]<hitB[1] && hitA[2]>hitB[2] && hitA[3]<hitB[3]){
+				count++;
 				continue;
 			}
-			count++;
+
+			if(hitA[0]<hitB[0] && hitA[1]>hitB[1] && hitA[2]<hitB[2] && hitA[3]>hitB[3]){
+				count++;
+			}
+
 		}
 	}
 
 	return count;
-
 }
