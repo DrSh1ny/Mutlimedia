@@ -1,0 +1,52 @@
+body
+{
+	margin: 0px;
+}
+
+iframe, nav
+{	
+	width: 550px;
+	margin: auto;
+}
+
+iframe
+{
+	height: 390px;
+	display: block;
+	border: none;
+}
+
+nav
+{
+	height: 30px;
+}
+
+iframe, nav, button
+{
+	background: gray;
+}
+
+* {
+    outline: 0;
+}
+
+button
+{
+	border: none;
+	cursor: pointer;
+	margin: 0px;
+	padding: 0px;
+	padding: 0px;
+	position: relative;	
+	left: 510px;
+	top: 3px;		
+}
+
+button img
+{
+	margin: 0px;
+	width: 24px;
+	height: 24px;
+}
+
+

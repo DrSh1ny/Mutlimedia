@@ -1,0 +1,59 @@
+main
+{
+	background: black;
+}
+
+section
+{
+	color: white;
+	text-align: center;
+	position:absolute;
+	margin-left: 87px;
+	margin-top: 100px;
+	width: 376px;
+	height: 75px;	
+}
+
+section#animStart
+{
+	visibility: hidden;
+	animation: fadeInOut 4s linear 0s;	
+}
+
+section#animLast
+{
+	visibility: hidden;
+	animation: fadeInOut 4s linear 4s;
+}
+
+@keyframes fadeInOut
+{
+	0% {visibility: visible; opacity: 0;}
+	60% {opacity: 1;} 
+	75% {opacity: 0;} 
+	100% {opacity: 0; visibility: hidden;}
+}
+
+h1
+{
+	font: bold 20px Helvetica;
+}
+
+p
+{
+	font: 12px Helvetica;
+}
+
+video
+{
+	display: none;
+	width: 360px;
+	height: 288px;
+	position: relative;
+	left: 95px;
+	top: 51px;
+}
+
+* {
+    outline: 0;
+}

@@ -1,0 +1,38 @@
+main
+{
+	background: black;
+}
+
+section
+{
+	color: white;	
+	text-align: center;
+	position:relative;
+	left: 85px;
+	top: 390px; /*25px*/
+	width: 380px;
+	height: 0px; /*340px;*/	
+	overflow: hidden;
+	animation: showCredits linear 8s;
+}
+
+@keyframes showCredits
+{
+	72% {height: 340px; top: 50px;}
+	80% {height: 340px; top: 25px;}
+	100% {height: 340px; top: 25px;}
+}
+
+h1
+{
+	font: bold 20px Helvetica;
+}
+
+p
+{
+	font: 12px Helvetica;
+}
+
+* {
+    outline: 0;
+}
