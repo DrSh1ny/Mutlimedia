@@ -4,7 +4,7 @@ body
 }
 
 iframe, nav
-{	
+{
 	width: 550px;
 	margin: auto;
 }
@@ -24,7 +24,18 @@ nav
 iframe, nav, button
 {
 	background: gray;
+
+	animation: ended linear 0.5s;
+	animation-play-state: paused;
+	animation-fill-mode: forwards
 }
+
+@keyframes ended
+{
+	from {background: grey;}
+	to {background: white;}
+}
+
 
 * {
     outline: 0;
@@ -37,9 +48,9 @@ button
 	margin: 0px;
 	padding: 0px;
 	padding: 0px;
-	position: relative;	
+	position: relative;
 	left: 510px;
-	top: 3px;		
+	top: 3px;
 }
 
 button img
@@ -48,5 +59,3 @@ button img
 	width: 24px;
 	height: 24px;
 }
-
-

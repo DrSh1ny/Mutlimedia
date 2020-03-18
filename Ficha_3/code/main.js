@@ -63,6 +63,14 @@ function messageReceived(ev) {
 
 	if(ev.data=="Ended 3"){
 		hidePage(3);
+		//var navi=this.document.getElementsByTagName("nav")[0];
+		//navi.remove();
+		//var frm=this.document.getElementsByTagName("iframe")[0];
+		//frm.remove();
+		var frm=this.document.getElementsByTagName("iframe")[0];
+		frm.style.animationPlayState="running";
+		var navi=this.document.getElementsByTagName("nav")[0];
+		navi.style.animationPlayState="running";
 	}
 
 }
