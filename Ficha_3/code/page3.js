@@ -7,11 +7,12 @@
 
 function main()
 {
-	/*
-	ADD CODE
-	*/
+	window.addEventListener("animationend", sendMessage);
 }
 
-/*
-ADD CODE
-*/
+
+function sendMessage() {
+	var idMain=window.parent;
+	idMain.postMessage("Ended 3", "*");
+
+}

@@ -60,4 +60,9 @@ function messageReceived(ev) {
 	if(ev.data=="Ended 1"){
 		showPage(2);
 	}
+
+	if(ev.data=="Ended 3"){
+		hidePage(3);
+	}
+
 }
