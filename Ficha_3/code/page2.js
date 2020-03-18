@@ -150,14 +150,7 @@ function eventHandler(ev,currentPage,buttons,listener,ID){
 		document.onkeydown = function(e) {
 			if(e.keyCode == 27){
 				clearInterval(ID);
-				buttons[0].style.opacity = 1;
-				buttons[0].addEventListener("click", listener);
-				buttons[1].style.opacity = 1;
-				buttons[1].addEventListener("click", listener);
-				buttons[2].style.opacity = 1;
-				buttons[2].addEventListener("click", listener);
-				buttons[3].style.opacity = 1;
-				buttons[3].addEventListener("click", listener);
+				disable(buttons,listener,currentPage,0);
 			}
 			console.log(currentPage);
 		}
