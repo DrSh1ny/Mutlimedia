@@ -91,7 +91,8 @@ function previousSlide(currentPage, buttons, listener){
 
 
 function slideShow(newFunction){
-	var ID = window.setInterval(newFunction, 2000);
+	newFunction();
+	var ID = window.setInterval(newFunction,2000);
 	return ID;
 
 }
@@ -171,16 +172,16 @@ function eventHandler(ev,currentPage,buttons,listener,ID){
 function disable(buttons,listener,currentPage, slideShow = 0){
 	if(slideShow){
 		buttons[0].style.opacity = 0.3;
-		buttons[0].disable="true";
+		buttons[0].disabled=true;
 		buttons[0].style.cursor="initial";
 		buttons[1].style.opacity = 0.3;
-		buttons[1].disable="true";
+		buttons[1].disabled=true;
 		buttons[1].style.cursor="initial";
 		buttons[2].style.opacity = 0.3;
-		buttons[2].disable="true";
+		buttons[2].disabled=true;
 		buttons[2].style.cursor="initial";
 		buttons[3].style.opacity = 0.3;
-		buttons[3].disable="true";
+		buttons[3].disabled=true;
 		buttons[3].style.cursor="initial";
 
 
