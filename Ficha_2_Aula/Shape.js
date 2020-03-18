@@ -38,7 +38,7 @@ class Rectangle extends Shape
 	}
 
 	hitbox(){
-		return [x,x+comp,y,y+larg];
+		return [this.x,this.x+this.comp,this.y,this.y+this.larg]; //left right top bot
 	}
 }
 
@@ -51,7 +51,7 @@ class Circle extends Shape
 		super(x,y);
 		this.raio=raio;
 
-		
+
 
 
 	}
@@ -67,7 +67,7 @@ class Circle extends Shape
 	}
 
 	hitbox(){
-		return [x-raio,x+raio,y-raio,y+raio];
+		return [this.x-this.raio,this.x+this.raio,this.y-this.raio,this.y+this.raio]; //left right top bot
 
 	}
 

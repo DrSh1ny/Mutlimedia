@@ -19,7 +19,7 @@ function main()
 
 
 	var n=5;
-	var maxDim=300;
+	var maxDim=200;
 
 	var shapes=[];
 	//var threshold=0.5;
@@ -51,16 +51,14 @@ function main()
 			novo.draw(corRectangle,ctx);
 
 		}
+
 		shapes.push(novo);
 
 	}
 
 
-	var colisoes=colisao(shapes);
-	console.log(colisoes);
-
-	var inclusoes=inclusao(shapes);
-	console.log(inclusoes);
+	var novo=colisaoInclusao(shapes);
+	console.log("Colisões: "+novo[0]+"\nInclusões: "+novo[1]);
 }
 
 
@@ -79,7 +77,7 @@ function colisao(shapes)
 			let hitB=shapeB.hitbox();
 
 
-			if(hitA[2]>hitB[3] || shapeA.bot<shapeB.top || shapeA.left>shapeB.right || shapeA.right<shapeB.left){
+			if(hitA[2]>hitB[3] || hitA[3]<hitB[2] || hitA[0]>hitB[1] || hitA[1]<hitB[0]){
 				continue;
 			}
 
@@ -101,13 +99,54 @@ function inclusao(shapes)
 			let shapeB=shapes[j];
 
 
-			if((shapeA.top>shapeB.bot && shapeA.bot<shapeB.top && shapeA.left>shapeB.right || shapeA.right<shapeB.left)){
+			let hitA=shapeA.hitbox();
+			let hitB=shapeB.hitbox();
+
+
+			//shape A dentro de shape B
+			if(hitA[0]>hitB[0] && hitA[1]<hitB[1] && hitA[2]>hitB[2] && hitA[3]<hitB[3]){
+				count++;
 				continue;
 			}
-			count++;
+
+
+
 		}
 	}
 
 	return count;
+}
 
+
+function colisaoInclusao(shapes){
+	var countColision=0;
+	var countInclusion=0;
+
+	for(let i=0;i<shapes.length;i++){
+		for(let j=i+1;j<shapes.length;j++){
+
+			let shapeA=shapes[i];
+			let shapeB=shapes[j];
+
+
+			let hitA=shapeA.hitbox();
+			let hitB=shapeB.hitbox();
+
+
+			let count=0;
+
+			if(hitA[0]>hitB[0] && hitA[1]<hitB[1] && hitA[2]>hitB[2] && hitA[3]<hitB[3]){
+				countInclusion++;
+			}
+
+			if(!(hitA[2]>hitB[3] || hitA[3]<hitB[2] || hitA[0]>hitB[1] || hitA[1]<hitB[0])){
+				countColision++;
+			}
+
+
+
+		}
+	}
+
+	return [countColision, countInclusion];
 }
