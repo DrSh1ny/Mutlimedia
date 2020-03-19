@@ -38,19 +38,16 @@ button img
 #photo
 {
 	width: 300px;
-	left: 15px;
-	background: blue; /* remover */
+	left: 15px; /* remover */
 }
 
 #text
 {
 	width: 200px;
 	left: 25px;
-	border: none;
-	background: yellow;	 /*remover*/
+	border: none;	 /*remover*/
 }
 
 * {
-		controls: true;
     outline: 0;
 }
