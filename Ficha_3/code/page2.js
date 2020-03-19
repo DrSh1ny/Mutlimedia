@@ -46,7 +46,7 @@ function main()
 }
 
 
-function showPage(currentPage){
+function showPage(currentPage){		//mudar source consoante n pagina
 	var text = document.getElementById("text");
 	var image = document.getElementById("photo");
 	if(currentPage < 10){
@@ -90,11 +90,10 @@ function previousSlide(currentPage, buttons, listener){
 
 
 
-function slideShow(newFunction){
+function slideShow(newFunction){	//chama nextSlide 2 em 2 seg
 	newFunction();
 	var ID = window.setInterval(newFunction,2000);
 	return ID;
-
 }
 
 function sound(ev){
@@ -132,7 +131,7 @@ function eventHandler(ev,currentPage,buttons,listener,ID){
 	}
 	else if(button == buttons[4].id){
 
-		var newFunction = function(){
+		var newFunction = function(){		//timeInterval
 
 
 			if(currentPage != 16){
@@ -147,7 +146,7 @@ function eventHandler(ev,currentPage,buttons,listener,ID){
 
 		ID = slideShow(newFunction);
 
-		document.onkeydown = function(e) {
+		document.onkeydown = function(e) {	//premir ESC
 			if(e.keyCode == 27){
 				clearInterval(ID);
 				disable(buttons,listener,currentPage,0);
