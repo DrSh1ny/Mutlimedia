@@ -11,7 +11,6 @@ function main()
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	var spArray;  //sprite array
-
 	canvas.addEventListener("initend", initEndHandler);
 	init(ctx);  //carregar todos os componentes
 
@@ -37,10 +36,10 @@ function main()
 function init(ctx)
 {
 	var nLoad = 0;
-	var totLoad = 1;
+	var totLoad = 2;
 	var spArray = new Array(totLoad);
-	var img;
-
+	var imgCar,imgTurb;
+	var canvas = document.getElementById("canvas");
 	//estilos de texto
 	ctx.fillStyle = "#993333";
 	ctx.font = "12px helvetica";	
@@ -48,27 +47,53 @@ function init(ctx)
 	ctx.textAlign = "center";  
 
 	//carregar imagens e criar sprites
-	var img = new Image(); 
-	img.addEventListener("load", imgLoadedHandler);
-	img.id="car";
-	img.src = "resources/car.png";  //dá ordem de carregamento da imagem
+	var imgCar = new Image(); 
+	imgCar.addEventListener("load", imgLoadedHandler);
+	imgCar.id="car";
+	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
+
+	var imgTurb = new Image();
+	imgTurb.addEventListener("load",imgLoadedHandler);
+	imgTurb.id="turbo";
+	imgTurb.src="resources/turbo.png";
+
 
 	function imgLoadedHandler(ev)
 	{
-		var img = ev.target;
-		var nw = img.naturalWidth;
-		var nh = img.naturalHeight;
-		var sp = new SpriteImage(0, 0, nw/4, nh/4, 1, false, img);
-		spArray[0] = sp;
+		switch (ev.target.id) {
+			case "car":
+				
+				var img = ev.target;
+				var nw = img.naturalWidth;
+				var nh = img.naturalHeight;
+				var sp = new SpriteImage(0, 0, nw/4, nh/4, 1, false, img);
+				spArray[0] = sp;
 
-		nLoad++;		
+				nLoad++;		
+				break;
+			case "turbo":
+				var img = ev.target;
+				var nw = img.naturalWidth;
+				var nh = img.naturalHeight;
+				var sp = new SpriteImage(canvas.width/2, 0, nw, nh, 1, true, img);
+				spArray[1] = sp;
 
-		if (nLoad == totLoad)
-		{
-			var ev2 = new Event("initend");
-			ev2.spArray = spArray;
-			ctx.canvas.dispatchEvent(ev2);
+				nLoad++;		
+
+				
+				break;
+			default:
+				break;
 		}
+		if (nLoad == totLoad)
+				{
+					var ev2 = new Event("initend");
+					ev2.spArray = spArray;
+					ctx.canvas.dispatchEvent(ev2);
+					
+					
+				}
+		
 	}	
 }
 
@@ -85,10 +110,11 @@ function startAnim(ctx, spArray)
 function draw(ctx, spArray)
 {
 	var dim = spArray.length;
-
+	console.log(spArray.length)
 	for (let i = 0; i < dim; i++)
 	{
 		spArray[i].draw(ctx);
+		
 	}
 }
 

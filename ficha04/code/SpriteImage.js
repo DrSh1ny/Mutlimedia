@@ -40,6 +40,7 @@ class SpriteImage
 		this.x = this.xIni;
 		this.y = this.yIni;
 		this.clickable = this.clickableIni;
+
 	}
 
 
@@ -52,6 +53,32 @@ class SpriteImage
 			return true;
 		else
 			return false;
+	}
+
+	getData(){
+		var canvas= document.createElement("canvas");
+		canvas.width = this.width;
+		canvas.height = this.height;
+		canvas.style.left = this.x;
+		canvas.style.top = this.y;
+		ctx = canvas.getContext("2d");
+		ctx.drawImage(this.img);
+		return ctx.getData();
+	}
+
+	collisionPixel(img){
+		var mx = img.x;
+		var my = img.y;
+		if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height){
+			img.img.getData()
+			if(){
+
+			}else
+				return false
+		}
+		else
+			return false;
+
 	}
 
 
