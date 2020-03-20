@@ -13,6 +13,8 @@ function main()
 	var spArray;  //sprite array
 	canvas.addEventListener("initend", initEndHandler);
 	init(ctx);  //carregar todos os componentes
+	
+	
 
 	//funções locais para gestão de eventos
 	function initEndHandler(ev)
@@ -48,11 +50,13 @@ function init(ctx)
 
 	//carregar imagens e criar sprites
 	var imgCar = new Image();
+	
 	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.id="car";
 	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
 
 	var imgTurb = new Image();
+	
 	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.id="turbo";
 	imgTurb.src="resources/turbo.png";
@@ -183,7 +187,7 @@ function render(ctx, spArray, reqID, dt)
 //--- interacção com o rato
 //-------------------------------------------------------------
 function canvasClickHandler(ev, ctx, spArray)
-{
+{	
 	if (spArray[0].clickedBoundingBox(ev))
 	{
 		spArray[0].reset(ev, ctx);
