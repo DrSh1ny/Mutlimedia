@@ -17,9 +17,9 @@ function main()
 	//funções locais para gestão de eventos
 	function initEndHandler(ev)
 	{
-		//instalar listeners do rato	
+		//instalar listeners do rato
 		ctx.canvas.addEventListener("click", cch);
-		
+
 		spArray = ev.spArray;
 		//iniciar a animação
 		startAnim(ctx, spArray);
@@ -27,8 +27,8 @@ function main()
 
 	var cch = function(ev)
 	{
-		canvasClickHandler(ev, ctx, spArray);	
-	}	
+		canvasClickHandler(ev, ctx, spArray);
+	}
 }
 
 
@@ -42,12 +42,12 @@ function init(ctx)
 	var canvas = document.getElementById("canvas");
 	//estilos de texto
 	ctx.fillStyle = "#993333";
-	ctx.font = "12px helvetica";	
-	ctx.textBaseline = "bottom"; 
-	ctx.textAlign = "center";  
+	ctx.font = "12px helvetica";
+	ctx.textBaseline = "bottom";
+	ctx.textAlign = "center";
 
 	//carregar imagens e criar sprites
-	var imgCar = new Image(); 
+	var imgCar = new Image();
 	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.id="car";
 	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
@@ -62,14 +62,14 @@ function init(ctx)
 	{
 		switch (ev.target.id) {
 			case "car":
-				
+
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
 				var sp = new SpriteImage(0, 0, nw/4, nh/4, 1, false, img);
 				spArray[0] = sp;
 
-				nLoad++;		
+				nLoad++;
 				break;
 			case "turbo":
 				var img = ev.target;
@@ -78,9 +78,7 @@ function init(ctx)
 				var sp = new SpriteImage(canvas.width/2, 0, nw, nh, 1, true, img);
 				spArray[1] = sp;
 
-				nLoad++;		
-
-				
+				nLoad++;
 				break;
 			default:
 				break;
@@ -90,19 +88,19 @@ function init(ctx)
 					var ev2 = new Event("initend");
 					ev2.spArray = spArray;
 					ctx.canvas.dispatchEvent(ev2);
-					
-					
+
+
 				}
-		
-	}	
+
+	}
 }
 
 
 //iniciar animação
-function startAnim(ctx, spArray)
+function startAnim(ctx, spArray)		//primeira chamada 
 {
 	draw(ctx, spArray);
-	animLoop(ctx, spArray);	
+	animLoop(ctx, spArray);
 }
 
 
@@ -114,7 +112,7 @@ function draw(ctx, spArray)
 	for (let i = 0; i < dim; i++)
 	{
 		spArray[i].draw(ctx);
-		
+
 	}
 }
 
@@ -135,8 +133,8 @@ function clear(ctx, spArray)
 //--- controlo da animação: coração da aplicação!!!
 //-------------------------------------------------------------
 var auxDebug = 0;  //eliminar
-function animLoop(ctx, spArray)
-{	
+function animLoop(ctx, spArray)		//funcao intermediaria que chama o render
+{
 	var al = function(time)
 	{
 		animLoop(ctx, spArray);
@@ -146,7 +144,7 @@ function animLoop(ctx, spArray)
 	render(ctx, spArray, reqID);
 }
 
-//resedenho, actualizações, ...
+//resedenho, actualizações, ...funcao chamada para 60fps, atualiza as posicoes,o texto, tempo, clear a canvas e volta a desenhar
 function render(ctx, spArray, reqID, dt)
 {
 	var cw = ctx.canvas.width;
@@ -162,7 +160,7 @@ function render(ctx, spArray, reqID, dt)
 		if (sp.x + sp.width + sp.speed > cw)
 			sp.x = cw - sp.width;
 		else
-			sp.x = sp.x + sp.speed;		
+			sp.x = sp.x + sp.speed;
 	}
 	else
 	{
@@ -188,7 +186,7 @@ function canvasClickHandler(ev, ctx, spArray)
 {
 	if (spArray[0].clickedBoundingBox(ev))
 	{
-		spArray[0].reset(ev, ctx);		
+		spArray[0].reset(ev, ctx);
 		animLoop(ctx, spArray);
 	}
 }

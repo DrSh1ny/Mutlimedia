@@ -11,14 +11,15 @@ class SpriteImage
 		this.y = y;
 		this.width = w;
 		this.height = h;
+		this.speedIni= speed;
 		this.speed = speed;
 
 		//imagem
-		this.img = img;		
-		
+		this.img = img;
+
 		//rato
 		this.clickableIni = clickable;
-		this.clickable = clickable;			
+		this.clickable = clickable;
 	}
 
 
@@ -31,7 +32,7 @@ class SpriteImage
 	clear(ctx)
 	{
 		ctx.clearRect(this.x, this.y, this.width, this.height);
-	}	
+	}
 
 
 	reset(ev, ctx)
@@ -55,26 +56,24 @@ class SpriteImage
 			return false;
 	}
 
-	getData(){
-		var canvas= document.createElement("canvas");
-		canvas.width = this.width;
-		canvas.height = this.height;
-		canvas.style.left = this.x;
-		canvas.style.top = this.y;
-		ctx = canvas.getContext("2d");
-		ctx.drawImage(this.img);
-		return ctx.getData();
+	getImageData(img){
+		var canvas=document.createElement("canvas");
+		canvas.width=this.width;
+		canvas.height=this.height;
+		
+		var ctx=canvas.getContext("2d");
+		ctx.drawImage(img,0,0,this.width,this.height);
+		return ctx.getImageData(0,0,this.width,this.height);
 	}
 
 	collisionPixel(img){
 		var mx = img.x;
 		var my = img.y;
 		if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height){
-			img.img.getData()
-			if(){
+			//colisao das caixas detetada
+			//check pixels
 
-			}else
-				return false
+			return true
 		}
 		else
 			return false;
