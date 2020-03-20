@@ -57,6 +57,13 @@ class SpriteImage
 	}
 
 	getImageData(img){
+
+		// IMPORTANTE 
+		//tem de se executar o browser com a flag --allow-file-access-from-files tipo 
+		//"Chrome.exe --allow-file-access-from-files"
+		//caso contrário o browser nao deixa executar funcao por seguranca
+		//confirmado pelo professor
+		
 		var canvas=document.createElement("canvas");
 		canvas.width=this.width;
 		canvas.height=this.height;
