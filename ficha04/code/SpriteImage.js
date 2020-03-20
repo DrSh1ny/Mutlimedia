@@ -57,11 +57,11 @@ class SpriteImage
 	}
 
 	getImageData(img){
-		img.setAttribute('crossOrigin', '');
 		var canvas=document.createElement("canvas");
 		canvas.width=this.width;
 		canvas.height=this.height;
 		var ctx=canvas.getContext("2d");
+
 		ctx.drawImage(img,0,0,this.width,this.height);
 		return ctx.getImageData(0,0,this.width,this.height);
 	}
@@ -71,17 +71,24 @@ class SpriteImage
 		var ratoX=ev.offsetX;
 		var ratoY=ev.offsetY;
 		
-		var array=this.getImageData(img);
+		var data=this.getImageData(img);
+		var array=data.data;
+
 		//se a posicao do rato for diferente de zero no array entao houve colisao
 		var xLocal=ratoX-this.x;
 		var yLocal=ratoY-this.y;
 		
+		
 		//achar linha e depois coluna
-		var pos=yLocal*this.width*4 + xLocal*4
+		var pos=Math.round(yLocal)*Math.round(this.width)*4;
+		pos+=Math.round(xLocal)*4;  //posicao do rato no array
+		
+		
+		(pos);
 		if (array[pos+3]!=0){
 			//colisao das caixas detetada
 			//check pixels
-			return true
+			return true;
 		}
 		else
 			return false;

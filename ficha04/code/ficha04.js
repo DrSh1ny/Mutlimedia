@@ -50,13 +50,11 @@ function init(ctx)
 
 	//carregar imagens e criar sprites
 	var imgCar = new Image();
-	
 	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.id="car";
 	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
-
-	var imgTurb = new Image();
 	
+	var imgTurb = new Image();
 	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.id="turbo";
 	imgTurb.src="resources/turbo.png";
@@ -70,7 +68,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(0, 0, nw/4, nh/4, 1, false, img);
+				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img);
 				spArray[0] = sp;
 
 				nLoad++;
@@ -112,7 +110,7 @@ function startAnim(ctx, spArray)		//primeira chamada
 function draw(ctx, spArray)
 {
 	var dim = spArray.length;
-	console.log(spArray.length)
+	
 	for (let i = 0; i < dim; i++)
 	{
 		spArray[i].draw(ctx);
