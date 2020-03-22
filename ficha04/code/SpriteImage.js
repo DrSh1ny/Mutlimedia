@@ -103,7 +103,7 @@ class SpriteImage
 	}
 	getImageDataTwo(ctxOld,sprite1,sprite2){
 
-		//Nao sei porque mas se um dos 
+		
 		var x=Math.round(Math.max(sprite1.x,sprite2.x));
 		var y=Math.round(Math.max(sprite1.y,sprite2.y));
 		var x1=Math.round(Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width));
