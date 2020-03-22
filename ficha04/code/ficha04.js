@@ -52,7 +52,7 @@ function init(ctx)
 	var imgCar = new Image();
 	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.id="car";
-	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
+	imgCar.src = "resources/car1.png";  //dá ordem de carregamento da imagem
 	
 	var imgTurb = new Image();
 	imgTurb.addEventListener("load",imgLoadedHandler);
@@ -68,7 +68,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img);
+				var sp = new SpriteImage(0, 0, Math.round(nw/2), Math.round(nh/2), 1, false, img);
 				spArray[0] = sp;
 
 				nLoad++;
@@ -77,7 +77,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(canvas.width/2, 0, nw, nh, 1, true, img);
+				var sp = new SpriteImage(Math.round(canvas.width/2), 0, nw, nh, 1, true, img);
 				spArray[1] = sp;
 
 				nLoad++;
@@ -157,6 +157,13 @@ function render(ctx, spArray, reqID, dt)
 
 	//animar sprites
 	var sp = spArray[0];
+	var turbo=spArray[1];
+
+	//verificar se turbo toca no carro e aumentar velocidade do carro
+	if(sp.checkCollision(ctx,sp,turbo)==true){  
+		sp.speed+=3;
+	}
+
 	if (sp.x + sp.width < cw)
 	{
 		if (sp.x + sp.width + sp.speed > cw)
@@ -176,7 +183,6 @@ function render(ctx, spArray, reqID, dt)
 	//redesenhar sprites e texto
 	var txt = "Time: " + Math.round(dt) + " msec";
 	ctx.fillText(txt, cw/2, ch);
-
 	draw(ctx, spArray);
 }
 
@@ -187,7 +193,8 @@ function render(ctx, spArray, reqID, dt)
 function canvasClickHandler(ev, ctx, spArray)
 {	
 	if (spArray[0].clickedBoundingBox(ev))
-	{
+	{	
+		
 		spArray[0].reset(ev, ctx);
 		animLoop(ctx, spArray);
 	}

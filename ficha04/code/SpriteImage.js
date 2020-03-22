@@ -40,6 +40,7 @@ class SpriteImage
 		this.clear(ctx);
 		this.x = this.xIni;
 		this.y = this.yIni;
+		
 		this.clickable = this.clickableIni;
 
 	}
@@ -91,7 +92,6 @@ class SpriteImage
 		pos+=Math.round(xLocal)*4;  //posicao do rato no array
 		
 		
-		(pos);
 		if (array[pos+3]!=0){
 			//colisao das caixas detetada
 			//check pixels
@@ -100,6 +100,69 @@ class SpriteImage
 		else
 			return false;
 
+	}
+	getImageDataTwo(ctxOld,sprite1,sprite2){
+
+		//Nao sei porque mas se um dos 
+		var x=Math.round(Math.max(sprite1.x,sprite2.x));
+		var y=Math.round(Math.max(sprite1.y,sprite2.y));
+		var x1=Math.round(Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width));
+		var y1=Math.round(Math.min(sprite1.y+sprite1.height,sprite2.y+sprite2.height));
+		var colWidth=x1-x;
+		var colHeight=y1-y;
+
+		var xA=x-sprite1.x
+		var xB=x-sprite2.x
+
+		var yA=y-sprite1.y
+		var yB=y-sprite2.y
+
+		var canvas=document.createElement("canvas");
+		canvas.width=colWidth;
+		canvas.height=colHeight;
+		var ctx=canvas.getContext("2d");
+
+		ctx.drawImage(sprite1.img,xA,yA,colWidth,colHeight,0,0,colWidth,colHeight);
+		var array1=ctx.getImageData(0,0,colWidth,colHeight);
+		ctx.clearRect(0,0,colWidth,colHeight);
+		
+		ctx.drawImage(sprite2.img,xB,yB,colWidth,colHeight,0,0,colWidth,colHeight);
+		var array2=ctx.getImageData(0,0,colWidth,colHeight);
+	
+		return [array1,array2];
+	}
+	checkCollision(ctxOld,sprite1,sprite2){
+		var topA=sprite1.y;
+		var topB=sprite2.y;
+		var leftA=sprite1.x;
+		var leftB=sprite2.x;
+		var botA=topA+sprite1.height;
+		var botB=topB+sprite2.height;
+		var rightA=leftA+sprite1.width;
+		var rightB=leftB+sprite2.width;
+
+		if((rightA>leftB) && (leftA<rightB) && (botA>topB) && (topA<botB)){
+			
+			
+			var data=this.getImageDataTwo(ctxOld,sprite1,sprite2);
+			
+			var array1=data[0].data;
+			var array2=data[1].data;
+
+			var comp=array1.length;
+			for(let i=0; i<comp;i+=4){
+				
+				if(array1[i+3]!=0 && array2[i+3]!=0){
+					
+					return true;
+					
+				}
+			}
+			return false;
+		}
+		else{
+			return false;
+		}
 	}
 
 
