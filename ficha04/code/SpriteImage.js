@@ -102,8 +102,12 @@ class SpriteImage
 
 	}
 	getImageDataTwo(ctxOld,sprite1,sprite2){
+		// IMPORTANTE 
+		//tem de se executar o browser com a flag --allow-file-access-from-files tipo 
+		//"Chrome.exe --allow-file-access-from-files"
+		//caso contrário o browser nao deixa executar funcao por seguranca
+		//confirmado pelo professor
 
-		
 		var x=Math.round(Math.max(sprite1.x,sprite2.x));
 		var y=Math.round(Math.max(sprite1.y,sprite2.y));
 		var x1=Math.round(Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width));
@@ -160,7 +164,7 @@ class SpriteImage
 
 			return false;
 		}
-		
+
 		else{
 			return false;
 		}
