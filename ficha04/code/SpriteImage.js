@@ -131,6 +131,7 @@ class SpriteImage
 	
 		return [array1,array2];
 	}
+
 	checkCollision(ctxOld,sprite1,sprite2){
 		var topA=sprite1.y;
 		var topB=sprite2.y;
@@ -144,22 +145,22 @@ class SpriteImage
 		if((rightA>leftB) && (leftA<rightB) && (botA>topB) && (topA<botB)){
 			
 			
-			var data=this.getImageDataTwo(ctxOld,sprite1,sprite2);
+			var pixies=this.getImageDataTwo(ctxOld,sprite1,sprite2);
 			
-			var array1=data[0].data;
-			var array2=data[1].data;
+			var array1=pixies[0].data;
+			var array2=pixies[1].data;
 
 			var comp=array1.length;
 			for(let i=0; i<comp;i+=4){
 				
 				if(array1[i+3]!=0 && array2[i+3]!=0){
-					
 					return true;
-					
 				}
 			}
+
 			return false;
 		}
+		
 		else{
 			return false;
 		}
