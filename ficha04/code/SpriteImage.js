@@ -108,6 +108,8 @@ class SpriteImage
 		//caso contrário o browser nao deixa executar funcao por seguranca
 		//confirmado pelo professor
 
+
+		//calcular posicao do retangulo de intersecao
 		var x=Math.round(Math.max(sprite1.x,sprite2.x));
 		var y=Math.round(Math.max(sprite1.y,sprite2.y));
 		var x1=Math.round(Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width));
@@ -115,9 +117,11 @@ class SpriteImage
 		var colWidth=x1-x;
 		var colHeight=y1-y;
 
+		//pos do retangulo retalivo ao sprite 1
 		var xA=x-sprite1.x
 		var xB=x-sprite2.x
 
+		//pos do retangulo retalivo ao sprite 2
 		var yA=y-sprite1.y
 		var yB=y-sprite2.y
 
@@ -125,11 +129,12 @@ class SpriteImage
 		canvas.width=colWidth;
 		canvas.height=colHeight;
 		var ctx=canvas.getContext("2d");
-
+		//tirar array do retangulo no sprite 1
 		ctx.drawImage(sprite1.img,xA,yA,colWidth,colHeight,0,0,colWidth,colHeight);
 		var array1=ctx.getImageData(0,0,colWidth,colHeight);
 		ctx.clearRect(0,0,colWidth,colHeight);
 		
+		//tirar array do retangulo no sprite 2
 		ctx.drawImage(sprite2.img,xB,yB,colWidth,colHeight,0,0,colWidth,colHeight);
 		var array2=ctx.getImageData(0,0,colWidth,colHeight);
 	
@@ -137,6 +142,7 @@ class SpriteImage
 	}
 
 	checkCollision(ctxOld,sprite1,sprite2){
+		//verificar box de colisao
 		var topA=sprite1.y;
 		var topB=sprite2.y;
 		var leftA=sprite1.x;
@@ -150,11 +156,11 @@ class SpriteImage
 			
 			
 			var pixies=this.getImageDataTwo(ctxOld,sprite1,sprite2);
-			
+			//arrays com os pixeis da colisao
 			var array1=pixies[0].data;
 			var array2=pixies[1].data;
-
 			var comp=array1.length;
+			
 			for(let i=0; i<comp;i+=4){
 				
 				if(array1[i+3]!=0 && array2[i+3]!=0){
