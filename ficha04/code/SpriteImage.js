@@ -116,7 +116,7 @@ class SpriteImage
 		var rightB=leftB+sprite2.width;
 
 		
-		if(!(topA>botB || botA<topB || leftA>rightB || rightA<leftB)){
+		if(!((botA<topB && rightA<leftB) || (rightB<leftA && botA<topB) || (rightA<leftB && topA>botB) || (leftA>rightB && topA>botB))){
 
 			//arrays com os pixeis de cada sprite
 			var pixeisA=sprite1.array;

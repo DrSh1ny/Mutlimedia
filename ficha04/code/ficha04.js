@@ -51,13 +51,13 @@ function init(ctx)
 
 	//carregar imagens e criar sprites
 	var imgCar = new Image();
-	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.id="car";
+	imgCar.addEventListener("load", imgLoadedHandler);
 	imgCar.src = "resources/car.png";  //dá ordem de carregamento da imagem
 	
 	var imgTurb = new Image();
-	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.id="turbo";
+	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.src="resources/turbo.png";
 
 
@@ -78,7 +78,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(Math.round(canvas.width/2), 70, nw, nh, 1, true, img);
+				var sp = new SpriteImage(Math.round(canvas.width/2), 62, nw, nh, 1, false, img);
 				spArray[1] = sp;
 
 				nLoad++;
