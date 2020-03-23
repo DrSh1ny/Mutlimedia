@@ -41,7 +41,7 @@ class SpriteImage
 		this.clear(ctx);
 		this.x = this.xIni;
 		this.y = this.yIni;
-		
+		this.speed=this.speedIni;
 		this.clickable = this.clickableIni;
 
 	}
@@ -104,7 +104,7 @@ class SpriteImage
 	}
 	
 
-	checkCollision(sprite1,sprite2){
+	checkCollision(ctx,sprite1,sprite2){
 		//verificar box de colisao
 		var topA=sprite1.y;
 		var topB=sprite2.y;
@@ -115,8 +115,9 @@ class SpriteImage
 		var rightA=leftA+sprite1.width;
 		var rightB=leftB+sprite2.width;
 
-		if((rightA>leftB) && (leftA<rightB) && (botA>topB) && (topA<botB)){
-			
+		
+		if(!(topA>botB || botA<topB || leftA>rightB || rightA<leftB)){
+
 			//arrays com os pixeis de cada sprite
 			var pixeisA=sprite1.array;
 			var pixeisB=sprite2.array;
@@ -127,15 +128,18 @@ class SpriteImage
 			var xMax=Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width);
 			var yMax=Math.min(sprite1.y+sprite1.height,sprite2.y+sprite2.height);
 
-			for(let x=xMin;x<xMax;x++){
-				for(let y=yMin;y<yMax;y++){
-					var xLocalA= x-leftA;
-					var yLocalA=y-topA;
+			for(let y=yMin;y<yMax;y++){
+				for(let x=xMin;x<xMax;x++){
+					
 
-					var xLocalB= x-leftB;
-					var yLocalB=y-topB;
 
-					if(pixeisA[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && pixeisB[yLocalB*sprite1.width*4 + xLocalB*4 +3]!=0){
+					let xLocalA= x-leftA;
+					let yLocalA= y-topA;
+
+					let xLocalB= x-leftB;
+					let yLocalB= y-topB;
+
+					if(pixeisA[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && pixeisB[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
 						return true;
 					}
 				}

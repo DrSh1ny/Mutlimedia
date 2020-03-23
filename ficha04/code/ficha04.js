@@ -69,7 +69,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(0, 0, Math.round(nw/2), Math.round(nh/2), 1, false, img);
+				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img);
 				spArray[0] = sp;
 
 				nLoad++;
@@ -78,7 +78,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(Math.round(canvas.width/2), 30, nw, nh, 1, true, img);
+				var sp = new SpriteImage(Math.round(canvas.width/2), 70, nw, nh, 1, true, img);
 				spArray[1] = sp;
 
 				nLoad++;
@@ -168,16 +168,12 @@ function render(ctx, spArray, reqID, dt)
 	var turbo=spArray[1];
 
 	//verificar se turbo toca no carro e aumentar velocidade do carro
-	if(sp.checkCollision(sp,turbo)==true){  
-		sp.speed+=3;
+	if(sp.checkCollision(ctx,sp,turbo)==true){  
+		sp.speed+=2;
 	}
 	//apagar canvas
 	ctx.clearRect(0, 0, cw, ch);
 
-	
-
-	
-	
 
 	if (sp.x + sp.width < cw)
 	{
