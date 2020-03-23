@@ -163,17 +163,21 @@ function render(ctx, spArray, reqID, dt)
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 
-	//apagar canvas
-	ctx.clearRect(0, 0, cw, ch);
-
 	//animar sprites
 	var sp = spArray[0];
 	var turbo=spArray[1];
 
 	//verificar se turbo toca no carro e aumentar velocidade do carro
-	if(sp.checkCollision(ctx,sp,turbo)==true){  
+	if(sp.checkCollision(sp,turbo)==true){  
 		sp.speed+=3;
 	}
+	//apagar canvas
+	ctx.clearRect(0, 0, cw, ch);
+
+	
+
+	
+	
 
 	if (sp.x + sp.width < cw)
 	{

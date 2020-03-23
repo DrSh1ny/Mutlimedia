@@ -16,6 +16,7 @@ class SpriteImage
 
 		//imagem
 		this.img = img;
+		this.array=this.getImageData(this.img);
 
 		//rato
 		this.clickableIni = clickable;
@@ -79,7 +80,7 @@ class SpriteImage
 		var ratoX=ev.offsetX;
 		var ratoY=ev.offsetY;
 		
-		var data=this.getImageData(img);
+		var data=this.array;
 		var array=data.data;
 
 		//se a posicao do rato for diferente de zero no array entao houve colisao
@@ -101,47 +102,9 @@ class SpriteImage
 			return false;
 
 	}
-	getImageDataTwo(ctxOld,sprite1,sprite2){
-		// IMPORTANTE 
-		//tem de se executar o browser com a flag --allow-file-access-from-files tipo 
-		//"Chrome.exe --allow-file-access-from-files"
-		//caso contrário o browser nao deixa executar funcao por seguranca
-		//confirmado pelo professor
-
-
-		//calcular posicao do retangulo de intersecao
-		var x=Math.round(Math.max(sprite1.x,sprite2.x));
-		var y=Math.round(Math.max(sprite1.y,sprite2.y));
-		var x1=Math.round(Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width));
-		var y1=Math.round(Math.min(sprite1.y+sprite1.height,sprite2.y+sprite2.height));
-		var colWidth=x1-x;
-		var colHeight=y1-y;
-
-		//pos do retangulo retalivo ao sprite 1
-		var xA=x-sprite1.x
-		var xB=x-sprite2.x
-
-		//pos do retangulo retalivo ao sprite 2
-		var yA=y-sprite1.y
-		var yB=y-sprite2.y
-
-		var canvas=document.createElement("canvas");
-		canvas.width=colWidth;
-		canvas.height=colHeight;
-		var ctx=canvas.getContext("2d");
-		//tirar array do retangulo no sprite 1
-		ctx.drawImage(sprite1.img,xA,yA,colWidth,colHeight,0,0,colWidth,colHeight);
-		var array1=ctx.getImageData(0,0,colWidth,colHeight);
-		ctx.clearRect(0,0,colWidth,colHeight);
-		
-		//tirar array do retangulo no sprite 2
-		ctx.drawImage(sprite2.img,xB,yB,colWidth,colHeight,0,0,colWidth,colHeight);
-		var array2=ctx.getImageData(0,0,colWidth,colHeight);
 	
-		return [array1,array2];
-	}
 
-	checkCollision(ctxOld,sprite1,sprite2){
+	checkCollision(sprite1,sprite2){
 		//verificar box de colisao
 		var topA=sprite1.y;
 		var topB=sprite2.y;
@@ -154,26 +117,35 @@ class SpriteImage
 
 		if((rightA>leftB) && (leftA<rightB) && (botA>topB) && (topA<botB)){
 			
+			//arrays com os pixeis de cada sprite
+			var pixeisA=sprite1.array;
+			var pixeisB=sprite2.array;
+
 			
-			var pixies=this.getImageDataTwo(ctxOld,sprite1,sprite2);
-			//arrays com os pixeis da colisao
-			var array1=pixies[0].data;
-			var array2=pixies[1].data;
-			var comp=array1.length;
-			
-			for(let i=0; i<comp;i+=4){
-				
-				if(array1[i+3]!=0 && array2[i+3]!=0){
-					return true;
+			var xMin=Math.max(sprite1.x,sprite2.x);
+			var yMin=Math.max(sprite1.y,sprite2.y);
+			var xMax=Math.min(sprite1.x+sprite1.width,sprite2.x+sprite2.width);
+			var yMax=Math.min(sprite1.y+sprite1.height,sprite2.y+sprite2.height);
+
+			for(let x=xMin;x<xMax;x++){
+				for(let y=yMin;y<yMax;y++){
+					var xLocalA= x-leftA;
+					var yLocalA=y-topA;
+
+					var xLocalB= x-leftB;
+					var yLocalB=y-topB;
+
+					if(pixeisA[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && pixeisB[yLocalB*sprite1.width*4 + xLocalB*4 +3]!=0){
+						return true;
+					}
 				}
 			}
-
 			return false;
 		}
-
 		else{
 			return false;
 		}
+			
 	}
 
 
