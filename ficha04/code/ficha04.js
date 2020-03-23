@@ -36,7 +36,8 @@ function main()
 
 //init: carregamento de componentes
 function init(ctx)
-{
+{	
+	var start=null;
 	var nLoad = 0;
 	var totLoad = 2;
 	var spArray = new Array(totLoad);
@@ -102,7 +103,7 @@ function init(ctx)
 function startAnim(ctx, spArray)		//primeira chamada 
 {
 	draw(ctx, spArray);
-	animLoop(ctx, spArray);
+	animLoop(ctx, spArray,0);
 }
 
 
@@ -135,20 +136,30 @@ function clear(ctx, spArray)
 //--- controlo da animação: coração da aplicação!!!
 //-------------------------------------------------------------
 var auxDebug = 0;  //eliminar
-function animLoop(ctx, spArray)		//funcao intermediaria que chama o render
+function animLoop(ctx, spArray,startTime,time)		//funcao intermediaria que chama o render
 {
+	
+	
+	
+
 	var al = function(time)
-	{
-		animLoop(ctx, spArray);
+	{	
+		if(startTime==0){
+			startTime=time;
+		}
+		
+		animLoop(ctx, spArray,startTime,time);
 	}
+
 	var reqID = window.requestAnimationFrame(al);
 
-	render(ctx, spArray, reqID);
+	render(ctx, spArray, reqID,time-startTime);
+	
 }
 
 //resedenho, actualizações, ...funcao chamada para 60fps, atualiza as posicoes,o texto, tempo, clear a canvas e volta a desenhar
 function render(ctx, spArray, reqID, dt)
-{
+{	
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 
@@ -196,6 +207,6 @@ function canvasClickHandler(ev, ctx, spArray)
 	{	
 		
 		spArray[0].reset(ev, ctx);
-		animLoop(ctx, spArray);
+		animLoop(ctx, spArray,0,0);
 	}
 }
