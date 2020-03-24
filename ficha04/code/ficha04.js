@@ -15,8 +15,7 @@ function main()
 	var spArray;  //sprite array
 	canvas.addEventListener("initend", initEndHandler);
 
-	var som = new Audio("ficha04/resources/turbo.mp3");
-	
+	var som = new Audio("resources/turbo.mp3");
 	init(ctx,som);  //carregar todos os componentes
 	
 	
@@ -25,7 +24,6 @@ function main()
 	{
 		//instalar listeners do rato
 		ctx.canvas.addEventListener("click", cch);
-
 		spArray = ev.spArray;
 		//iniciar a animação
 		startAnim(ctx, spArray,som);
@@ -33,7 +31,7 @@ function main()
 
 	var cch = function(ev)
 	{
-		canvasClickHandler(ev, ctx, spArray);
+		canvasClickHandler(ev, ctx, spArray,som);
 	}
 }
 
@@ -107,8 +105,9 @@ function init(ctx,som)
 //iniciar animação
 function startAnim(ctx, spArray,som)		//primeira chamada 
 {
+	
 	draw(ctx, spArray);
-	animLoop(ctx, spArray,0,som);
+	animLoop(ctx, spArray,0,0,som);
 }
 
 
@@ -145,7 +144,7 @@ function animLoop(ctx, spArray,startTime,time,som)		//funcao intermediaria que c
 {
 	
 	
-	
+	console.log(som);
 
 	var al = function(time)
 	{	
@@ -175,7 +174,7 @@ function render(ctx, spArray, reqID, dt,som)
 	//verificar se turbo toca no carro e aumentar velocidade do carro
 	if(sp.checkCollision(ctx,sp,turbo)==true){  
 		sp.speed+=2;
-		//som.play();
+		som.play();
 	}
 	//apagar canvas
 	ctx.clearRect(0, 0, cw, ch);
@@ -194,6 +193,8 @@ function render(ctx, spArray, reqID, dt,som)
 
 		//make clickable
 		sp.clickable = true;
+		console.log(turbo);
+		turbo.clickable = true;
 	}
 
 
@@ -207,12 +208,14 @@ function render(ctx, spArray, reqID, dt,som)
 //-------------------------------------------------------------
 //--- interacção com o rato
 //-------------------------------------------------------------
-function canvasClickHandler(ev, ctx, spArray)
+function canvasClickHandler(ev, ctx, spArray,som)
 {	
 	if (spArray[0].clickedBoundingBox(ev))
 	{	
 		
 		spArray[0].reset(ev, ctx);
+		spArray[1].reset(ev,ctx);
 		animLoop(ctx, spArray,0,0,som);
+		
 	}
 }
