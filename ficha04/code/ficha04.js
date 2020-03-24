@@ -8,14 +8,18 @@
 
 function main()
 {
+
+	
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	var spArray;  //sprite array
 	canvas.addEventListener("initend", initEndHandler);
-	init(ctx);  //carregar todos os componentes
-	
-	
 
+	var som = new Audio("ficha04/resources/turbo.mp3");
+	
+	init(ctx,som);  //carregar todos os componentes
+	
+	
 	//funções locais para gestão de eventos
 	function initEndHandler(ev)
 	{
@@ -24,7 +28,7 @@ function main()
 
 		spArray = ev.spArray;
 		//iniciar a animação
-		startAnim(ctx, spArray);
+		startAnim(ctx, spArray,som);
 	}
 
 	var cch = function(ev)
@@ -35,7 +39,7 @@ function main()
 
 
 //init: carregamento de componentes
-function init(ctx)
+function init(ctx,som)
 {	
 	var start=null;
 	var nLoad = 0;
@@ -59,6 +63,7 @@ function init(ctx)
 	imgTurb.id="turbo";
 	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.src="resources/turbo.png";
+
 
 
 	function imgLoadedHandler(ev)
@@ -100,10 +105,10 @@ function init(ctx)
 
 
 //iniciar animação
-function startAnim(ctx, spArray)		//primeira chamada 
+function startAnim(ctx, spArray,som)		//primeira chamada 
 {
 	draw(ctx, spArray);
-	animLoop(ctx, spArray,0);
+	animLoop(ctx, spArray,0,som);
 }
 
 
@@ -136,7 +141,7 @@ function clear(ctx, spArray)
 //--- controlo da animação: coração da aplicação!!!
 //-------------------------------------------------------------
 var auxDebug = 0;  //eliminar
-function animLoop(ctx, spArray,startTime,time)		//funcao intermediaria que chama o render
+function animLoop(ctx, spArray,startTime,time,som)		//funcao intermediaria que chama o render
 {
 	
 	
@@ -148,17 +153,17 @@ function animLoop(ctx, spArray,startTime,time)		//funcao intermediaria que chama
 			startTime=time;
 		}
 		
-		animLoop(ctx, spArray,startTime,time);
+		animLoop(ctx, spArray,startTime,time,som);
 	}
 
 	var reqID = window.requestAnimationFrame(al);
 
-	render(ctx, spArray, reqID,time-startTime);
+	render(ctx, spArray, reqID,time-startTime,som);
 	
 }
 
 //resedenho, actualizações, ...funcao chamada para 60fps, atualiza as posicoes,o texto, tempo, clear a canvas e volta a desenhar
-function render(ctx, spArray, reqID, dt)
+function render(ctx, spArray, reqID, dt,som)
 {	
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
@@ -170,6 +175,7 @@ function render(ctx, spArray, reqID, dt)
 	//verificar se turbo toca no carro e aumentar velocidade do carro
 	if(sp.checkCollision(ctx,sp,turbo)==true){  
 		sp.speed+=2;
+		//som.play();
 	}
 	//apagar canvas
 	ctx.clearRect(0, 0, cw, ch);
@@ -207,6 +213,6 @@ function canvasClickHandler(ev, ctx, spArray)
 	{	
 		
 		spArray[0].reset(ev, ctx);
-		animLoop(ctx, spArray,0,0);
+		animLoop(ctx, spArray,0,0,som);
 	}
 }
