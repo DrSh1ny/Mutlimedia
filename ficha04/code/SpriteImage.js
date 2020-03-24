@@ -116,11 +116,12 @@ class SpriteImage
 		var rightB=leftB+sprite2.width;
 
 		
-		if(!((botA<topB && rightA<leftB) || (rightB<leftA && botA<topB) || (rightA<leftB && topA>botB) || (leftA>rightB && topA>botB))){
-
+		if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
+			console.log("boxes");
+			
 			//arrays com os pixeis de cada sprite
-			var pixeisA=sprite1.array;
-			var pixeisB=sprite2.array;
+			var pixeisA=sprite1.array.data;
+			var pixeisB=sprite2.array.data;
 
 			
 			var xMin=Math.max(sprite1.x,sprite2.x);
@@ -140,6 +141,7 @@ class SpriteImage
 					let yLocalB= y-topB;
 
 					if(pixeisA[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && pixeisB[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
+						console.log("pixeis");
 						return true;
 					}
 				}

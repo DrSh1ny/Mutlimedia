@@ -78,7 +78,7 @@ function init(ctx)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(Math.round(canvas.width/2), 62, nw, nh, 1, false, img);
+				var sp = new SpriteImage(Math.round(canvas.width/2), 0, nw, nh, 1, false, img);
 				spArray[1] = sp;
 
 				nLoad++;
