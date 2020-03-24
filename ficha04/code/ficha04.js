@@ -74,7 +74,6 @@ function init(ctx,som)
 				var nh = img.naturalHeight;
 				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img);
 				spArray[0] = sp;
-
 				nLoad++;
 				break;
 			case "turbo":
@@ -193,7 +192,6 @@ function render(ctx, spArray, reqID, dt,som)
 
 		//make clickable
 		sp.clickable = true;
-		console.log(turbo);
 		turbo.clickable = true;
 	}
 
@@ -210,7 +208,7 @@ function render(ctx, spArray, reqID, dt,som)
 //-------------------------------------------------------------
 function canvasClickHandler(ev, ctx, spArray,som)
 {	
-	if (spArray[0].clickedBoundingBox(ev))
+	if (spArray[0].clickedBoundingBox(ev) || spArray[1].clickedBoundingBox(ev))
 	{	
 		
 		spArray[0].reset(ev, ctx);
