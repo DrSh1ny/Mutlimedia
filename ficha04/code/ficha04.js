@@ -62,9 +62,9 @@ function init(ctx,som)
 	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.src="resources/turbo.png";
 
-	document.addEventListener("mousedown",mouseDown);
-	document.addEventListener("mouseup",mouseUp);
-	document.addEventListener("mousemove",mouseHover);
+	canvas.addEventListener("mousedown",mouseDown);
+	canvas.addEventListener("mouseup",mouseUp);
+	canvas.addEventListener("mousemove",mouseHover);
 	window.addEventListener("keyup",keyUp);
 	window.addEventListener("keydown",keyDown);
 
@@ -105,7 +105,6 @@ function init(ctx,som)
 	}
 
 	function mouseDown(ev) {
-		console.log("Here");
 		mouseDownEvent(ev,spArray[1]);
 	}
 	function mouseUp(ev){
@@ -167,8 +166,6 @@ var auxDebug = 0;  //eliminar
 function animLoop(ctx, spArray,startTime,time,som)		//funcao intermediaria que chama o render
 {
 	
-	
-
 	var al = function(time)
 	{	
 		if(startTime==0){
@@ -223,12 +220,25 @@ function render(ctx, spArray, reqID, dt,som)
 		sp.clickable = true;
 		turbo.clickable = true;
 	}
+	
 
-
-	if(turbo.draggable && turbo.mouseDown){
-		turbo.x += turbo.offsetX;
-		turbo.y += turbo.offsetY;
+	
+	if(turbo.up && turbo.y>0){
+		turbo.y -=turbo.speed
 	}
+	if(turbo.down && turbo.y + turbo.height<ch){
+		turbo.y += turbo.speed
+	}
+	
+
+	if(turbo.left && turbo.x> 0){
+		turbo.x -= turbo.speed
+	}
+	if(turbo.right && turbo.x + turbo.width<cw){
+		turbo.x += turbo.speed
+	}
+
+
 
 
 	//redesenhar sprites e texto
@@ -257,8 +267,10 @@ function canvasClickHandler(ev, ctx, spArray,som)
 
 function mouseDownEvent(ev,sp){
 	if(sp.draggable && sp.mouseOverBoundingBox(ev)){
-		console.log("Here");
 		sp.mouseDown = true
+		sp.offsetX = ev.offsetX - sp.x;  //mx, my = mouseX, mouseY na canvas
+		sp.offsetY = ev.offsetY - sp.y;
+		
 	}
 }
 
@@ -271,7 +283,44 @@ function mouseUpEvent(ev,sp){
 
 function mouseHoverEvent(ev,sp){
 	if(sp.draggable && sp.mouseDown){
-		sp.offsetX = ev.offsetX - sp.x;  //mx, my = mouseX, mouseY na canvas
-		sp.offsetY = ev.offsetY - sp.y;
+		sp.x = ev.offsetX - sp.offsetX;  //mx, my = mouseX, mouseY na canvas
+		sp.y = ev.offsetY - sp.offsetY;
 	}
+}
+
+function keyUpEvent(ev,sp) {
+	switch (ev.code){
+		case "ArrowUp":
+			sp.up = false;
+			break;
+		case "ArrowDown":
+			sp.down = false;
+			break;
+		case "ArrowLeft":
+			sp.left = false;
+			break;
+		case "ArrowRight":
+			sp.right = false;
+			break;	
+	}
+	
+}
+
+function keyDownEvent(ev,sp){
+	switch (ev.code){
+		case "ArrowUp":
+			sp.up = true;
+			break;
+		case "ArrowDown":
+			sp.down = true;
+			break;
+		case "ArrowLeft":
+			sp.left = true;
+			break;
+		case "ArrowRight":
+			sp.right = true;
+			break;	
+	}
+
+	
 }

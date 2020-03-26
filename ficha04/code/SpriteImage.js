@@ -25,6 +25,12 @@ class SpriteImage
 
 		this.mouseDown = false;
 		this.draggable = draggable;
+
+		this.up = false;
+		this.down = false;
+		this.left = false;
+		this.right = false;
+
 	}
 
 
