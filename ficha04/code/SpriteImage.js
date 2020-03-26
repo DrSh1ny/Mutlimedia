@@ -2,7 +2,7 @@
 
 class SpriteImage
 {
-	constructor(x, y, w, h, speed, clickable, img)
+	constructor(x, y, w, h, speed, clickable, img, draggable)
 	{
 		//posição e movimento
 		this.xIni = x;
@@ -13,7 +13,8 @@ class SpriteImage
 		this.height = h;
 		this.speedIni= speed;
 		this.speed = speed;
-
+		this.offsetX = 0;
+		this.offsetY = 0;
 		//imagem
 		this.img = img;
 		this.array=this.getImageData(this.img);
@@ -21,6 +22,9 @@ class SpriteImage
 		//rato
 		this.clickableIni = clickable;
 		this.clickable = clickable;
+
+		this.mouseDown = false;
+		this.draggable = draggable;
 	}
 
 
@@ -117,7 +121,7 @@ class SpriteImage
 
 		
 		if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
-			console.log("boxes");
+			
 			
 			//arrays com os pixeis de cada sprite
 			var pixeisA=sprite1.array.data;
@@ -141,7 +145,6 @@ class SpriteImage
 					let yLocalB= y-topB;
 
 					if(pixeisA[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && pixeisB[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
-						console.log("pixeis");
 						return true;
 					}
 				}

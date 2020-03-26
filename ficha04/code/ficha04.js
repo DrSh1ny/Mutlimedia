@@ -62,6 +62,11 @@ function init(ctx,som)
 	imgTurb.addEventListener("load",imgLoadedHandler);
 	imgTurb.src="resources/turbo.png";
 
+	document.addEventListener("mousedown",mouseDown);
+	document.addEventListener("mouseup",mouseUp);
+	document.addEventListener("mousemove",mouseHover);
+	window.addEventListener("keyup",keyUp);
+	window.addEventListener("keydown",keyDown);
 
 
 	function imgLoadedHandler(ev)
@@ -72,7 +77,7 @@ function init(ctx,som)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img);
+				var sp = new SpriteImage(0, 0, Math.round(nw/4), Math.round(nh/4), 1, false, img,false);
 				spArray[0] = sp;
 				nLoad++;
 				break;
@@ -80,7 +85,7 @@ function init(ctx,som)
 				var img = ev.target;
 				var nw = img.naturalWidth;
 				var nh = img.naturalHeight;
-				var sp = new SpriteImage(Math.round(canvas.width/2), 0, nw, nh, 1, false, img);
+				var sp = new SpriteImage(Math.round(canvas.width/2), 0, nw, nh, 1, false, img,true);
 				spArray[1] = sp;
 
 				nLoad++;
@@ -98,6 +103,26 @@ function init(ctx,som)
 				}
 
 	}
+
+	function mouseDown(ev) {
+		console.log("Here");
+		mouseDownEvent(ev,spArray[1]);
+	}
+	function mouseUp(ev){
+		mouseUpEvent(ev,spArray[1]);
+	}
+	function mouseHover(ev) {
+		mouseHoverEvent(ev,spArray[1])
+	}
+	function keyUp(ev){
+		keyUpEvent(ev,spArray[1]);
+	}
+
+	function keyDown(ev){
+		keyDownEvent(ev,spArray[1]);
+	}
+
+
 }
 
 
@@ -143,7 +168,6 @@ function animLoop(ctx, spArray,startTime,time,som)		//funcao intermediaria que c
 {
 	
 	
-	console.log(som);
 
 	var al = function(time)
 	{	
@@ -174,6 +198,11 @@ function render(ctx, spArray, reqID, dt,som)
 	if(sp.checkCollision(ctx,sp,turbo)==true){  
 		sp.speed+=2;
 		som.play();
+
+		turbo.clear(ctx);
+		turbo.x =cw/2;
+		turbo.y = ch/2;
+		turbo.draw(ctx);
 	}
 	//apagar canvas
 	ctx.clearRect(0, 0, cw, ch);
@@ -196,6 +225,12 @@ function render(ctx, spArray, reqID, dt,som)
 	}
 
 
+	if(turbo.draggable && turbo.mouseDown){
+		turbo.x += turbo.offsetX;
+		turbo.y += turbo.offsetY;
+	}
+
+
 	//redesenhar sprites e texto
 	var txt = "Time: " + Math.round(dt) + " msec";
 	ctx.fillText(txt, cw/2, ch);
@@ -215,5 +250,28 @@ function canvasClickHandler(ev, ctx, spArray,som)
 		spArray[1].reset(ev,ctx);
 		animLoop(ctx, spArray,0,0,som);
 		
+	}
+}
+
+
+
+function mouseDownEvent(ev,sp){
+	if(sp.draggable && sp.mouseOverBoundingBox(ev)){
+		console.log("Here");
+		sp.mouseDown = true
+	}
+}
+
+
+function mouseUpEvent(ev,sp){
+	if(sp.draggable && sp.mouseDown){
+		sp.mouseDown = false;
+	}
+}
+
+function mouseHoverEvent(ev,sp){
+	if(sp.draggable && sp.mouseDown){
+		sp.offsetX = ev.offsetX - sp.x;  //mx, my = mouseX, mouseY na canvas
+		sp.offsetY = ev.offsetY - sp.y;
 	}
 }
