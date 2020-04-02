@@ -106,6 +106,7 @@ class SpriteImage
 		if (array[pos+3]!=0){
 			//colisao das caixas detetada
 			//check pixels
+			console.log(this.y)
 			return true;
 		}
 		else
@@ -172,3 +173,4 @@ class SpriteImage
 			return this.mouseOverBoundingBox(ev);
 	}
 }
+

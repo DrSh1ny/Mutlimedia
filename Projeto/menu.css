@@ -1,0 +1,26 @@
+body
+{
+    background-image: url("resources/background.bmp");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+button {
+      border-radius: 4px;
+      background-color: inherit;
+      border: none;
+      color: #000000;
+      text-align: center;
+      font-family: monospace;
+      font-size: 32px;
+      padding: 8px;
+      width: 200px;
+      transition: all 0.5s;
+      cursor: pointer;
+      align-items: baseline;
+      margin-bottom: 7px;
+      bottom: auto;
+
+  }
+
+
