@@ -1,30 +1,55 @@
-class Components
-{
-      constructor(x,y,height,width,src){
-            this.x = x
-            this.y = y
-            this.height = height
-            this.width = width
-            
-            this.src = src
-      }
+"use strict";
 
-
-      draw(ctx){
-            ctx.drawImage(this.src,this.x,this.y,this.width,this.height)
-      }
-
-      clear(ctx)
+class Component{
+      constructor(x, y, w, h, speedX,speedY, img)
 	{
-		ctx.clearRect(this.x, this.y, this.width, this.height);
+		//posição e movimento
+		this.xIni = x;
+		this.yIni = y;
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+		this.speedX = speedX;
+		this.speedY = speedY;
+
+		//imagem
+            this.img = img;
+      }
+      draw(ctx)
+	{
+		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
 	}
 
 
-      destroy(ev, ctx){
-            this.clear(ctx);
-      }
+	clear(ctx)
+	{
+		ctx.clearRect(this.x, this.y, this.width, this.height);
+	}	
 
-      getImageData(img){
+
+	reset(ev, ctx)
+	{
+		this.clear(ctx);
+		this.x = this.xIni;
+		this.y = this.yIni;
+      }
+      
+      mouseOverBoundingBox(ev) //ev.target é a canvas
+	{
+		var mx = ev.offsetX;  //mx, my = mouseX, mouseY na canvas
+		var my = ev.offsetY;
+		if (mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height)
+			return true;
+		else
+			return false;
+	}
+
+
+
+
+
+	getImageData(img){
 
 		// IMPORTANTE 
 		//tem de se executar o browser com a flag --allow-file-access-from-files tipo 
@@ -41,37 +66,7 @@ class Components
 		return ctx.getImageData(0,0,this.width,this.height);
       }
       
-      collisionPixel(ev,img){
-		//posicao do rato
-		var ratoX=ev.offsetX;
-		var ratoY=ev.offsetY;
-		
-		var data=this.array;
-		var array=data.data;
-
-		//se a posicao do rato for diferente de zero no array entao houve colisao
-		var xLocal=ratoX-this.x;
-		var yLocal=ratoY-this.y;
-		
-		
-		//achar linha e depois coluna
-		var pos=Math.round(yLocal)*Math.round(this.width)*4;
-		pos+=Math.round(xLocal)*4;  //posicao do rato no array
-		
-		
-		if (array[pos+3]!=0){
-			//colisao das caixas detetada
-			//check pixels
-			console.log(this.y)
-			return true;
-		}
-		else
-			return false;
-
-      }
-      
-
-      collisionPixel(ev,img){
+      collisionPixel(ev){
 		//posicao do rato
 		var ratoX=ev.offsetX;
 		var ratoY=ev.offsetY;
@@ -99,9 +94,7 @@ class Components
 			return false;
 
 	}
-	
-
-	checkCollision(ctx,sprite1,sprite2){
+	checkCollision(sprite1,sprite2){
 		//verificar box de colisao
 		var topA=sprite1.y;
 		var topB=sprite2.y;
@@ -148,43 +141,32 @@ class Components
 			return false;
             }
       }
-		
 }
 
-class ElementoEspecial extends Components{
-      constructor(x,y,height,width,src,speedX,speedY){
-            super(x,y,height,width,src)
-            this.speedX = speedX
-            this.speedY = speedY
-      }
 
-      mover(finalX,finalY,ctx){
-            while(this.x != finalX && this.y != finalY){
-                  this.x += this.speedX
-                  this.y += this.speedY
-                  super.clear(ctx)
-                  super.draw(ctx)
-            }
-      }
+class SpecialElement extends Component{
+	constructor(x, y, w, h, speedX,speedy, img,finalX,finalY){
+		super(x, y, w, h, speedX,speedy, img);
+		this.finalX = finalX;
+		this.finalY = finalY;
+	}
 }
 
-class End extends Components{
-      constructor(x,y,height,width,src){
-            super(x,y,height,width,src)
-      }
+class End extends Component{
+	constructor(x, y, w, h, speedX,speedy, img){
+		super(x, y, w, h, speedX,speedy, img);
+	}
 
+	reaction(ctx,sprite1,sprite2){
+		if(super.checkCollision(ctx,sprite1,sprite2)){
+			return true
+		}
 
-      reaction(ctx,sprite1,sprite2){
-            if(super.checkCollision(ctx,sprite1,sprite2)){
-                  return true
-            }
-
-            return false
-      }
-
+		return false
+	}
 }
 
-class Wall extends Components{
+class Wall extends Component{
       constructor(x,y,height,width,src){
             super(x,y,height,width,src)
       }
@@ -199,12 +181,12 @@ class Wall extends Components{
 
 }
 
-
-class Bot extends ElementoEspecial{
-      constructor(x,y,height,width,src,speedX,speedY,vidas,reaction){
-            super(x,y,height,width,src,speedX,speedY)
+class Bot extends SpecialElement{
+      constructor(x,y,height,width,src,speedX,speedY,finalX,finalY,vidas,reaction){
+            super(x,y,height,width,src,speedX,speedY,finalX,finalY)
             this.vidas = vidas
-            this.reaction = reaction
+		this.reaction = reaction
+		
       }
 
       interaction(ctx,sprite1,sprite2){
@@ -218,9 +200,8 @@ class Bot extends ElementoEspecial{
       }
 }
 
-
-class Caixas extends ElementoEspecial{
-      constructor(x,y,height,width,src,speedX,speedY,vidas,reaction){
+class Caixas extends SpecialElement{
+      constructor(x,y,height,width,src,speedX,speedY,reaction){
             super(x,y,height,width,src,speedX,speedY)
             this.reaction = reaction
 
