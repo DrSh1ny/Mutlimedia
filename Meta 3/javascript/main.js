@@ -18,7 +18,7 @@ function main(imagens){
     canvas.style.backgroundImage = "url('../resources/background.png')";
     
 	elements=mainMenu(canvas,elements,imagens);
-    drawElements(ctx,elements);
+    drawElements(ctx,elements,imagens);
 
 	
     canvas.addEventListener("click",clickHandler);
@@ -28,7 +28,7 @@ function main(imagens){
 
     function clickHandler(ev){
         elements=canvasClickHandler(ev,elements,imagens,canvas);
-        drawElements(ctx,elements);
+        drawElements(ctx,elements,imagens);
     }
 
     function mouseMoveHandler(ev) {
@@ -47,10 +47,11 @@ function mainMenu(canvas,elements,imagens){
     
 
     var elementos= new Array();
+    
 
     var botaoJogar = new Component(2*width/5,2.5*height/4,300,60,imagens.Jogar,imagens.JogarHover);
-    var botaoOpcao = new Component(width/7,2.5*height/4,300,60,imagens.OpcaoHover);
-    var botaoCreditos = new Component(10*width/15,2.5*height/4,300,60,imagens.CreditosHover);
+    var botaoOpcao = new Component(width/7,2.5*height/4,300,60,imagens.Opcao,imagens.OpcaoHover);
+    var botaoCreditos = new Component(10*width/15,2.5*height/4,300,60,imagens.Creditos,imagens.CreditosHover);
 
     elementos.push(botaoJogar);
     elementos.push(botaoOpcao);
@@ -116,8 +117,11 @@ function mainAntigo(imagens){
 
 }
 
-function drawElements(ctx,elements){
+function drawElements(ctx,elements,imagens){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    if(elements[0].img.id=="Jogar"){
+        canvas.getContext("2d").drawImage(imagens.Logo,ctx.canvas.width/2-350,40,734,536);
+    }
     for(let i=0;i<elements.length;i++){
         elements[i].render(ctx);
     }
@@ -165,14 +169,14 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
         if (elementos[i].mouseOverBoundingBox(ev)){
             canvas.style.cursor = "pointer";
             elementos[i].hover=true;
-            drawElements(ctx,elementos);
+            drawElements(ctx,elementos,imagens);
             return;
             
         }
         elementos[i].hover=false;
         
     }
-    drawElements(ctx,elementos);
+    drawElements(ctx,elementos,imagens);
     canvas.style.cursor = "default";
 
     
@@ -180,7 +184,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
-    var resources=["um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resources=["Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
     var toLoad=resources.length;   
     var loaded=0;
     
