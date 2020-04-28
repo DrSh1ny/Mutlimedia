@@ -4,45 +4,7 @@
       window.addEventListener("load",main)
 }());
 
-function animLoop(ctx, spArray)
-{	
-	var al = function(time)
-	{
-		animLoop(ctx, spArray);
-	}
-	var reqID = window.requestAnimationFrame(al);
 
-	render(ctx, spArray, reqID);
-}
-
-function render(ctx, spArray, reqID)
-{
-	var cw = ctx.canvas.width;
-	var ch = ctx.canvas.height;
-
-	//apagar canvas
-	ctx.clearRect(0, 0, cw, ch);
-
-	//animar sprites
-	var sp = spArray[0];
-	if (sp.x + sp.width < cw)
-	{
-		if (sp.x + sp.width + sp.speed > cw)
-			sp.x = cw - sp.width;
-		else
-			sp.x = sp.x + sp.speed;		
-	}
-	else
-	{
-		window.cancelAnimationFrame(reqID);
-
-	}
-
-
-	
-
-	draw(ctx, spArray);
-}
 
 function main(){
 	var canvas = document.getElementById("canvas");
@@ -68,7 +30,7 @@ function main(){
 		elements.forEach(element => {
 			element.draw(ctx);
 		});
-
+		
 
 		function clickHandler(ev){
 			canvasClickHandler(ev,ctx,elements)

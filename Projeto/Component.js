@@ -46,9 +46,6 @@ class Component{
 	}
 
 
-
-
-
 	getImageData(img){
 
 		// IMPORTANTE 
