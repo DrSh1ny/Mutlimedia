@@ -68,8 +68,8 @@ function menuModo(canvas,elements,imagens){
 
     var elementos= new Array();
 
-    var botaoInfinito = new Component(200,height/2,500,60,imagens.modo_infinito,imagens.modo_infinitoHover);
-    var botaoClassico = new Component(width-700,height/2,500,60,imagens.modo_classico,imagens.modo_classicoHover);
+    var botaoInfinito = new Component(40,height/2+5,700,110,imagens.modo_infinito,imagens.modo_infinitoHover);
+    var botaoClassico = new Component(width-740,height/2,700,100,imagens.modo_classico,imagens.modo_classicoHover);
     var botaoVoltar = new Component(10,height-60,300,50,imagens.Voltar,imagens.VoltarHover);
 
     elementos.push(botaoInfinito);
