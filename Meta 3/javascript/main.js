@@ -50,7 +50,7 @@ function mainMenu(canvas,elements,imagens){
     
 
     var botaoJogar = new Component(2*width/5,2.5*height/4,300,60,imagens.Jogar,imagens.JogarHover);
-    var botaoOpcao = new Component(width/7,2.5*height/4,300,60,imagens.Opcao,imagens.OpcaoHover);
+    var botaoOpcao = new Component(width/7,2.51*height/4,300,60,imagens.Opcao,imagens.OpcaoHover);
     var botaoCreditos = new Component(10*width/15,2.5*height/4,300,60,imagens.Creditos,imagens.CreditosHover);
 
     elementos.push(botaoJogar);
@@ -70,7 +70,7 @@ function menuModo(canvas,elements,imagens){
 
     var botaoInfinito = new Component(40,height/2+5,700,110,imagens.modo_infinito,imagens.modo_infinitoHover);
     var botaoClassico = new Component(width-740,height/2,700,100,imagens.modo_classico,imagens.modo_classicoHover);
-    var botaoVoltar = new Component(10,height-60,300,50,imagens.Voltar,imagens.VoltarHover);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
     elementos.push(botaoInfinito);
     elementos.push(botaoClassico);
@@ -94,7 +94,7 @@ function menuNiveis(canvas,elements,imagens){
     var dois = new Component(130,1.2*height/4+50,40,40,imagens.dois,imagens.doisHover);
     var tres = new Component(190,1.2*height/4+50,40,40,imagens.tres,imagens.tresHover);
 
-    var botaoVoltar = new Component(10,height-60,300,50,imagens.Voltar,imagens.VoltarHover);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
     elementos.push(capitulo1);
     elementos.push(capitulo2);
@@ -184,7 +184,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
-    var resources=["Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resources=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
     var toLoad=resources.length;   
     var loaded=0;
     
