@@ -119,7 +119,7 @@ function mainAntigo(imagens){
 
 function drawElements(ctx,elements,imagens){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    if(elements[0].img.id=="Jogar"){
+    if(elements.length>0 && elements[0].img.id=="Jogar"){
         canvas.getContext("2d").drawImage(imagens.Logo,ctx.canvas.width/2-350,40,734,536);
     }
     for(let i=0;i<elements.length;i++){
@@ -128,10 +128,10 @@ function drawElements(ctx,elements,imagens){
 }
 
 function canvasClickHandler(ev, elements,imagens,canvas){
+    
+    
     for(let i=0;i<elements.length;i++){
-        if (elements[i].mouseOverBoundingBox(ev)){
-            
-            
+        if (elements[i].mouseOverBoundingBox(ev)){      
             
             switch (elements[i].img.id) {
 				case "Jogar":
@@ -152,7 +152,7 @@ function canvasClickHandler(ev, elements,imagens,canvas){
                     return elementos;
 
 				default:
-                    return elements;
+                    return [];
 					
 			}
         }

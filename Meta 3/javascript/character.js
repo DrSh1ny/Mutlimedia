@@ -48,7 +48,7 @@ class Character {
         this.img=img;
         this.imgData=this.getImageData(self.img);
         
-
+        
     
         
 
