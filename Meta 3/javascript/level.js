@@ -28,7 +28,8 @@ class Level{
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
     var imagens=this.imagens;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
-    
+    var endPoint=this.endPoint;
+
     var id;
     var d = new Date();
     var lastFrame =d.getTime();
@@ -57,7 +58,7 @@ class Level{
         id=requestAnimationFrame(render);
 
         //level ended?
-        if(assetsAnimated[0].checkPixelCollision(char,assetsAnimated[0])){ 
+        if( endPoint.checkPixelCollision(char,endPoint) ){ 
           cancelAnimationFrame(id);
           drawElements(ctx,elementos,imagens);
         }
@@ -122,6 +123,7 @@ class Level{
           case 4: //endPoint (star)
             var endPoint=new ComponentAnimated(posX,posY,64,64,this.imagens.end,30,3);
             this.assetsAnimated.push(endPoint);
+            this.endPoint=endPoint;
             break;
           default:
             break;
