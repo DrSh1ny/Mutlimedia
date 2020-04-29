@@ -1,5 +1,4 @@
 "use strict";
-
 (function()
 {
 	window.addEventListener("load", loadingScreen);
@@ -58,6 +57,28 @@ function mainMenu(canvas,elements,imagens){
     elementos.push(botaoCreditos);
     return elementos;
 
+}
+
+function optionsMenu(canvas,elements,imagens,stateVolume){
+    var height = canvas.height;
+    var width = canvas.width;
+
+    var elementos= new Array();
+
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minus);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plus);
+    var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
+    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.Keybinding);
+    var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+    elementos.push(minus);
+    elementos.push(plus);
+    elementos.push(Keybinding);
+    elementos.push(Help);
+    elementos.push(botaoVoltar);
+    elementos.push(volume)
+    return elementos
 }
 
 
@@ -145,12 +166,19 @@ function canvasClickHandler(ev, elements,imagens,canvas){
                 case "modo_classico":
                     var elementos=menuNiveis(canvas,elements,imagens);
                     return elementos;
-                
+                case "Opcao":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    return elementos;
                 case "um":
                     var elementos=[];
                     mainAntigo(imagens);
                     return elementos;
-
+                case "minus":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMute)
+                    return elementos;
+                case "plus":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    return elementos;
 				default:
                     return [];
 					
@@ -184,7 +212,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
-    var resources=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resources=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2","Help","volumeMax","volumeMedium","volumeMinium","volumeMute","Help"]
     var toLoad=resources.length;   
     var loaded=0;
     
