@@ -68,12 +68,12 @@ class Component{
 }
 
 class ComponentAnimated extends Component{
-      constructor(posX,posY,width,height,img,periodBetweenFrames,numberFrames){
+      constructor(posX,posY,width,height,img,periodBetweenFrames,numberFrames,initialFrame){
             super(posX,posY,width,height,img,null);
             this.period=periodBetweenFrames;
             this.numberFrames=numberFrames;
             this.frameCount=0;
-            this.currentFrame=0;
+            this.currentFrame=initialFrame;
             this.imgData=this.getImageData(this.img);
       }
 
