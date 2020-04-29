@@ -121,10 +121,16 @@ class Level{
             break;
             
           case 4: //endPoint (star)
-            var endPoint=new ComponentAnimated(posX,posY,64,64,this.imagens.end,30,3);
+            var endPoint=new ComponentAnimated(posX,posY,64,64,this.imagens.end,30,3,0);
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
+
+          case 5: //grass
+            var grass=new ComponentAnimated(posX,posY,52,21,this.imagens.grass,60,3,Math.round(Math.random()*2));
+            this.assetsAnimated.push(grass);
+            break;
+
           default:
             break;
         }
