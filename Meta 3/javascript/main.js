@@ -133,8 +133,8 @@ function menuNiveis(canvas,elements,imagens){
 function mainAntigo(imagens){
     var nivel=new Level(imagens,1600,900);
     nivel.loadLevel("../resources/mapa1.json");
-    nivel.run();
-
+    var elementos=nivel.run();
+    return elementos;
 
 }
 
@@ -170,8 +170,8 @@ function canvasClickHandler(ev, elements,imagens,canvas){
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
                     return elementos;
                 case "um":
-                    var elementos=[];
-                    mainAntigo(imagens);
+                    
+                    var elementos=mainAntigo(imagens);
                     return elementos;
                 case "minus":
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMute)
@@ -212,7 +212,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
-    var resources=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2","Help","volumeMax","volumeMedium","volumeMinium","volumeMute","Help"]
+    var resources=["end","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2","Help","volumeMax","volumeMedium","volumeMinium","volumeMute","Help"]
     var toLoad=resources.length;   
     var loaded=0;
     

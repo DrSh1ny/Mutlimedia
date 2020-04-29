@@ -67,6 +67,115 @@ class Component{
 
 }
 
+class ComponentAnimated extends Component{
+      constructor(posX,posY,width,height,img,periodBetweenFrames,numberFrames){
+            super(posX,posY,width,height,img,null);
+            this.period=periodBetweenFrames;
+            this.numberFrames=numberFrames;
+            this.frameCount=0;
+            this.currentFrame=0;
+            this.imgData=this.getImageData(this.img);
+      }
+
+      render(ctx){
+            var frameWidth=this.img.naturalWidth/this.numberFrames;
+            var currentPos=frameWidth*this.currentFrame;
+
+            ctx.drawImage(this.img,currentPos,0,frameWidth,this.img.naturalHeight,this.posX,this.posY,this.width,this.height);
+            this.frameCount++;
+
+            if(this.frameCount>this.period){
+                  this.currentFrame= (this.currentFrame+1)%this.numberFrames;
+                  this.frameCount=0;
+            }
+            
+      }
+
+      getImageData(img) {
+
+            var canvas = document.createElement("canvas");
+            canvas.width = this.width;
+            canvas.height = this.height;
+            var ctx = canvas.getContext("2d");
+            
+            var arrayImgData=[];
+            var frameWidth=this.img.naturalWidth/this.numberFrames;
+            
+            
+            for(let x=0;x<this.numberFrames;x++){
+                  //limpar tela
+                  ctx.clearRect(0,0,this.width,this.height);
+                  //desenhar frame
+                  ctx.drawImage(img,x*frameWidth,0,img.naturalWidth,img.naturalHeight,0,0,this.width,this.height);
+                  //captar array de pixeis
+                  var frame=ctx.getImageData(0,0,this.width,this.height);
+                  //colocar frame no array principal
+                  arrayImgData.push(frame);
+            }
+            
+            return arrayImgData;
+      }
+
+      checkPixelCollision(sprite1,sprite2){
+            //calcular box de colisao
+            var box1=sprite1.getBox();
+            var box2=sprite2.getBox();
+
+            var topA=box1[1];
+            var topB=box2[1];
+            var leftA=box1[0];
+            var leftB=box2[0];
+            var botA=box1[3];
+            var botB=box2[3];
+            var rightA=box1[2];
+            var rightB=box2[2];
+
+            //para recolher array de pixeis do frame atual
+            var row=0;
+            var frame=0;
+            var atual=0;
+            var atualB=0;
+            var array1=[];
+            var array2=[];
+            
+            if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
+            row=sprite1.getRow();
+            frame=sprite1.frame;
+            atual=row*4+frame;
+            atualB=sprite2.currentFrame;
+            array1=sprite1.imgData[atual].data;
+            array2=sprite2.imgData[atualB].data;
+
+            var xMin=Math.max(sprite1.posX,sprite2.posX);
+                  var yMin=Math.max(sprite1.posY,sprite2.posY);
+                  var xMax=Math.min(sprite1.posX+sprite1.width,sprite2.posX+sprite2.width);
+                  var yMax=Math.min(sprite1.posY+sprite1.height,sprite2.posY+sprite2.height);
+
+            for(let y=yMin;y<yMax;y++){
+                  for(let x=xMin;x<xMax;x++){
+                              
+                        let xLocalA= Math.floor(x-leftA);
+                        let yLocalA= Math.floor(y-topA);
+
+                        let xLocalB= Math.floor(x-leftB);
+                        let yLocalB= Math.floor(y-topB);
+
+                        if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && array2[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
+                              return true;
+                        }
+                  }
+            }
+                        
+            return false;
+      }
+
+      else{
+            return false;
+      }
+                  
+      }
+
+}
 
 class SpecialElement extends Component{
 	constructor(x, y, w, h, speedX,speedy, img,finalX,finalY){
