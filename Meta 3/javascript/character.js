@@ -125,8 +125,6 @@ class Character {
 
 
     move(character, lastFrame, currentFrame,ctx) {
-        
-        
         character.lastX=character.posX;
         character.lastY=character.posY;
 
@@ -192,11 +190,7 @@ class Character {
         character.posY+=character.speedY;
         character.handleCollision(character);
         
-
-        var func = function (time) {
-            character.move(character, currentFrame, time,ctx);
-        }
-        requestAnimationFrame(func);
+        
     }
 
 

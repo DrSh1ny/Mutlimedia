@@ -13,6 +13,7 @@ class Level{
 
     this.sprites
     this.assets;
+    this.assetsAnimated;
 
     this.imagens=imagens;
   }
@@ -24,26 +25,46 @@ class Level{
     var nw=canvas.width;
     var nh=canvas.height;
     var assets=this.assets; //todos os componenentes do nivel e o character incluido
+    var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
+    var imagens=this.imagens;
+    var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
     
-    
-       
+    var id;
+    var d = new Date();
+    var lastFrame =d.getTime();
+
     var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets);
     assets.push(char);
+
+    
+
     //camera
     var camera=new Camera(0,0,800,450);
     //var camera=new Camera(0,0,1066,600);
     var mapa = {x:0, y:0, width:1600, height:900};
 
-    char.move(char,0,0,ctx);
+    
     render();
     
     
-    function render(){
-       
-        camera.updateAnim(assets,mapa,ctx);
+    function render(time){
         
-        requestAnimationFrame(render);
+        
+        char.move(char,lastFrame,time,ctx);
+        camera.updateAnim(assets,assetsAnimated,mapa,ctx);
+        lastFrame=time;//for move function
+
+        id=requestAnimationFrame(render);
+
+        //level ended?
+        if(assetsAnimated[0].checkPixelCollision(char,assetsAnimated[0])){ 
+          cancelAnimationFrame(id);
+          drawElements(ctx,elementos,imagens);
+        }
+
     }
+
+    return elementos;
 
   }
 
@@ -73,7 +94,7 @@ class Level{
     var squareHeight=this.height/900;
 
     this.assets=new Array();
-    
+    this.assetsAnimated=new Array();
   
     for(let x=0;x<1600;x++){
       for(let y=0;y<900;y++){
@@ -98,6 +119,10 @@ class Level{
             this.assets.push(asset);
             break;
             
+          case 4: //endPoint (star)
+            var endPoint=new ComponentAnimated(posX,posY,64,64,this.imagens.end,30,3);
+            this.assetsAnimated.push(endPoint);
+            break;
           default:
             break;
         }
