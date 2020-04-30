@@ -195,7 +195,7 @@ function loadingScreen() {
     var loaded=0;
 
 
-    for(let i = 0, l = resourcesImg.length ; i < l ; i++){
+    for(let i=0,l=resourcesImg.length;i<l;i++){
         let source=resourcesImg[i];
         let imagem=new Image();
 
@@ -205,7 +205,7 @@ function loadingScreen() {
         imagem.src="../resources/"+source+".png";
     }
 
-    for(let i = 0, l = resourcesSound.length ; i < l ; i++){
+    for(let i=0,l=resourcesSound.length;i<l;i++){
         let source = resourcesSound[i];
         let sound = new Audio();
 
@@ -215,12 +215,11 @@ function loadingScreen() {
         resourcesLoadedHandler();
     }
 
+
     function resourcesLoadedHandler(ev){
         loaded++;
 
         if(loaded==toLoad){
-            console.log(imagens);
-			console.log(sounds);
             main(imagens, sounds);
         }
     }
