@@ -360,7 +360,6 @@ class Character {
                     
 				}
             }
-
             return false;
         }
 		else{

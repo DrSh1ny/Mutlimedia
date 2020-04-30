@@ -178,16 +178,44 @@ class ComponentAnimated extends Component{
 }
 
 class Shooter extends Component{
-      constructor(posX,posY,width,heigth,img,periodBetweenBullets,velocityOfBullets,direction,bulletWidth,bulletHeigth){
+      constructor(posX,posY,width,heigth,img,periodBetweenBullets,bulletVelocityX,bulletVelocityY,bulletWidth,bulletHeigth,bulletImg){
             super(posX,posY,width,heigth,img);
             
             //atributes of shooter's bullets
             this.bulletPeriod=periodBetweenBullets;
-            this.bulletVelocity=velocityOfBullets;
-            this.direction=direction;
+            this.bulletVelocityX=bulletVelocityX;
+            this.bulletVelocityY=bulletVelocityY;
             this.bulletWidth=bulletWidth;
-            this.bulletHeigth=bulletHeigth;   
+            this.bulletHeigth=bulletHeigth;
+            this.bulletImg=bulletImg;
+           
+            var wraper=[this.posX+24,this.posY-4,this.bulletWidth,this.bulletHeigth,this.bulletImg,this.bulletVelocityX,this.bulletVelocityY]; //jeez, such spam, how does one not do it such way?
+            this.id=window.setInterval(this.fireBullet,this.bulletPeriod,wraper);
       }
+
+      fireBullet(wraper){
+            var canvas = document.getElementById("canvas");
+            var bullet=new Bullet(...wraper);
+            var ev=new Event("bulletFired");
+
+            ev.bullet=bullet;
+            canvas.dispatchEvent(ev);
+      }
+}
+
+class Bullet extends Component{
+      constructor(posX,posY,width,heigth,img,velocityX,velocityY){
+            super(posX,posY,width,heigth,img);
+            this.velocityX=velocityX;
+            this.velocityY=velocityY;
+      }
+
+      move(){
+            this.posX+=this.velocityX;
+            this.posY+=this.velocityY;
+      }
+      
+
 }
 
 class SpecialElement extends Component{

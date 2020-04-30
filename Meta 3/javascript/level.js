@@ -26,9 +26,11 @@ class Level{
     var nh=canvas.height;
     var assets=this.assets; //todos os componenentes do nivel e o character incluido
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
+    var bullets=new Array();  //bullet containment
     var imagens=this.imagens;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
-    var endPoint=this.endPoint;
+	var endPoint=this.endPoint;
+	var self=this;
 
     //for character movement
     var id;
@@ -38,7 +40,7 @@ class Level{
     var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets);
     assets.push(char);
 
-    
+    canvas.addEventListener("bulletFired",bulletFiredHandler);
     //camera
     var camera=new Camera(0,0,800,450);
     //var camera=new Camera(0,0,1066,600);
@@ -48,25 +50,39 @@ class Level{
     render();
     function render(time){
         
-        //character movement
-        char.move(char,lastFrame,time,ctx);
-        //rendering of everything
-        camera.updateAnim(assets,assetsAnimated,mapa,ctx);
-        lastFrame=time;//for move function
+      //bullet handler
+      self.bulletHandler(bullets);
+      //character movement
+      char.move(char,lastFrame,time,ctx);
+      //rendering of everything
+      camera.updateAnim(assets,assetsAnimated,bullets,mapa,ctx);
+      lastFrame=time;//for move function
 
-        id=requestAnimationFrame(render);
+      id=requestAnimationFrame(render);
 
-        //evaluate level ending conditions
-        if( endPoint.checkPixelCollision(char,endPoint) ){ 
-          cancelAnimationFrame(id);
-          drawElements(ctx,elementos,imagens);
-        }
+      //evaluate level ending conditions
+      if( endPoint.checkPixelCollision(char,endPoint) ){ 
+        cancelAnimationFrame(id);
+        drawElements(ctx,elementos,imagens);
+      }
 
     }
 
+    function bulletFiredHandler(ev){
+      var bullet=ev.bullet;
+      bullets.push(bullet);
+    }
+
+    //canvas.removeEventListener("bulletFired",bulletFiredHandler);
     return elementos;
 
   }
+
+	bulletHandler(bullets){
+	for(let i=0;i<bullets.length;i++){
+		bullets[i].move();
+	}
+  }					
 
   loadLevel(file_path){
     //get the data in the file in a string
@@ -124,7 +140,12 @@ class Level{
             var grass=new ComponentAnimated(posX,posY,52,21,this.imagens.grass,60,3,Math.round(Math.random()*2));
             this.assetsAnimated.push(grass);
             break;
-
+			
+		  case 8: //shooter
+            var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+            this.assets.push(shooter);
+			break;
+			
           default:
             break;
         }
