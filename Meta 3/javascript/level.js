@@ -63,6 +63,7 @@ class Level{
       //evaluate level ending conditions
       if( endPoint.checkPixelCollision(char,endPoint) ){ 
         cancelAnimationFrame(id);
+        canvas.removeEventListener("bulletFired",bulletFiredHandler);
         drawElements(ctx,elementos,imagens);
       }
 
@@ -73,7 +74,7 @@ class Level{
       bullets.push(bullet);
     }
 
-    //canvas.removeEventListener("bulletFired",bulletFiredHandler);
+    
     return elementos;
 
   }
