@@ -1,41 +1,43 @@
 "use strict";
+
 (function()
 {
 	window.addEventListener("load", loadingScreen);
 }());
 
 
-function main(imagens){
-    
+function main(imagens, sounds){
+
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
 	var elements = new Array()
     var imagens=imagens;
-    
+		var sounds = sounds;
+
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
-    
+
 	elements=mainMenu(canvas,elements,imagens);
     drawElements(ctx,elements,imagens);
 
-	
+
     canvas.addEventListener("click",clickHandler);
     canvas.addEventListener("mousemove",mouseMoveHandler);
-	
-		
+
+
 
     function clickHandler(ev){
-        elements=canvasClickHandler(ev,elements,imagens,canvas);
+        elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
         drawElements(ctx,elements,imagens);
     }
 
     function mouseMoveHandler(ev) {
         canvasMouseMoveHandlder(ev,elements,imagens,canvas);
     }
-  
 
-	
+
+
 }
 
 
@@ -43,10 +45,10 @@ function main(imagens){
 function mainMenu(canvas,elements,imagens){
     var height = canvas.height;
     var width = canvas.width;
-    
+
 
     var elementos= new Array();
-    
+
 
     var botaoJogar = new Component(2*width/5,2.5*height/4,300,60,imagens.Jogar,imagens.JogarHover);
     var botaoOpcao = new Component(width/7,2.51*height/4,300,60,imagens.Opcao,imagens.OpcaoHover);
@@ -59,33 +61,11 @@ function mainMenu(canvas,elements,imagens){
 
 }
 
-function optionsMenu(canvas,elements,imagens,stateVolume){
-    var height = canvas.height;
-    var width = canvas.width;
-
-    var elementos= new Array();
-
-    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minus);
-    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plus);
-    var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
-    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.Keybinding);
-    var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
-    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
-
-    elementos.push(minus);
-    elementos.push(plus);
-    elementos.push(Keybinding);
-    elementos.push(Help);
-    elementos.push(botaoVoltar);
-    elementos.push(volume)
-    return elementos
-}
-
 
 function menuModo(canvas,elements,imagens){
     var height = canvas.height;
     var width = canvas.width;
-    
+
 
     var elementos= new Array();
 
@@ -103,7 +83,7 @@ function menuModo(canvas,elements,imagens){
 function menuNiveis(canvas,elements,imagens){
     var height = canvas.height;
     var width = canvas.width;
-    
+
 
     var elementos= new Array();
 
@@ -133,55 +113,52 @@ function menuNiveis(canvas,elements,imagens){
 function mainAntigo(imagens){
     var nivel=new Level(imagens,1600,900);
     nivel.loadLevel("../resources/mapa1.json");
-    var elementos=nivel.run();
-    return elementos;
+    nivel.run();
+
 
 }
 
 function drawElements(ctx,elements,imagens){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if(elements.length>0 && elements[0].img.id=="Jogar"){
-        canvas.getContext("2d").drawImage(imagens.Logo,ctx.canvas.width/2-350,40,734,536);
+        ctx.drawImage(imagens.Logo,ctx.canvas.width/2-350,40,734,536);
     }
     for(let i=0;i<elements.length;i++){
         elements[i].render(ctx);
     }
 }
 
-function canvasClickHandler(ev, elements,imagens,canvas){
-    
-    
+function canvasClickHandler(ev, elements,imagens,canvas, sounds){
+
+
     for(let i=0;i<elements.length;i++){
-        if (elements[i].mouseOverBoundingBox(ev)){      
-            
+        if (elements[i].mouseOverBoundingBox(ev)){
+
             switch (elements[i].img.id) {
-				case "Jogar":
+								case "Jogar":
                     var elementos=menuModo(canvas,elements,imagens);
+										sounds.buttonSound.play();
                     return elementos;
-					
-				case "Voltar":
+
+								case "Voltar":
                     var elementos=mainMenu(canvas,elements,imagens);
+										sounds.buttonSound.play();
                     return elementos;
-                    
+
                 case "modo_classico":
                     var elementos=menuNiveis(canvas,elements,imagens);
+										sounds.buttonSound.play();
                     return elementos;
-                case "Opcao":
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
-                    return elementos;
+
                 case "um":
-                    
-                    var elementos=mainAntigo(imagens);
+                    var elementos=[];
+										sounds.levelButtonSound.play()
+                    mainAntigo(imagens);
                     return elementos;
-                case "minus":
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMute)
-                    return elementos;
-                case "plus":
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
-                    return elementos;
-				default:
+
+								default:
                     return [];
-					
+
 			}
         }
     }
@@ -199,46 +176,57 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
             elementos[i].hover=true;
             drawElements(ctx,elementos,imagens);
             return;
-            
+
         }
         elementos[i].hover=false;
-        
+
     }
     drawElements(ctx,elementos,imagens);
     canvas.style.cursor = "default";
 
-    
+
 }
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
-    var resources=["grass","end","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2","Help","volumeMax","volumeMedium","volumeMinium","volumeMute","Help"]
-    var toLoad=resources.length;   
+		var sounds = {};
+    var resourcesImg=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+	var	resourcesSound = ["levelButtonSound", "buttonSound"]
+    var toLoad=resourcesImg.length + resourcesSound.lenght;
     var loaded=0;
-    
-    
-    for(let i=0;i<toLoad;i++){
-        let source=resources[i];
+
+
+    for(let i = 0, l = resourceImg.lenght ; i < l ; i++){
+        let source=resourcesImg[i];
         let imagem=new Image();
 
         imagens[source]=imagem;
         imagem.id=source;
-        imagem.addEventListener("load", imgLoadedHandler);
+        imagem.addEventListener("load", resourcesLoadedHandler);
         imagem.src="../resources/"+source+".png";
     }
-    
 
+		for(let i = 0, l = resourcesSound.length ; i < l ; i++){
+			let source = resourcesSound[i];
+			let sound = new Audio();
 
-    function imgLoadedHandler(ev){
+			sounds[source] = sound;
+			sound.id = source;
+			sound.addEventListener("load", resourcesLoadedHandler)
+			sound.src = "../resources/sounds/" + source + ".mp3";
+		}
+
+    function resourcesLoadedHandler(ev){
         loaded++;
-        
+
         if(loaded==toLoad){
             console.log(imagens);
-            main(imagens);
+						console.log(sounds);
+            main(imagens, sounds);
         }
     }
-    
-   
+
+
 }
 
 
@@ -258,11 +246,11 @@ function loadingScreen() {
     var canvas=document.getElementById("canvas");
     var ctx=canvas.getContext("2d");
     var nw=canvas.width;
-    var nh=canvas.height; 
+    var nh=canvas.height;
 
     var imagens=imagens;
-    
-    
+
+
     var assets=[];
     var asset=new Component(700,700,300,300,imagens.box2);
     var asset1=new Component(900,600,300,300,imagens.box1);
@@ -278,19 +266,19 @@ function loadingScreen() {
     assets.push(asset5);
 
     var char=new Character(0,300,256,350,imagens.char,assets);
-    
+
 
     //camera
     //var camera=new Camera(0,0,1066,600);
     var camera=new Camera(0,0,1600,900);
     var mapa = {x:0, y:0, width:1600, height:900};
-    
+
 
 
     char.move(char,0,0,ctx);
     render();
-    
-    
+
+
     function render(){
         camera.updateAnim([asset,char,asset1,asset2,asset3,asset4,asset5],mapa,ctx);
 
