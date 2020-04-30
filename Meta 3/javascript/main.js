@@ -135,7 +135,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
         if (elements[i].mouseOverBoundingBox(ev)){
 
             switch (elements[i].img.id) {
-								case "Jogar":
+				case "Jogar":
                     var elementos=menuModo(canvas,elements,imagens);
 					sounds.buttonSound.play();
                     return elementos;
