@@ -117,11 +117,11 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
 
     var elementos= new Array();
 
-    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minus);
-    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plus);
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minusHover);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plusHover);
     var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
-    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.Keybinding);
-    var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
+    var Keybinding = new Component(9*width/15,height/2-30,600,70,imagens.Keybinding,imagens.KeybindingHover);
+    var Help = new Component(2*width/5,height/2-100,200,200,imagens.Help,imagens.HelpHover);
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
     elementos.push(minus);
@@ -223,7 +223,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["Help","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
