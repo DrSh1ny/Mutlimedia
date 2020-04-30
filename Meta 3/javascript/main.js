@@ -7,21 +7,14 @@
 
 
 function main(imagens, sounds){
-<<<<<<< HEAD
     
-=======
->>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
 
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
 	var elements = new Array()
     var imagens=imagens;
-<<<<<<< HEAD
 	var sounds = sounds;
-=======
-		var sounds = sounds;
->>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
 
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
