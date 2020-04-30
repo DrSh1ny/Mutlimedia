@@ -103,7 +103,6 @@ class Level{
             this.assets.push(asset);
             break;
            
-            
           case 2: //caixa2
             var asset=new Component(posX,posY,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
             this.assets.push(asset);
