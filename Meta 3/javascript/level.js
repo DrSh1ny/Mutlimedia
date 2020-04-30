@@ -46,8 +46,6 @@ class Level{
 
     
     render();
-    
-    
     function render(time){
         
         
@@ -76,17 +74,13 @@ class Level{
     
     //parse the string using JSON.parse()
     var obj = JSON.parse(text);
-    
-    
-
-    
+ 
     //assign the data to the respective atribute of the level
     this.charX = obj.properties[0].value;
     this.charY = obj.properties[1].value;
     this.sprites = obj.layers[0].data;
 
   
-    
     //more can be added as long as the constructor and the level file are updated
     //translate the matrix into an array of components
     //divide level space into grids
