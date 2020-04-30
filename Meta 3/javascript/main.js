@@ -7,14 +7,21 @@
 
 
 function main(imagens, sounds){
+<<<<<<< HEAD
     
+=======
+>>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
 
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
 	var elements = new Array()
     var imagens=imagens;
+<<<<<<< HEAD
 	var sounds = sounds;
+=======
+		var sounds = sounds;
+>>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
 
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
@@ -114,8 +121,8 @@ function menuNiveis(canvas,elements,imagens){
 function mainAntigo(imagens){
     var nivel=new Level(imagens,1600,900);
     nivel.loadLevel("../resources/mapa1.json");
-    var elementos=nivel.run();
-    return elementos;
+    nivel.run();
+
 
 
 }
@@ -137,7 +144,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
         if (elements[i].mouseOverBoundingBox(ev)){
 
             switch (elements[i].img.id) {
-				case "Jogar":
+								case "Jogar":
                     var elementos=menuModo(canvas,elements,imagens);
 					sounds.buttonSound.play();
                     return elementos;
@@ -191,6 +198,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 		var sounds = {};
+<<<<<<< HEAD
     var resourcesImg=["end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
@@ -198,6 +206,15 @@ function loadingScreen() {
 
 
     for(let i = 0, l = resourcesImg.length ; i < l ; i++){
+=======
+    var resourcesImg=["back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+	var	resourcesSound = ["levelButtonSound", "buttonSound"]
+    var toLoad=resourcesImg.length + resourcesSound.lenght;
+    var loaded=0;
+
+
+    for(let i = 0, l = resourceImg.lenght ; i < l ; i++){
+>>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
         let source=resourcesImg[i];
         let imagem=new Image();
 
@@ -207,6 +224,7 @@ function loadingScreen() {
         imagem.src="../resources/"+source+".png";
     }
 
+<<<<<<< HEAD
     for(let i = 0, l = resourcesSound.length ; i < l ; i++){
         let source = resourcesSound[i];
         let sound = new Audio();
@@ -217,12 +235,28 @@ function loadingScreen() {
         resourcesLoadedHandler();
     }
 
+=======
+		for(let i = 0, l = resourcesSound.length ; i < l ; i++){
+			let source = resourcesSound[i];
+			let sound = new Audio();
+
+			sounds[source] = sound;
+			sound.id = source;
+			sound.addEventListener("load", resourcesLoadedHandler)
+			sound.src = "../resources/sounds/" + source + ".mp3";
+		}
+
+>>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
     function resourcesLoadedHandler(ev){
         loaded++;
 
         if(loaded==toLoad){
             console.log(imagens);
+<<<<<<< HEAD
 			console.log(sounds);
+=======
+						console.log(sounds);
+>>>>>>> 3656651d9c0ef8941b75b4ac52ee41ed53f76d5a
             main(imagens, sounds);
         }
     }
