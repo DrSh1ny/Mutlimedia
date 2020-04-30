@@ -111,6 +111,28 @@ function menuNiveis(canvas,elements,imagens){
 
 }
 
+function optionsMenu(canvas,elements,imagens,stateVolume){
+    var height = canvas.height;
+    var width = canvas.width;
+
+    var elementos= new Array();
+
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minus);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plus);
+    var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
+    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.Keybinding);
+    var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+    elementos.push(minus);
+    elementos.push(plus);
+    elementos.push(Keybinding);
+    elementos.push(Help);
+    elementos.push(botaoVoltar);
+    elementos.push(volume)
+    return elementos
+}
+
 function mainAntigo(imagens){
     var nivel=new Level(imagens,1600,900);
     nivel.loadLevel("../resources/mapa1.json");
@@ -135,11 +157,20 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
         if (elements[i].mouseOverBoundingBox(ev)){
 
             switch (elements[i].img.id) {
+
 				case "Jogar":
                     var elementos=menuModo(canvas,elements,imagens);
 					sounds.buttonSound.play();
                     return elementos;
-
+                case "Opcao":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    return elementos;
+                case "minus":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMute)
+                    return elementos;
+                case "plus":
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    return elementos;
 				case "Voltar":
                     var elementos=mainMenu(canvas,elements,imagens);
 					sounds.buttonSound.play();
@@ -189,7 +220,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 		var sounds = {};
-    var resourcesImg=["end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["Help","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
