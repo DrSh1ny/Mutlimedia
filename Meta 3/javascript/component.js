@@ -177,6 +177,19 @@ class ComponentAnimated extends Component{
 
 }
 
+class Shooter extends Component{
+      constructor(posX,posY,width,heigth,img,periodBetweenBullets,velocityOfBullets,direction,bulletWidth,bulletHeigth){
+            super(posX,posY,width,heigth,img);
+            
+            //atributes of shooter's bullets
+            this.bulletPeriod=periodBetweenBullets;
+            this.bulletVelocity=velocityOfBullets;
+            this.direction=direction;
+            this.bulletWidth=bulletWidth;
+            this.bulletHeigth=bulletHeigth;   
+      }
+}
+
 class SpecialElement extends Component{
 	constructor(x, y, w, h, speedX,speedy, img,finalX,finalY){
 		super(x, y, w, h, speedX,speedy, img);

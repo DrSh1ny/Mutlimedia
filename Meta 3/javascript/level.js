@@ -30,6 +30,7 @@ class Level{
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
     var endPoint=this.endPoint;
 
+    //for character movement
     var id;
     var d = new Date();
     var lastFrame =d.getTime();
@@ -38,24 +39,24 @@ class Level{
     assets.push(char);
 
     
-
     //camera
     var camera=new Camera(0,0,800,450);
     //var camera=new Camera(0,0,1066,600);
     var mapa = {x:0, y:0, width:1600, height:900};
 
-    
+    //HEART
     render();
     function render(time){
         
-        
+        //character movement
         char.move(char,lastFrame,time,ctx);
+        //rendering of everything
         camera.updateAnim(assets,assetsAnimated,mapa,ctx);
         lastFrame=time;//for move function
 
         id=requestAnimationFrame(render);
 
-        //level ended?
+        //evaluate level ending conditions
         if( endPoint.checkPixelCollision(char,endPoint) ){ 
           cancelAnimationFrame(id);
           drawElements(ctx,elementos,imagens);
