@@ -148,17 +148,17 @@ class Level{
 					
 				}
         switch (this.sprites[pos]) {
-          case 3: //plataforma
-            var asset=new Component(posX,posY,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
+          case 2: //caixa1
+            var asset=new Component(posX,posY-this.imagens.box1.naturalHeight,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
             this.assets.push(asset);
             break;
            
-          case 2: //caixa2
+          case 3: //caixa2
             var asset=new Component(posX,posY,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
             this.assets.push(asset);
             break;
             
-          case 1: //caixa1
+          case 1: //plataforma
             var asset=new Component(posX,posY-this.imagens.plataforma.naturalHeight,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
             this.assets.push(asset);
             break;
@@ -198,7 +198,13 @@ class Level{
 						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
 						this.assets.push(asset);
 						break;
-			
+					
+					case 15: //lamp
+            var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,15,16,0);
+            this.assetsAnimated.push(lamp);
+            break;
+					
+					
           default:
             break;
         }
