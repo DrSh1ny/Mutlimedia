@@ -141,9 +141,14 @@ class Level{
         var posX=x*squareWidth;
         var posY=y*squareHeight;
         
-        var pos=y*1600 + x;
+				var pos=y*1600 + x;
+				
+				if(this.sprites[pos]!=0){
+					console.log(this.sprites[pos]);
+					
+				}
         switch (this.sprites[pos]) {
-          case 1: //plataforma
+          case 3: //plataforma
             var asset=new Component(posX,posY,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
             this.assets.push(asset);
             break;
@@ -153,32 +158,46 @@ class Level{
             this.assets.push(asset);
             break;
             
-          case 3: //caixa1
-            var asset=new Component(posX,posY,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
+          case 1: //caixa1
+            var asset=new Component(posX,posY-this.imagens.plataforma.naturalHeight,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
             this.assets.push(asset);
             break;
             
-          case 4: //endPoint (star)
-            var endPoint=new ComponentAnimated(posX,posY,64,64,this.imagens.end,30,3,0);
+          case 11: //endPoint (star)
+            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end.naturalHeight,this.imagens.end.naturalWidth/3,this.imagens.end.naturalHeight,this.imagens.end,30,3,0);
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
 
-          case 5: //grass
-            var grass=new ComponentAnimated(posX,posY,52,21,this.imagens.grass,60,3,Math.round(Math.random()*2));
+          case 4: //grass
+            var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,60,3,Math.round(Math.random()*2));
             this.assetsAnimated.push(grass);
             break;
 			
-					case 8: //shooter
+					case 234: //shooterRight
 						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
 						this.assets.push(shooter);
 						break;
 
-					case 9: //ground
-						var asset=new Component(posX,posY,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
+					case 14: //shooterLeft
+						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,-3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+						this.assets.push(shooter);
+						break;
+
+					case 8: //ground
+						var asset=new Component(posX,posY-this.imagens.ground.naturalHeight,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
 						this.assets.push(asset);
 						break;
 
+					case 9: //groundRight
+						var asset=new Component(posX,posY-this.imagens.groundRight.naturalHeight,this.imagens.groundRight.naturalWidth,this.imagens.groundRight.naturalHeight,this.imagens.groundRight);
+						this.assets.push(asset);
+						break;
+
+					case 10: //groundLeft
+						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
+						this.assets.push(asset);
+						break;
 			
           default:
             break;
