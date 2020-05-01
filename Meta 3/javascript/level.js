@@ -29,8 +29,8 @@ class Level{
     var bullets=new Array();  //bullet containment
     var imagens=this.imagens;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
-	var endPoint=this.endPoint;
-	var self=this;
+		var endPoint=this.endPoint;
+		var self=this;
 
     //for character movement
     var id;
@@ -49,40 +49,67 @@ class Level{
     //HEART
     render();
     function render(time){
-        
-      //bullet handler
-      self.bulletHandler(bullets);
-      //character movement
-      char.move(char,lastFrame,time,ctx);
-      //rendering of everything
-      camera.updateAnim(assets,assetsAnimated,bullets,mapa,ctx);
-      lastFrame=time;//for move function
+			
+			//bullet handler
+			self.bulletHandler(char,bullets,assets);
+			//character movement
+			char.move(char,lastFrame,time,ctx);
+			//rendering of everything
+			camera.updateAnim(imagens,char,assets,assetsAnimated,bullets,mapa,ctx);
+			camera.drawHUD(ctx,char,imagens);
+			lastFrame=time;//for move function
 
-      id=requestAnimationFrame(render);
+			id=requestAnimationFrame(render);
 
-      //evaluate level ending conditions
-      if( endPoint.checkPixelCollision(char,endPoint) ){ 
-        cancelAnimationFrame(id);
-        canvas.removeEventListener("bulletFired",bulletFiredHandler);
-        drawElements(ctx,elementos,imagens);
-      }
-
-    }
+			//evaluate ending conditions
+			if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint)){
+					cancelAnimationFrame(id);	//stop rendering
+					canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
+					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
+				
+					for(let i=0;i<bullets.length;i++){
+						clearInterval(bullets[i].shooter.id);//stop bullet firing   
+					}
+			}
+		}
 
     function bulletFiredHandler(ev){
-      var bullet=ev.bullet;
-      bullets.push(bullet);
+			var newBullet=self.bulletFiredHandlerOuter(ev);
+      bullets.push(newBullet);
     }
 
     
     return elementos;
-
-  }
-
-	bulletHandler(bullets){
-	for(let i=0;i<bullets.length;i++){
-		bullets[i].move();
 	}
+
+	//reach end | out of lives | out of level bounds (not yet)
+	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint){
+		if(endPoint.checkPixelCollision(char,endPoint)){
+			return true;
+		}
+		
+		if(char.lives<1){
+				return true;
+			}
+
+	}
+
+	//some shooter fired a bullet
+	bulletFiredHandlerOuter(ev){
+		return ev.bullet;
+	}
+
+
+	bulletHandler(char,bullets,assets){
+		for(let i=0;i<bullets.length;i++){
+			bullets[i].move();
+
+			if(bullets[i].checkPixelCollision(char,bullets[i])){
+				bullets.splice(i,1);
+				char.lives--;
+			}
+
+		}
   }					
 
   loadLevel(file_path){

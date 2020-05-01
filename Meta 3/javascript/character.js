@@ -27,6 +27,8 @@ class Character {
         this.up=false;
         this.grounded=false;
 
+        this.lives=3;
+
         var self = this;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
 

@@ -57,6 +57,64 @@ class Component{
 			return false;
 	}
 
+      checkPixelCollision(sprite1,sprite2){
+            //calcular box de colisao
+            var box1=sprite1.getBox();
+            var box2=sprite2.getBox();
+
+            var topA=box1[1];
+            var topB=box2[1];
+            var leftA=box1[0];
+            var leftB=box2[0];
+            var botA=box1[3];
+            var botB=box2[3];
+            var rightA=box1[2];
+            var rightB=box2[2];
+
+            //para recolher array de pixeis do frame atual
+            var row=0;
+            var frame=0;
+            var atual=0;
+            
+            var array1=[];
+            var array2=[];
+            
+            if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
+            row=sprite1.getRow();
+            frame=sprite1.frame;
+            atual=row*4+frame;
+            
+            array1=sprite1.imgData[atual].data;
+            array2=sprite2.imgData.data;
+
+            var xMin=Math.max(sprite1.posX,sprite2.posX);
+                  var yMin=Math.max(sprite1.posY,sprite2.posY);
+                  var xMax=Math.min(sprite1.posX+sprite1.width,sprite2.posX+sprite2.width);
+                  var yMax=Math.min(sprite1.posY+sprite1.height,sprite2.posY+sprite2.height);
+
+            for(let y=yMin;y<yMax;y++){
+                  for(let x=xMin;x<xMax;x++){
+                              
+                        let xLocalA= Math.floor(x-leftA);
+                        let yLocalA= Math.floor(y-topA);
+
+                        let xLocalB= Math.floor(x-leftB);
+                        let yLocalB= Math.floor(y-topB);
+
+                        if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && array2[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
+                              return true;
+                        }
+                  }
+            }
+                        
+            return false;
+      }
+
+      else{
+            return false;
+      }
+                  
+      }
     reset(ev, ctx)
 	{
 		this.clear(ctx);
@@ -189,7 +247,7 @@ class Shooter extends Component{
             this.bulletHeigth=bulletHeigth;
             this.bulletImg=bulletImg;
            
-            var wraper=[this.posX+24,this.posY-4,this.bulletWidth,this.bulletHeigth,this.bulletImg,this.bulletVelocityX,this.bulletVelocityY]; //jeez, such spam, how does one not do it such way?
+            var wraper=[this.posX+24,this.posY-4,this.bulletWidth,this.bulletHeigth,this.bulletImg,this.bulletVelocityX,this.bulletVelocityY,this]; //jeez, such spam, how does one not do it such way?
             this.id=window.setInterval(this.fireBullet,this.bulletPeriod,wraper);
       }
 
@@ -204,8 +262,9 @@ class Shooter extends Component{
 }
 
 class Bullet extends Component{
-      constructor(posX,posY,width,heigth,img,velocityX,velocityY){
+      constructor(posX,posY,width,heigth,img,velocityX,velocityY,parentShooter){
             super(posX,posY,width,heigth,img);
+            this.shooter=parentShooter;
             this.velocityX=velocityX;
             this.velocityY=velocityY;
       }
