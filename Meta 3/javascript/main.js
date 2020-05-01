@@ -133,8 +133,8 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
     return elementos
 }
 
-function mainAntigo(imagens){
-    var nivel=new Level(imagens,1600,900);
+function mainAntigo(imagens,sounds){
+    var nivel=new Level(imagens,sounds,1600,900);
     nivel.loadLevel("../resources/mapa2.json");
     var elementos =nivel.run();
     return elementos;
@@ -186,7 +186,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
                 case "um":
 					sounds.levelButtonSound.play()
-                    var elementos=mainAntigo(imagens);
+                    var elementos=mainAntigo(imagens,sounds);
                     return elementos;
 
 				default:

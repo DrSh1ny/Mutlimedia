@@ -4,7 +4,7 @@
 
 class Level{
 
-  constructor(imagens,width,height){
+  constructor(imagens,sounds,width,height){
     this.charX;
     this.charY;
 
@@ -15,7 +15,8 @@ class Level{
     this.assets;
     this.assetsAnimated;
 
-    this.imagens=imagens;
+		this.imagens=imagens;
+		this.sounds=sounds;
   }
 
   
@@ -26,8 +27,11 @@ class Level{
     var nh=canvas.height;
     var assets=this.assets; //todos os componenentes do nivel e o character incluido
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
-    var bullets=new Array();  //bullet containment
-    var imagens=this.imagens;
+		var bullets=new Array();  //bullet containment
+		
+		var imagens=this.imagens;
+		var sounds=this.sounds;
+		var levelSound=sounds.levelSound2;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
 		var endPoint=this.endPoint;
 		var self=this;
@@ -47,11 +51,13 @@ class Level{
     var mapa = {x:0, y:0, width:1600, height:900};
 
     //HEART
-    render();
+		render();
+		levelSound.play();
     function render(time){
 			
 			//bullet handler
 			self.bulletHandler(char,bullets,assets);
+			self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
 			//character movement
 			char.move(char,lastFrame,time,ctx);
 			//rendering of everything
@@ -66,6 +72,8 @@ class Level{
 					cancelAnimationFrame(id);	//stop rendering
 					canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
 					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
+					levelSound.pause();
+					levelSound.currentTime = 0;
 				
 					for(let i=0;i<bullets.length;i++){
 						clearInterval(bullets[i].shooter.id);//stop bullet firing   
@@ -110,7 +118,18 @@ class Level{
 			}
 
 		}
-  }					
+	}				
+		
+	soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound){
+		var xDistance=Math.abs(char.posX-endPoint.posX);
+		var yDistance=Math.abs(char.posY-endPoint.posY);
+		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
+		var final=1-(distance/1500);
+		 
+		levelSound.volume=0.02; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
+		
+		
+	}
 
   loadLevel(file_path){
     //get the data in the file in a string
