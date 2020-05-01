@@ -169,10 +169,16 @@ class Level{
             this.assetsAnimated.push(grass);
             break;
 			
-		  case 8: //shooter
-            var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-            this.assets.push(shooter);
-			break;
+					case 8: //shooter
+						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+						this.assets.push(shooter);
+						break;
+
+					case 9: //ground
+						var asset=new Component(posX,posY,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
+						this.assets.push(asset);
+						break;
+
 			
           default:
             break;

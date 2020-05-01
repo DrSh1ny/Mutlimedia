@@ -125,8 +125,9 @@ class Camera{
   }
 
   drawHUD(ctx,char,images){
+    ctx.drawImage(images.pause,10,0,images.pause.naturalWidth,images.pause.naturalHeight);
     for(let i=0;i<char.lives;i++){
-      ctx.drawImage(images.heart,1520-70*i,10,images.heart.naturalWidth,images.heart.naturalHeight);
+      ctx.drawImage(images.heart,1500-70*i,10,images.heart.naturalWidth,images.heart.naturalHeight);
     }
   }
     
