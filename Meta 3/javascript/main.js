@@ -185,10 +185,19 @@ function keyMenu(canvas,elements,imagens,sounds){
         Object.keys(keys).forEach(function(key,index) {
             // key: the name of the object key
             // index: the ordinal position of the key within the object
-            ctx.font = '48px xirod';
-            ctx.fillText(keys[key], 1000, 160+140*index);
-            
+            if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump")){
+                ctx.fillStyle="#ffffff";
+                ctx.font = '48px xirod';
+            }
+            else{
+                ctx.fillStyle="#274547";
+                ctx.font = '48px xirod';
+            }
+            ctx.fillText(keys[key], 1000, 160+140*index);            
         });
+        if(selected!=null){
+            ctx.fillText("Pressione uma tecla!", 370, 600);
+        }
         id=requestAnimationFrame(render);
     }
 
