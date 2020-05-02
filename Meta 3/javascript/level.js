@@ -222,9 +222,15 @@ class Level{
             var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,15,16,0);
             this.assetsAnimated.push(lamp);
             break;
-					case 17: //plataformaIce
+					case 31: //plataformaIce
             var asset=new Component(posX,posY-this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce.naturalWidth,this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce);
             this.assets.push(asset);
+            break;
+
+          case 32: //end2
+            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end2.naturalHeight,this.imagens.end2.naturalWidth/8,this.imagens.end2.naturalHeight,this.imagens.end2,20,8,0);
+            this.assetsAnimated.push(endPoint);
+            this.endPoint=endPoint;
             break;
 					
           default:
