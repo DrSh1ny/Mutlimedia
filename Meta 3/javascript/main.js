@@ -111,6 +111,7 @@ function menuNiveis(canvas,elements,imagens){
 
 }
 
+
 function optionsMenu(canvas,elements,imagens,stateVolume){
     var height = canvas.height;
     var width = canvas.width;
@@ -133,12 +134,14 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
     return elementos
 }
 
+
 function mainAntigo(imagens,sounds){
     var nivel=new Level(imagens,sounds,1600,900);
     nivel.loadLevel("../resources/mapa2.json");
     var elementos =nivel.run();
     return elementos;
 }
+
 
 function drawElements(ctx,elements,imagens){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -150,8 +153,67 @@ function drawElements(ctx,elements,imagens){
     }
 }
 
-function canvasClickHandler(ev, elements,imagens,canvas, sounds){
+function keyMenu(canvas,elements,imagens,sounds){
+    var selected=null;
+    var keys={left:"arrowLeft",right:"arrowRight",jump:"space"};
+    var elementos=new Array();
+    var id;
+    //canvas.removeEventListener("click",clickHandler);
+    canvas.addEventListener("click",keyClickHandler);
+    canvas.addEventListener("mousemove",mouseMoveHandler);
 
+    var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda);
+    var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita);
+    var saltar=new Component(197,380,imagens.saltar.naturalWidth,imagens.saltar.naturalHeight,imagens.saltar);
+    //var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar);
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    //elementos.push(atacar);
+    elementos.push(saltar);
+    elementos.push(esquerda);
+    elementos.push(direita);
+
+
+    render();
+
+    function render(time){
+        console.log(selected);
+        
+        drawElements(canvas.getContext("2d"),elementos,imagens);
+        
+        id=requestAnimationFrame(render);
+    }
+
+    function mouseMoveHandler(ev) {
+        canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
+    }
+
+    function keyClickHandler(ev){
+        selected=keyClickHandlerOuter(ev,canvas,elementos,keys,selected);
+        if(selected=="Voltar"){
+            
+            canvas.removeEventListener("mousemove",mouseMoveHandler);
+            canvas.removeEventListener("click",keyClickHandler);
+            cancelAnimationFrame(id);
+        }
+    }
+
+    return mainMenu(canvas,elements,imagens);
+}
+
+
+
+function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
+    for(let i=0;i<elementos.length;i++){
+        if (elementos[i].mouseOverBoundingBox(ev)){
+            return elementos[i].img.id;
+        }
+    }
+    return null;
+}
+
+
+function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
     for(let i=0;i<elements.length;i++){
         if (elements[i].mouseOverBoundingBox(ev)){
@@ -165,6 +227,10 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                 case "Opcao":
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    return elementos;
+                case "Keybinding":
+                    sounds.buttonSound.play();
+                    var elementos=keyMenu(canvas,elements,imagens,sounds);
                     return elementos;
                 case "minus":
                     sounds.buttonSound.play();
@@ -198,6 +264,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
     return elements;
 }
 
+
 function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
     var x=ev.offsetX;
     var y=ev.offsetY;
@@ -220,10 +287,11 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 }
 
+
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
