@@ -234,31 +234,33 @@ class Character {
     
 
     keyDown(ev, character) {
-        if (ev.key == "ArrowRight") {
+        var canvas=document.getElementById("canvas");
+        
+        if (ev.code == canvas.keys.right) {
             character.right = true;
             character.lastDirection="right";
         }
 
-        if (ev.key == "ArrowLeft") {
+        if (ev.code == canvas.keys.left) {
             character.left = true;
             character.lastDirection="left";
         }
 
-        if (ev.code == "Space") {
+        if (ev.code == canvas.keys.jump) {
             character.up = true;
         }
     }
 
     keyUp(ev, character) {
-        if (ev.key == "ArrowRight") {
+        if (ev.code == canvas.keys.right) {
             character.right = false;
         }
 
-        if (ev.key == "ArrowLeft") {
+        if (ev.code == canvas.keys.left) {
             character.left = false;  
         }
 
-        if (ev.code == "Space") {
+        if (ev.code == canvas.keys.jump) {
             character.up = false;
         }
 

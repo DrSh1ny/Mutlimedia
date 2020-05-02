@@ -15,6 +15,8 @@ function main(imagens, sounds){
 	var elements = new Array()
     var imagens=imagens;
 	var sounds = sounds;
+    var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space"};
+    canvas.keys=keys;
 
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
@@ -155,12 +157,13 @@ function drawElements(ctx,elements,imagens){
 
 function keyMenu(canvas,elements,imagens,sounds){
     var selected=null;
-    var keys={left:"arrowLeft",right:"arrowRight",jump:"space"};
+    var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space"};
     var elementos=new Array();
     var id;
     //canvas.removeEventListener("click",clickHandler);
     canvas.addEventListener("click",keyClickHandler);
     canvas.addEventListener("mousemove",mouseMoveHandler);
+    document.addEventListener("keyup", keyUpHandler);
 
     var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda);
     var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita);
@@ -188,12 +191,19 @@ function keyMenu(canvas,elements,imagens,sounds){
         canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
     }
 
+    function keyUpHandler(ev){
+        keyUpHandlerOuter(ev,keys,selected);
+        selected=null;
+    }
+
     function keyClickHandler(ev){
         selected=keyClickHandlerOuter(ev,canvas,elementos,keys,selected);
         if(selected=="Voltar"){
             
             canvas.removeEventListener("mousemove",mouseMoveHandler);
             canvas.removeEventListener("click",keyClickHandler);
+            document.removeEventListener("keyup", keyUpHandler);
+            canvas.keys=keys;
             cancelAnimationFrame(id);
         }
     }
@@ -201,7 +211,21 @@ function keyMenu(canvas,elements,imagens,sounds){
     return mainMenu(canvas,elements,imagens);
 }
 
-
+ function keyUpHandlerOuter(ev,keys,selected){
+    switch (selected) {
+        case "direita":
+            keys.right=ev.code;
+            break;
+        case "esquerda":
+            keys.left=ev.code;
+            break;
+        case "saltar":
+            keys.jump=ev.code;
+            break;
+        default:
+            break;
+    }
+ }
 
 function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
     for(let i=0;i<elementos.length;i++){
