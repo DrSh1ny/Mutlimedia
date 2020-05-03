@@ -8,17 +8,33 @@ class Character {
         this.lastX= posX;
         this.lastY= posY;
 
+        var canvas = document.getElementById("canvas");
+        this.framerate=canvas.framerate;
+        if(this.framerate==144){//144hz monitor
+
         this.speedX = 0;
         this.speedY = 0;
-        this.acelX = 0;
+        this.acelX = 2;
         this.acelYUp = 0.2;
         this.acelYDown=0.5;
         this.frictionX=0.92;
-    
         this.speedLimitX=2;
         this.speedLimitY=30;
         this.boostX=30;
         this.boostY=8;
+        }
+        else{ //60hz monitor
+            this.speedX = 0;
+            this.speedY = 0;
+            this.acelX = 4.8;
+            this.acelYUp = 1.5;
+            this.acelYDown=3.75;
+            this.frictionX=0.87;
+            this.speedLimitX=4;
+            this.speedLimitY=25;
+            this.boostX=40;
+            this.boostY=26;
+        }
 
         this.width = width;
         this.height = height;
@@ -64,6 +80,7 @@ class Character {
         ctx.drawImage(this.img,this.frame*64,row*92,64,92, this.posX, this.posY, this.width, this.height);
         
         this.frameCount+=1;
+        
         if(this.frameCount>20){
             this.frameCount=0;
             this.frame=(this.frame+1)%4;
@@ -133,6 +150,9 @@ class Character {
 
        
         var acelY=character.acelYDown;
+        var acelX=character.acelX;
+        var friction=character.frictionX;
+        
         if(character.speedY<0){
             acelY=character.acelYUp;
         }
@@ -140,15 +160,15 @@ class Character {
 
         //left
         if(character.left && !character.right){
-            character.acelX=-2;
+            acelX=-character.acelX;
             character.speedX-=character.boostX;
-            character.frictionX=1;
+            friction=1;
         }
         //right
         if(character.right && !character.left){
-            character.acelX=2;
+            acelX=character.acelX;
             character.speedX+=character.boostX;
-            character.frictionX=1;
+            friction=1;
         }
         //up
         if(character.up && character.grounded){
@@ -159,16 +179,16 @@ class Character {
         //no key
         if(!character.right && !character.left){
             if(character.grounded){
-                character.frictionX=0.92;
+                friction=character.frictionX;
             }
             else{
-                character.frictionX=1;
+                friction=1;
             }
             character.acelX=0;
         }
 
         character.speedY+=acelY;
-        character.speedX=(character.speedX+character.acelX)*character.frictionX;
+        character.speedX=(character.speedX+character.acelX)*friction;
 
         //speed limit
         if(character.speedX>character.speedLimitX){

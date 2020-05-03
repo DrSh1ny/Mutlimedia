@@ -163,6 +163,13 @@ class Level{
     //parse the string using JSON.parse()
     var obj = JSON.parse(text);
  
+    //need to know framerate to set projectile and animation velocity 
+    var canvas = document.getElementById("canvas");
+    var fator=1;
+    if(canvas.framerate==60){
+      fator=2.4;
+    }
+    
     //assign the data to the respective atribute of the level
     this.charX = obj.properties[0].value;
     this.charY = obj.properties[1].value;
@@ -207,23 +214,23 @@ class Level{
             break;
             
           case 11: //endPoint (star)
-            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end.naturalHeight,this.imagens.end.naturalWidth/3,this.imagens.end.naturalHeight,this.imagens.end,30,3,0);
+            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end.naturalHeight,this.imagens.end.naturalWidth/3,this.imagens.end.naturalHeight,this.imagens.end,Math.round(30/fator),3,0);
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
 
           case 4: //grass
-            var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,60,3,Math.round(Math.random()*2));
+            var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,Math.round(60/fator),3,Math.round(Math.random()*2));
             this.assetsAnimated.push(grass);
             break;
 			
 					case 234: //shooterRight
-						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
 						this.assets.push(shooter);
 						break;
 
 					case 14: //shooterLeft
-						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,-3,0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
 						this.assets.push(shooter);
 						break;
 
@@ -243,7 +250,7 @@ class Level{
 						break;
 					
 					case 15: //lamp
-            var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,15,16,0);
+            var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,Math.round(15/fator),16,0);
             this.assetsAnimated.push(lamp);
             break;
 					case 31: //plataformaIce
@@ -252,7 +259,7 @@ class Level{
             break;
 
           case 32: //end2
-            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end2.naturalHeight,this.imagens.end2.naturalWidth/8,this.imagens.end2.naturalHeight,this.imagens.end2,20,8,0);
+            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end2.naturalHeight,this.imagens.end2.naturalWidth/8,this.imagens.end2.naturalHeight,this.imagens.end2,Math.round(20/fator),8,0);
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;

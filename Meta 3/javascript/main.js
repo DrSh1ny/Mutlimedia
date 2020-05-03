@@ -28,6 +28,7 @@ function main(imagens, sounds){
 
     canvas.keys=keys;
     canvas.eventListeners={click:clickHandler , mouseMove:mouseMoveHandler};
+    canvas.framerate=60;
 
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
@@ -124,7 +125,11 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
     var Keybinding = new Component(9*width/15,height/2-30,600,70,imagens.Keybinding,imagens.KeybindingHover);
     var Help = new Component(2*width/5,height/2-100,200,200,imagens.Help,imagens.HelpHover);
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    var framerate1 = new Component(400,700,300,70,imagens["60hz"],imagens["60hzHover"]);
+    var framerate2 = new Component(width-800,685,330,100,imagens["144hz"],imagens["144hzHover"]);
 
+    elementos.push(framerate1);
+    elementos.push(framerate2);
     elementos.push(minus);
     elementos.push(plus);
     elementos.push(Keybinding);
@@ -300,6 +305,16 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
                     return elementos;
 
+                case "60hz":
+                    canvas.framerate=60;
+                    sounds.buttonSound.play();
+                    return elements;
+
+                case "144hz":
+                    canvas.framerate=144;
+                    sounds.buttonSound.play();
+                    return elements;
+
 				default:
                     return elements;
 
@@ -336,7 +351,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
