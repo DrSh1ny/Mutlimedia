@@ -264,6 +264,7 @@ class Shooter extends Component{
 class Bullet extends Component{
       constructor(posX,posY,width,heigth,img,velocityX,velocityY,parentShooter){
             super(posX,posY,width,heigth,img);
+
             this.shooter=parentShooter;
             this.velocityX=velocityX;
             this.velocityY=velocityY;
