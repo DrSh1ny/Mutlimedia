@@ -11,7 +11,8 @@ class Character {
         this.speedX = 0;
         this.speedY = 0;
         this.acelX = 0;
-        this.acelY = 0.2;
+        this.acelYUp = 0.2;
+        this.acelYDown=0.5;
         this.frictionX=0.92;
     
         this.speedLimitX=2;
@@ -130,26 +131,25 @@ class Character {
         character.lastX=character.posX;
         character.lastY=character.posY;
 
-        var secondsPassed=(currentFrame-lastFrame)/1000;
-        
-        
-        if(character.speedY>0){
-            character.acelY=0.5;
+       
+        var acelY=character.acelYDown;
+        if(character.speedY<0){
+            acelY=character.acelYUp;
         }
-        else{
-            character.acelY=0.2;
-        }
+        
+            
+        
 
         //left
         if(character.left && !character.right){
-            character.acelX=-2*secondsPassed;
-            character.speedX-=character.boostX*secondsPassed;
+            character.acelX=-2;
+            character.speedX-=character.boostX;
             character.frictionX=1;
         }
         //right
         if(character.right && !character.left){
-            character.acelX=2*secondsPassed;
-            character.speedX+=character.boostX*secondsPassed;
+            character.acelX=2;
+            character.speedX+=character.boostX;
             character.frictionX=1;
         }
         //up
@@ -169,7 +169,7 @@ class Character {
             character.acelX=0;
         }
 
-        character.speedY+=character.acelY;
+        character.speedY+=acelY;
         character.speedX=(character.speedX+character.acelX)*character.frictionX;
 
         //speed limit

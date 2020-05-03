@@ -69,15 +69,18 @@ class Level{
 
 			//evaluate ending conditions
 			if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint)){
-					cancelAnimationFrame(id);	//stop rendering
+
+          for(let i=0;i<bullets.length;i++){
+            clearInterval(bullets[i].shooter.id);//stop bullet firing   
+          }
+          
 					canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
 					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
 					levelSound.pause();
-					levelSound.currentTime = 0;
+          levelSound.currentTime = 0;
+          cancelAnimationFrame(id);	//stop rendering
 				
-					for(let i=0;i<bullets.length;i++){
-						clearInterval(bullets[i].shooter.id);//stop bullet firing   
-					}
+					
 			}
 		}
 

@@ -204,12 +204,10 @@ function keyMenu(canvas,elements,imagens,sounds){
     function mouseMoveHandler(ev) {
         canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
     }
-
     function keyUpHandler(ev){
         keyUpHandlerOuter(ev,keys,selected);
         selected=null;
     }
-
     function keyClickHandler(ev){
         selected=keyClickHandlerOuter(ev,canvas,elementos,keys,selected);
         if(selected=="Voltar"){
@@ -240,7 +238,6 @@ function keyMenu(canvas,elements,imagens,sounds){
             break;
     }
  }
-
 function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
     for(let i=0;i<elementos.length;i++){
         if (elementos[i].mouseOverBoundingBox(ev)){
@@ -249,7 +246,6 @@ function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
     }
     return null;
 }
-
 
 function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
