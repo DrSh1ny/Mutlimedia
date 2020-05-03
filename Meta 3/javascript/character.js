@@ -127,7 +127,7 @@ class Character {
     
 
 
-    move(character,secondsPassed,ctx) {
+    move(character,timePassed,ctx) {
         character.lastX=character.posX;
         character.lastY=character.posY;
 
@@ -140,13 +140,13 @@ class Character {
 
         //left
         if(character.left && !character.right){
-            character.acelX=-2;
+            character.acelX=-2*(6.9/timePassed);
             character.speedX-=character.boostX;
             character.frictionX=1;
         }
         //right
         if(character.right && !character.left){
-            character.acelX=2;
+            character.acelX=2*(6.9/timePassed);
             character.speedX+=character.boostX;
             character.frictionX=1;
         }
@@ -184,7 +184,8 @@ class Character {
             character.speedY=-character.speedLimitY;
         }
 
-
+        console.log(timePassed);
+        
         //move
         character.posX+=character.speedX;
         character.posY+=character.speedY;
