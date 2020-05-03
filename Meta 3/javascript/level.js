@@ -44,28 +44,36 @@ class Level{
     var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets);
     assets.push(char);
 
-    canvas.addEventListener("bulletFired",bulletFiredHandler);
     //camera
     var camera=new Camera(0,0,800,450);
     //var camera=new Camera(0,0,1066,600);
     var mapa = {x:0, y:0, width:1600, height:900};
 
+
+    canvas.addEventListener("bulletFired",bulletFiredHandler);
+    canvas.removeEventListener("click",canvas.eventListeners.click);
+    canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
+
     //HEART
 		render();
-		levelSound.play();
+    levelSound.play();
+    
     function render(time){
-
+      
+  
       var timePassed=time-lastFrame;
 			//bullet handler
 			self.bulletHandler(char,bullets,assets);
-			self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
+      self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
+      
 			//character movement
-			char.move(char,timePassed,ctx);
+      char.move(char,timePassed,ctx);
+      
 			//rendering of everything
 			camera.updateAnim(imagens,char,assets,assetsAnimated,bullets,mapa,ctx);
-			camera.drawHUD(ctx,char,imagens);
+      camera.drawHUD(ctx,char,imagens);
+      
 			lastFrame=time;//for move function
-
 			id=requestAnimationFrame(render);
 
 			//evaluate ending conditions
@@ -74,16 +82,27 @@ class Level{
           for(let i=0;i<bullets.length;i++){
             clearInterval(bullets[i].shooter.id);//stop bullet firing   
           }
-					canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
+
+          canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
+          canvas.addEventListener("click",canvas.eventListeners.click);
+          canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
 					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
 					levelSound.pause();
           levelSound.currentTime = 0;
           cancelAnimationFrame(id);	//stop rendering
-				
-					
-			}
-		}
+      }
+      
 
+		}
+    
+    function clickLevelHandler(ev){
+        return;
+    }
+
+    function mouseMoveLevelHandler(ev){
+        return;
+    }
+    
     function bulletFiredHandler(ev){
 			var newBullet=self.bulletFiredHandlerOuter(ev);
       bullets.push(newBullet);
@@ -92,6 +111,8 @@ class Level{
     
     return elementos;
 	}
+
+
 
 	//reach end | out of lives | out of level bounds (not yet)
 	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint){
@@ -106,12 +127,12 @@ class Level{
 	}
 
 	//some shooter fired a bullet
-	bulletFiredHandlerOuter(ev){
+	bulletFiredHandlerOuter(ev){    
 		return ev.bullet;
 	}
 
 
-	bulletHandler(char,bullets,assets){
+	bulletHandler(char,bullets,assets){   //check collition of bullets
 		for(let i=0;i<bullets.length;i++){
 			bullets[i].move();
 

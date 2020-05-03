@@ -8,7 +8,7 @@
 
 function main(imagens, sounds){
     
-
+    
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
@@ -16,33 +16,31 @@ function main(imagens, sounds){
     var imagens=imagens;
 	var sounds = sounds;
     var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space"};
+
+    var clickHandler=function(ev){
+        elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
+        drawElements(ctx,elements,imagens);
+    }
+
+    var mouseMoveHandler=function(ev) {
+        canvasMouseMoveHandlder(ev,elements,imagens,canvas);
+    }
+
     canvas.keys=keys;
+    canvas.eventListeners={click:clickHandler , mouseMove:mouseMoveHandler};
 
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
 
 	elements=mainMenu(canvas,elements,imagens);
     drawElements(ctx,elements,imagens);
-
+    
 
     canvas.addEventListener("click",clickHandler);
     canvas.addEventListener("mousemove",mouseMoveHandler);
 
 
-
-    function clickHandler(ev){
-        elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
-        drawElements(ctx,elements,imagens);
-    }
-
-    function mouseMoveHandler(ev) {
-        canvasMouseMoveHandlder(ev,elements,imagens,canvas);
-    }
-
-
-
 }
-
 
 
 function mainMenu(canvas,elements,imagens){
@@ -157,15 +155,11 @@ function drawElements(ctx,elements,imagens){
 
 function keyMenu(canvas,elements,imagens,sounds){
     var selected=null;
-    var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space"};
+    var keys=canvas.keys;
     var elementos=new Array();
     var id;
     var ctx=canvas.getContext("2d");
-    //canvas.removeEventListener("click",clickHandler);
-    canvas.addEventListener("click",keyClickHandler);
-    canvas.addEventListener("mousemove",mouseMoveHandler);
-    document.addEventListener("keyup", keyUpHandler);
-
+    
     var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda,imagens.esquerdaHover);
     var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita,imagens.direitaHover);
     var saltar=new Component(197,380,imagens.saltar.naturalWidth,imagens.saltar.naturalHeight,imagens.saltar,imagens.saltarHover);
@@ -178,49 +172,63 @@ function keyMenu(canvas,elements,imagens,sounds){
     elementos.push(direita);
 
 
-    render();
-
-    function render(time){
-        drawElements(canvas.getContext("2d"),elementos,imagens);
-        Object.keys(keys).forEach(function(key,index) {
-            // key: the name of the object key
-            // index: the ordinal position of the key within the object
-            if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump")){
-                ctx.fillStyle="#ffffff";
-                ctx.font = '48px xirod';
-            }
-            else{
-                ctx.fillStyle="#274547";
-                ctx.font = '48px xirod';
-            }
-            ctx.fillText(keys[key], 1000, 160+140*index);            
-        });
-        if(selected!=null){
-            ctx.fillText("Pressione uma tecla!", 370, 600);
-        }
-        id=requestAnimationFrame(render);
-    }
-
-    function mouseMoveHandler(ev) {
+    var mouseMoveHandler=function(ev) {
         canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
     }
-    function keyUpHandler(ev){
+
+    var keyUpHandler=function(ev){
         keyUpHandlerOuter(ev,keys,selected);
         selected=null;
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
     }
-    function keyClickHandler(ev){
+
+    var keyClickHandler=function(ev){
         selected=keyClickHandlerOuter(ev,canvas,elementos,keys,selected);
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
         if(selected=="Voltar"){
-            
             canvas.removeEventListener("mousemove",mouseMoveHandler);
             canvas.removeEventListener("click",keyClickHandler);
             document.removeEventListener("keyup", keyUpHandler);
+            canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
+            canvas.addEventListener("click",canvas.eventListeners.click);
+
             canvas.keys=keys;
             cancelAnimationFrame(id);
         }
     }
 
+    canvas.removeEventListener("click",canvas.eventListeners.click);
+    canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
+    canvas.addEventListener("mousemove",mouseMoveHandler);
+    canvas.addEventListener("click",keyClickHandler);
+    document.addEventListener("keyup", keyUpHandler);
+    
+
     return mainMenu(canvas,elements,imagens);
+}
+
+function typeBindedKeys(canvas,imagens,elementos,keys,selected){
+    var ctx=canvas.getContext("2d");
+
+    drawElements(ctx,elementos,imagens);
+    Object.keys(keys).forEach(function(key,index) {
+        
+        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump")){
+            ctx.fillStyle="#ffffff";
+            ctx.font = '48px xirod';
+        }
+        else{
+            ctx.fillStyle="#274547";
+            ctx.font = '48px xirod';
+        }
+        ctx.fillText(keys[key], 1000, 160+140*index);            
+    });
+
+    if(selected!=null){
+        ctx.fillText("Pressione uma tecla!", 370, 600);
+    }
+
 }
 
  function keyUpHandlerOuter(ev,keys,selected){
@@ -238,6 +246,7 @@ function keyMenu(canvas,elements,imagens,sounds){
             break;
     }
  }
+
 function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
     for(let i=0;i<elementos.length;i++){
         if (elementos[i].mouseOverBoundingBox(ev)){
@@ -285,8 +294,10 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "um":
+                    canvas.style.cursor = "default";
 					sounds.levelButtonSound.play()
                     var elementos=mainAntigo(imagens,sounds);
+
                     return elementos;
 
 				default:
@@ -363,59 +374,3 @@ function loadingScreen() {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    var canvas=document.getElementById("canvas");
-    var ctx=canvas.getContext("2d");
-    var nw=canvas.width;
-    var nh=canvas.height;
-
-    var imagens=imagens;
-
-
-    var assets=[];
-    var asset=new Component(700,700,300,300,imagens.box2);
-    var asset1=new Component(900,600,300,300,imagens.box1);
-    var asset2=new Component(1150,500,300,300,imagens.box1);
-    var asset3=new Component(100,850,300,40,imagens.plataforma);
-    var asset4=new Component(400,850,300,40,imagens.plataforma);
-    var asset5=new Component(400,400,100,100,imagens.box2);
-    assets.push(asset);
-    assets.push(asset1);
-    assets.push(asset2);
-    assets.push(asset3);
-    assets.push(asset4);
-    assets.push(asset5);
-
-    var char=new Character(0,300,256,350,imagens.char,assets);
-
-
-    //camera
-    //var camera=new Camera(0,0,1066,600);
-    var camera=new Camera(0,0,1600,900);
-    var mapa = {x:0, y:0, width:1600, height:900};
-
-
-
-    char.move(char,0,0,ctx);
-    render();
-
-
-    function render(){
-        camera.updateAnim([asset,char,asset1,asset2,asset3,asset4,asset5],mapa,ctx);
-
-        requestAnimationFrame(render);
-    }
-    */
