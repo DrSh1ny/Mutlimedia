@@ -127,7 +127,7 @@ class Character {
     
 
 
-    move(character, lastFrame, currentFrame,ctx) {
+    move(character,secondsPassed,ctx) {
         character.lastX=character.posX;
         character.lastY=character.posY;
 
@@ -136,9 +136,7 @@ class Character {
         if(character.speedY<0){
             acelY=character.acelYUp;
         }
-        
-            
-        
+    
 
         //left
         if(character.left && !character.right){

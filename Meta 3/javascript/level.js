@@ -54,12 +54,13 @@ class Level{
 		render();
 		levelSound.play();
     function render(time){
-			
+
+      var timePassed=time-lastFrame;
 			//bullet handler
 			self.bulletHandler(char,bullets,assets);
 			self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
 			//character movement
-			char.move(char,lastFrame,time,ctx);
+			char.move(char,timePassed,ctx);
 			//rendering of everything
 			camera.updateAnim(imagens,char,assets,assetsAnimated,bullets,mapa,ctx);
 			camera.drawHUD(ctx,char,imagens);
@@ -73,7 +74,6 @@ class Level{
           for(let i=0;i<bullets.length;i++){
             clearInterval(bullets[i].shooter.id);//stop bullet firing   
           }
-          
 					canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
 					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
 					levelSound.pause();
