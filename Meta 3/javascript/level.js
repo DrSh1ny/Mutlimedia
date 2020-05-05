@@ -162,6 +162,7 @@ class Level{
 			if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
 				bullets.splice(i,1);
         char.lives--;
+        continue;
       }
       
       for(let j=0;j<assets.length-1;j++){
