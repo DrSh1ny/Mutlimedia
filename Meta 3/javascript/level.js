@@ -61,9 +61,6 @@ class Level{
     
     function render(time){
       
-      console.log(char.shots);
-      
-      
       var timePassed=time-lastFrame;
       self.shotsHandler(char);
       //bullet handler
@@ -128,7 +125,7 @@ class Level{
       var distanceTraveled = Math.sqrt(Math.pow(Math.abs(char.shots[i].posX - char.shots[i].xIni), 2) + Math.pow(Math.abs(char.shots[i].posY - char.shots[i].yIni), 2));
       //para que nao se sobreponham a outros sprites (colocar um parametro na bala para saber se ja tocou em algum sprite, se sim, essa bala, mesmo que aqui não deve fazer nada, nem ser mostrada, nem dar dano)
       if(distanceTraveled > range){
-        char.shots.splice(i,1);
+        char.shots.shift();
       }
 
     }
@@ -137,7 +134,7 @@ class Level{
 
 	//reach end | out of lives | out of level bounds 
 	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa){
-		if(endPoint.checkPixelCollision(char,endPoint)){
+		if(char.checkPixelCollisionSpriteAnimated(char,endPoint)){
 			return true;
 		}
     
@@ -157,17 +154,28 @@ class Level{
 	}
 
 
-	bulletHandler(char,bullets,assets){   //check collition of bullets
+  bulletHandler(char,bullets,assets){   //check collition of bullets
+    
 		for(let i=0;i<bullets.length;i++){
 			bullets[i].move();
 
-			if(bullets[i].checkPixelCollision(char,bullets[i])){
+			if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
 				bullets.splice(i,1);
-				char.lives--;
-			}
+        char.lives--;
+      }
+      
+      for(let j=0;j<assets.length-1;j++){
+        
+        var a=assets[j].getBox();
+        if(bullets[i].shooter!=assets[j] && assets[j].checkPixelCollisionComponent(assets[j],bullets[i])){
+          bullets.splice(i,1);
+          break;
+        }
+      }
+      
+    }
 
-		}
-	}				
+} 			
 		
 	soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound){
 		var xDistance=Math.abs(char.posX-endPoint.posX);
@@ -256,7 +264,8 @@ class Level{
 
 					case 14: //shooterLeft
 						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-						this.assets.push(shooter);
+           
+            this.assets.push(shooter);
 						break;
 
 					case 8: //ground

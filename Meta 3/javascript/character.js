@@ -320,45 +320,9 @@ class Character {
         return [this.posX,this.posY,this.posX+this.width,this.posY+this.height] //left top right bottom
     }
 
-    checkBoxCollision(sprite1,sprite2){
-        //calcular box de colisao
-        var box1=sprite1.getBox();
-        var box2=sprite2.getBox();
+    
 
-		var topA=box1[1];
-		var topB=box2[1];
-		var leftA=box1[0];
-		var leftB=box2[0];
-		var botA=box1[3];
-		var botB=box2[3];
-		var rightA=box1[2];
-        var rightB=box2[2];
-        
-
-		
-		if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
-
-            var xMin=Math.max(sprite1.posX,sprite2.posX);
-			var yMin=Math.max(sprite1.posY,sprite2.posY);
-			var xMax=Math.min(sprite1.posX+sprite1.width,sprite2.posX+sprite2.width);
-            var yMax=Math.min(sprite1.posY+sprite1.height,sprite2.posY+sprite2.height);
-            
-            if(yMax-yMin<xMax-xMin){
-                return "vertical"
-            }
-            else{
-                return "horizontal"
-            }
-
-        }
-
-        else{
-            return false;
-        }
-
-    }
-
-    checkPixelCollision(sprite1,sprite2){
+    checkPixelCollision(sprite1,sprite2){ //character-Componente  for character phisics
         //calcular box de colisao
         var box1=sprite1.getBox();
         var box2=sprite2.getBox();
@@ -422,4 +386,63 @@ class Character {
 			
 	}
 
+
+    checkPixelCollisionSpriteAnimated(sprite1,sprite2){  //character-animated Componente
+        //calcular box de colisao
+        var box1=sprite1.getBox();
+        var box2=sprite2.getBox();
+
+        var topA=box1[1];
+        var topB=box2[1];
+        var leftA=box1[0];
+        var leftB=box2[0];
+        var botA=box1[3];
+        var botB=box2[3];
+        var rightA=box1[2];
+        var rightB=box2[2];
+
+        //para recolher array de pixeis do frame atual
+        var row=0;
+        var frame=0;
+        var atual=0;
+        var atualB=0;
+        var array1=[];
+        var array2=[];
+        
+        if (leftA < rightB && rightA > leftB && topA< botB && botA > topB) {
+        row=sprite1.getRow();
+        frame=sprite1.frame;
+        atual=row*4+frame;
+        atualB=sprite2.currentFrame;
+        array1=sprite1.imgData[atual].data;
+        array2=sprite2.imgData[atualB].data;
+
+        var xMin=Math.max(sprite1.posX,sprite2.posX);
+              var yMin=Math.max(sprite1.posY,sprite2.posY);
+              var xMax=Math.min(sprite1.posX+sprite1.width,sprite2.posX+sprite2.width);
+              var yMax=Math.min(sprite1.posY+sprite1.height,sprite2.posY+sprite2.height);
+
+        for(let y=yMin;y<yMax;y++){
+              for(let x=xMin;x<xMax;x++){
+                          
+                    let xLocalA= Math.floor(x-leftA);
+                    let yLocalA= Math.floor(y-topA);
+
+                    let xLocalB= Math.floor(x-leftB);
+                    let yLocalB= Math.floor(y-topB);
+
+                    if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && array2[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
+                          return true;
+                    }
+              }
+        }
+                    
+        return false;
+  }
+
+  else{
+        return false;
+  }
+              
+  }
 }
