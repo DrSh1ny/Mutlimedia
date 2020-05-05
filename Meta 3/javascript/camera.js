@@ -73,6 +73,10 @@ class Camera{
       bullets[i].render(ctx);
     }
 
+    for (let i=0;i<char.shots.length;i++){
+        char.shots[i].render(ctx);
+    }
+
       
     //restore the draw matrix to its default state.
     ctx.restore()

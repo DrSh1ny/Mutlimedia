@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets) {
+    constructor(posX, posY, width, height, img,assets,imagens) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -45,8 +45,14 @@ class Character {
         this.grounded=false;
 
         this.lives=3;
+        //projeteis lancados pela personagem
+        this.shots = [];
+        this.shotDelay = 500;//passar depois as bullets
+        this.lastShot = 0;
+        this.bulletsRange = 400;
 
         var self = this;
+        this.imagens=imagens;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
 
         var keyDownHandler = function (ev) {
@@ -274,6 +280,7 @@ class Character {
     }
 
     keyUp(ev, character) {
+        var canvas=document.getElementById("canvas");
         if (ev.code == canvas.keys.right) {
             character.right = false;
         }
@@ -285,6 +292,27 @@ class Character {
         if (ev.code == canvas.keys.jump) {
             character.up = false;
         }
+
+        if (ev.code == canvas.keys.attack){
+            //por causa de diferentes framrates
+            var fator=1;
+            if(canvas.framerate==60){
+                fator=2.4;
+            }
+            //se der para disparar cria o projetil
+            var d = new Date();
+            var time = d.getTime();
+            if(time - this.lastShot > this.shotDelay){//o primeiro disparo vai ser sempre permitido visto que o this.lasShot = 0, depois deste, este valor e atualizado e a partir dai so se dispara, no minimo em intervalos de this.shotDelay
+              if(this.lastDirection=="right"){
+                var shot = new Bullet(this.posX+this.width/2,this.posY+this.height/4,this.imagens.swordRight.naturalWidth,this.imagens.swordRight.naturalHeight,this.imagens.swordRight,5*fator,0,this) //colocar os parametros para a criacao do projetil
+              }
+              else{
+                var shot = new Bullet(this.posX-this.width/2,this.posY+this.height/4,this.imagens.swordLeft.naturalWidth,this.imagens.swordLeft.naturalHeight,this.imagens.swordLeft,-5*fator,0,this) //colocar os parametros para a criacao do projetil
+              }
+              character.shots.push(shot);
+              this.lastShot = time;
+            }
+          }
 
     }
 

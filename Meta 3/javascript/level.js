@@ -41,7 +41,7 @@ class Level{
     var d = new Date();
     var lastFrame =d.getTime();
 
-    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets);
+    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,imagens);
     assets.push(char);
 
     //camera
@@ -61,10 +61,14 @@ class Level{
     
     function render(time){
       
-  
+      console.log(char.shots);
+      
+      
       var timePassed=time-lastFrame;
-			//bullet handler
-			self.bulletHandler(char,bullets,assets);
+      self.shotsHandler(char);
+      //bullet handler
+      self.bulletHandler(char,bullets,assets);
+      
       self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
       
 			//character movement
@@ -103,6 +107,8 @@ class Level{
     function mouseMoveLevelHandler(ev){
         return;
     }
+
+    
     
     function bulletFiredHandler(ev){
 			var newBullet=self.bulletFiredHandlerOuter(ev);
@@ -113,7 +119,21 @@ class Level{
     return elementos;
 	}
 
+  shotsHandler(char) {
+    for (let i=0;i<char.shots.length;i++){
+      char.shots[i].posX+=char.shots[i].velocityX;
+      char.shots[i].posY+=char.shots[i].velocityY;
 
+      var range = char.bulletsRange;
+      var distanceTraveled = Math.sqrt(Math.pow(Math.abs(char.shots[i].posX - char.shots[i].xIni), 2) + Math.pow(Math.abs(char.shots[i].posY - char.shots[i].yIni), 2));
+      //para que nao se sobreponham a outros sprites (colocar um parametro na bala para saber se ja tocou em algum sprite, se sim, essa bala, mesmo que aqui não deve fazer nada, nem ser mostrada, nem dar dano)
+      if(distanceTraveled > range){
+        char.shots.splice(i,1);
+      }
+
+    }
+
+  }
 
 	//reach end | out of lives | out of level bounds 
 	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa){
