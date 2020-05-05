@@ -113,11 +113,34 @@ function menuNiveis(canvas,elements,imagens){
 }
 
 
-function optionsMenu(canvas,elements,imagens,stateVolume){
+function optionsMenu(canvas,elements,imagens,sons){
     var height = canvas.height;
     var width = canvas.width;
-
+    var stateVolume=imagens.volumeMax;
     var elementos= new Array();
+
+    var mediaVolume=0;
+    var i=0;
+    Object.keys(sons).forEach(function(key,index) {
+        mediaVolume+=sons[key].volume;
+        i++;
+    });
+        
+    mediaVolume=mediaVolume/i;
+    if(mediaVolume<=0){
+        stateVolume=imagens.volumeMute;
+    }
+    else if(mediaVolume<0.3){
+        stateVolume=imagens.volumeMinium;
+    }
+    else if(mediaVolume<0.6){
+        stateVolume=imagens.volumeMedium;
+    }
+    else{
+        stateVolume=imagens.volumeMax;
+    }
+    
+
 
     var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minusHover);
     var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plusHover);
@@ -125,6 +148,7 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
     var Keybinding = new Component(9*width/15,height/2-30,600,70,imagens.Keybinding,imagens.KeybindingHover);
     var Help = new Component(2*width/5,height/2-100,200,200,imagens.Help,imagens.HelpHover);
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
     var framerate1 = new Component(400,700,300,70,imagens["60hz"],imagens["60hzHover"]);
     var framerate2 = new Component(width-800,685,330,100,imagens["144hz"],imagens["144hzHover"]);
 
@@ -175,7 +199,10 @@ function keyMenu(canvas,elements,imagens,sounds){
     elementos.push(saltar);
     elementos.push(esquerda);
     elementos.push(direita);
-
+    
+    canvas.removeEventListener("click",canvas.eventListeners.click);
+    canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
+    typeBindedKeys(canvas,imagens,elementos,keys,selected);
 
     var mouseMoveHandler=function(ev) {
         canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
@@ -199,12 +226,11 @@ function keyMenu(canvas,elements,imagens,sounds){
             canvas.addEventListener("click",canvas.eventListeners.click);
 
             canvas.keys=keys;
-            cancelAnimationFrame(id);
+            
         }
     }
 
-    canvas.removeEventListener("click",canvas.eventListeners.click);
-    canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
+    
     canvas.addEventListener("mousemove",mouseMoveHandler);
     canvas.addEventListener("click",keyClickHandler);
     document.addEventListener("keyup", keyUpHandler);
@@ -280,14 +306,23 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     sounds.buttonSound.play();
                     var elementos=keyMenu(canvas,elements,imagens,sounds);
                     return elementos;
+                    
                 case "minus":
+                    Object.keys(sounds).forEach(function(key,index) {
+                        sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume-0.1));
+                    });
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMute)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
                     return elementos;
+
                 case "plus":
+                    Object.keys(sounds).forEach(function(key,index) {
+                        sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
+                    });
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
                     return elementos;
+
 				case "Voltar":
                     var elementos=mainMenu(canvas,elements,imagens);
 					sounds.buttonSound.play();

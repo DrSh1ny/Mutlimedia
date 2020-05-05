@@ -182,7 +182,7 @@ class Character {
                 friction=character.frictionX;
             }
             else{
-                friction=1;
+                friction=character.frictionX;
             }
             character.acelX=0;
         }
@@ -204,7 +204,10 @@ class Character {
             character.speedY=-character.speedLimitY;
         }
 
-        
+        //map boudaries
+        if(character.posX<0){
+            character.posX=0;
+        }
         
         //move
         character.posX+=character.speedX;

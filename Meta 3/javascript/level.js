@@ -55,7 +55,8 @@ class Level{
     canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
 
     //HEART
-		render();
+    render();
+    levelSound.volume*=0.3;
     levelSound.play();
     
     function render(time){
@@ -77,7 +78,7 @@ class Level{
 			id=requestAnimationFrame(render);
 
 			//evaluate ending conditions
-			if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint)){
+			if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){
 
           for(let i=0;i<bullets.length;i++){
             clearInterval(bullets[i].shooter.id);//stop bullet firing   
@@ -114,12 +115,16 @@ class Level{
 
 
 
-	//reach end | out of lives | out of level bounds (not yet)
-	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint){
+	//reach end | out of lives | out of level bounds 
+	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa){
 		if(endPoint.checkPixelCollision(char,endPoint)){
 			return true;
 		}
-		
+    
+    if(char.posY+char.height>=mapa.y+mapa.height){
+      return true;
+    }
+
 		if(char.lives<1){
 				return true;
 			}
@@ -150,7 +155,7 @@ class Level{
 		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
 		var final=1-(distance/1500);
 		 
-		levelSound.volume=0.02; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
+		//levelSound.volume*=0.1; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
 		
 		
 	}
