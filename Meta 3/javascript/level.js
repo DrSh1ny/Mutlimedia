@@ -62,7 +62,7 @@ class Level{
     function render(time){
       
       var timePassed=time-lastFrame;
-      self.shotsHandler(char);
+      self.shotsHandler(char,assets);
       //bullet handler
       self.bulletHandler(char,bullets,assets);
       
@@ -116,7 +116,7 @@ class Level{
     return elementos;
 	}
 
-  shotsHandler(char) {
+  shotsHandler(char,assets) {
     for (let i=0;i<char.shots.length;i++){
       char.shots[i].posX+=char.shots[i].velocityX;
       char.shots[i].posY+=char.shots[i].velocityY;
@@ -126,7 +126,19 @@ class Level{
       //para que nao se sobreponham a outros sprites (colocar um parametro na bala para saber se ja tocou em algum sprite, se sim, essa bala, mesmo que aqui não deve fazer nada, nem ser mostrada, nem dar dano)
       if(distanceTraveled > range){
         char.shots.shift();
+        continue;
       }
+      /*
+      for(let j=0;j<assets.length-1;j++){
+        if(assets[j].checkPixelCollisionComponent(assets[j],char.shots[i])){
+          char.shots.splice(i,1);
+          if(assets[j] instanceof Shooter){ <---MUITO MAU, RESOLVER DOUTRA FORMA
+            assets.splice(j,1);
+          }
+          break;
+        }
+      }
+      */
 
     }
 
@@ -166,8 +178,6 @@ class Level{
       }
       
       for(let j=0;j<assets.length-1;j++){
-        
-        var a=assets[j].getBox();
         if(bullets[i].shooter!=assets[j] && assets[j].checkPixelCollisionComponent(assets[j],bullets[i])){
           bullets.splice(i,1);
           break;
