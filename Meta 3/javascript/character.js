@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,imagens) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -54,6 +54,7 @@ class Character {
         var self = this;
         this.imagens=imagens;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
+        this.shooters=shooters;
 
         var keyDownHandler = function (ev) {
             self.keyDown(ev, self);
@@ -225,7 +226,7 @@ class Character {
 
 
     handleCollision(character){
-        // o ultimo asset é o proprio character, nao e testada a colisao ai
+        
         for(let i=0;i<character.assets.length-1;i++){
             var asset=character.assets[i]
             var collision=character.checkPixelCollision(character,asset);
@@ -247,6 +248,35 @@ class Character {
                     character.posX-=character.speedX;
                 }
                 else if(character.posX+character.width/2<asset.posX+asset.width/2 && character.speedX>0){
+                    character.posX-=character.speedX;
+                }
+                
+            }
+                
+                
+        }
+
+        for(let i=0;i<character.shooters.length;i++){
+            var shooter=character.shooters[i]
+            var collision=character.checkPixelCollision(character,shooter);
+
+            if(collision=="vertical" ){
+                if(character.posY<shooter.posY){
+                    character.posY=shooter.posY-character.height;
+                    character.speedY=0;
+                    character.grounded=true;
+                }
+                else{
+                    character.posY=shooter.posY+shooter.height;
+                    character.speedY=0;
+                }
+            }
+            
+            else if(collision=="horizontal"){
+                if(character.posX+character.width/2>shooter.posX+shooter.width/2 && character.speedX<0){
+                    character.posX-=character.speedX;
+                }
+                else if(character.posX+character.width/2<shooter.posX+shooter.width/2 && character.speedX>0){
                     character.posX-=character.speedX;
                 }
                 

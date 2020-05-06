@@ -14,6 +14,7 @@ class Level{
     this.sprites
     this.assets;
     this.assetsAnimated;
+    this.shooters;
 
 		this.imagens=imagens;
 		this.sounds=sounds;
@@ -25,8 +26,9 @@ class Level{
     var ctx=canvas.getContext("2d");
     var nw=canvas.width;
     var nh=canvas.height;
-    var assets=this.assets; //todos os componenentes do nivel e o character incluido
+    var assets=this.assets; //todos os componenentes do nivel e o character incluido excluindo os shooters
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
+    var shooters=this.shooters; 
 		var bullets=new Array();  //bullet containment
 		
 		var imagens=this.imagens;
@@ -41,7 +43,7 @@ class Level{
     var d = new Date();
     var lastFrame =d.getTime();
 
-    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,imagens);
+    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens);
     assets.push(char);
 
     //camera
@@ -62,17 +64,17 @@ class Level{
     function render(time){
       
       var timePassed=time-lastFrame;
-      self.shotsHandler(char,assets);
+      self.shotsHandler(char,assets,shooters);
       //bullet handler
-      self.bulletHandler(char,bullets,assets);
+      self.bulletHandler(char,bullets,assets,shooters);
       
-      self.soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound);
+      self.soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound);
       
 			//character movement
       char.move(char,timePassed,ctx);
       
 			//rendering of everything
-			camera.updateAnim(imagens,char,assets,assetsAnimated,bullets,mapa,ctx);
+			camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
       camera.drawHUD(ctx,char,imagens);
       
 			lastFrame=time;//for move function
@@ -116,7 +118,7 @@ class Level{
     return elementos;
 	}
 
-  shotsHandler(char,assets) {
+  shotsHandler(char,assets,shooters) {
     for (let i=0;i<char.shots.length;i++){
       char.shots[i].posX+=char.shots[i].velocityX;
       char.shots[i].posY+=char.shots[i].velocityY;
@@ -128,21 +130,28 @@ class Level{
         char.shots.shift();
         continue;
       }
-      /*
+      
+      //se o projetil colidir com um asset
       for(let j=0;j<assets.length-1;j++){
         if(assets[j].checkPixelCollisionComponent(assets[j],char.shots[i])){
           char.shots.splice(i,1);
-          if(assets[j] instanceof Shooter){ <---MUITO MAU, RESOLVER DOUTRA FORMA
-            assets.splice(j,1);
-          }
-          break;
+          return;
         }
       }
-      */
+      //se o projetil colidir com um shooter --> remover shooter e cancelar o seu lancamento de projeteis
+      for(let j=0;j<shooters.length;j++){
+        if(shooters[j].checkPixelCollisionComponent(shooters[j],char.shots[i])){
+          char.shots.splice(i,1);
+          clearInterval(shooters[j].id);
+          shooters.splice(j,1);
+          return;
+          }
+        }
 
+      }
     }
-
-  }
+      
+    
 
 	//reach end | out of lives | out of level bounds 
 	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa){
@@ -166,7 +175,7 @@ class Level{
 	}
 
 
-  bulletHandler(char,bullets,assets){   //check collition of bullets
+  bulletHandler(char,bullets,assets,shooters){   //check collition of bullets
     
 		for(let i=0;i<bullets.length;i++){
 			bullets[i].move();
@@ -188,7 +197,7 @@ class Level{
 
 } 			
 		
-	soundHandler(char,assets,assetsAnimated,endPoint,sounds,levelSound){
+	soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound){
 		var xDistance=Math.abs(char.posX-endPoint.posX);
 		var yDistance=Math.abs(char.posY-endPoint.posY);
 		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
@@ -229,6 +238,7 @@ class Level{
 
     this.assets=new Array();
     this.assetsAnimated=new Array();
+    this.shooters=new Array();
   
     for(let x=0;x<1600;x++){
       for(let y=0;y<900;y++){
@@ -270,13 +280,12 @@ class Level{
 			
 					case 234: //shooterRight
 						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-						this.assets.push(shooter);
+						this.shooters.push(shooter);
 						break;
 
 					case 14: //shooterLeft
 						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-           
-            this.assets.push(shooter);
+            this.shooters.push(shooter);
 						break;
 
 					case 8: //ground
