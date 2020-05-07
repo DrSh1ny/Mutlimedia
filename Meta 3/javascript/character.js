@@ -18,6 +18,7 @@ class Character {
         this.acelYUp = 0.2;
         this.acelYDown=0.5;
         this.frictionX=0.92;
+        this.airFriction=0.96;
         this.speedLimitX=2;
         this.speedLimitY=30;
         this.boostX=30;
@@ -30,6 +31,7 @@ class Character {
             this.acelYUp = 1.5;
             this.acelYDown=3.75;
             this.frictionX=0.87;
+            this.airFriction=0.92;
             this.speedLimitX=4;
             this.speedLimitY=25;
             this.boostX=40;
@@ -189,7 +191,7 @@ class Character {
                 friction=character.frictionX;
             }
             else{
-                friction=character.frictionX;
+                friction=character.airFriction;
             }
             character.acelX=0;
         }

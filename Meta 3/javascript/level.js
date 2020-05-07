@@ -53,70 +53,85 @@ class Level{
 
 
     canvas.addEventListener("bulletFired",bulletFiredHandler);
+    document.addEventListener("keyup",keyUpLevelHandler);
     canvas.removeEventListener("click",canvas.eventListeners.click);
     canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
 
     //HEART
-    render();
     levelSound.volume*=0.3;
     levelSound.play();
+    var gamestate="run";
+    render();
+    
     
     function render(time){
-      
-      var timePassed=time-lastFrame;
-      self.shotsHandler(char,assets,shooters);
-      //bullet handler
-      self.bulletHandler(char,bullets,assets,shooters);
-      
-      self.soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound);
-      
-			//character movement
-      char.move(char,timePassed,ctx);
-      
-			//rendering of everything
-			camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
-      camera.drawHUD(ctx,char,imagens);
-      
-			lastFrame=time;//for move function
-			id=requestAnimationFrame(render);
-
-			//evaluate ending conditions
-			if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){
-
-          for(let i=0;i<bullets.length;i++){
-            clearInterval(bullets[i].shooter.id);//stop bullet firing   
-          }
-
-          canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
-          canvas.addEventListener("click",canvas.eventListeners.click);
-          canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
-					drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
-					levelSound.pause();
-          levelSound.currentTime = 0;
-          cancelAnimationFrame(id);	//stop rendering
+      if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
+        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
       }
-      
+      else if(gamestate=="run"){
+        var timePassed=time-lastFrame;
 
+        self.shotsHandler(char,assets,shooters);
+        self.bulletHandler(char,bullets,assets,shooters);
+        self.soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound);
+        //character movement
+        char.move(char,timePassed,ctx);
+        //rendering of everything
+        camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
+        camera.drawHUD(ctx,char,imagens);
+        
+        lastFrame=time;//for move function
+        id=requestAnimationFrame(render);
+      }
+      else if(gamestate=="pause"){
+        id=requestAnimationFrame(render);
+      }
+			
 		}
     
     function clickLevelHandler(ev){
-        return;
-    }
-
+        return;}
     function mouseMoveLevelHandler(ev){
-        return;
-    }
-
-    
-    
+        return;}
+    function keyUpLevelHandler(ev){
+        gamestate=self.keyUpLevelHandlerOuter(ev,gamestate);
+      return;}
+      
     function bulletFiredHandler(ev){
 			var newBullet=self.bulletFiredHandlerOuter(ev);
-      bullets.push(newBullet);
-    }
+      bullets.push(newBullet);}
 
     
     return elementos;
-	}
+  }
+  
+
+  clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound){
+    var ctx=canvas.getContext("2d");
+    for(let i=0;i<shooters.length;i++){
+      clearInterval(shooters[i].id);//stop bullet firing   
+    }
+    document.removeEventListener("keyup",keyUpLevelHandler);
+    canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
+    canvas.addEventListener("click",canvas.eventListeners.click);
+    canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
+    drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
+    levelSound.pause();
+    levelSound.currentTime = 0;
+    cancelAnimationFrame(id);	//stop rendering
+  }
+  
+  keyUpLevelHandlerOuter(ev,gamestate){
+    if(ev.code=="Escape"){
+      if(gamestate=="run"){
+        return "pause"
+      }
+      if(gamestate=="pause"){
+        return "run"
+      }
+    }
+    return gamestate;
+  }
 
   shotsHandler(char,assets,shooters) {
     for (let i=0;i<char.shots.length;i++){
