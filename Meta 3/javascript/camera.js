@@ -55,12 +55,13 @@ class Camera{
 
   //chama o metodo draw da classe sprite
   render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx){
+    
     //the state saved will always be the default one, matrix starting at 0;0.
     ctx.save();
     //move the matrix to the area we want to show, the camara.
     ctx.scale(mapa.width/this.width,mapa.height/this.height);
     ctx.translate(-this.x, -this.y);
-    
+     
     for (let i = 0; i < sprites.length ; i++){
       sprites[i].render(ctx);
     }
@@ -138,7 +139,9 @@ class Camera{
       ctx.drawImage(images.heart,1500-70*i,10,images.heart.naturalWidth,images.heart.naturalHeight);
     }
   }
+
+  drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx){
     
-  
+  }
 
 }

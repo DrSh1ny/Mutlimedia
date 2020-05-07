@@ -68,7 +68,7 @@ class Level{
       if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
       }
-      else if(gamestate=="run"){
+      else if(gamestate=="run"){     
         var timePassed=time-lastFrame;
 
         self.shotsHandler(char,assets,shooters);
@@ -84,6 +84,8 @@ class Level{
         id=requestAnimationFrame(render);
       }
       else if(gamestate=="pause"){
+        
+        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
         id=requestAnimationFrame(render);
       }
 			
