@@ -65,10 +65,10 @@ function optionsMenu(canvas,elements,imagens,stateVolume){
 
     var elementos= new Array();
 
-    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minus);
-    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plus);
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minusHover);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plusHover);
     var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
-    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.Keybinding);
+    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.KeybindingHover);
     var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
