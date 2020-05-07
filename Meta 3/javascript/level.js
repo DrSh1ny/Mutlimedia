@@ -56,6 +56,9 @@ class Level{
     document.addEventListener("keyup",keyUpLevelHandler);
     canvas.removeEventListener("click",canvas.eventListeners.click);
     canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
+    canvas.addEventListener("click",clickLevelHandler);
+    canvas.addEventListener("mousemove",mouseMoveLevelHandler);
+
 
     //HEART
     levelSound.volume*=0.3;
@@ -65,7 +68,7 @@ class Level{
     
     
     function render(time){
-      if(self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
+      if(gamestate=="end" || self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
       }
       else if(gamestate=="run"){     
@@ -91,14 +94,15 @@ class Level{
 		}
     
     function clickLevelHandler(ev){
+        gamestate=self.clickLevelHandlerOuter(ev,ctx,elementosNivel,imagens,gamestate);
         return;}
     function mouseMoveLevelHandler(ev){
+        self.mouseLevelHandlerOuter(ev,ctx,elementosNivel,imagens);
         return;}
     function keyUpLevelHandler(ev){
       var resultado=self.keyUpLevelHandlerOuter(ev,gamestate,imagens,elementosNivel);
         gamestate=resultado[0];
         elementosNivel=resultado[1];
-        
       return;}
       
     function bulletFiredHandler(ev){
@@ -109,6 +113,42 @@ class Level{
     return elementos;
   }
   
+
+  clickLevelHandlerOuter(ev,ctx,elementos,imagens,gamestate){
+    for(let i=0;i<elementos.length;i++){
+      if (elementos[i].mouseOverBoundingBox(ev)){
+        switch (elementos[i].img.id) {
+          case "sair":
+            return "end";
+          case "reiniciar":
+            return "end";
+          default:
+            return gamestate;
+        }
+      }
+    }
+    return gamestate;
+  }
+  
+  mouseLevelHandlerOuter(ev,ctx,elementos,imagens){
+    var x=ev.offsetX;
+    var y=ev.offsetY;
+    
+    for(let i=0;i<elementos.length;i++){
+        if (elementos[i].mouseOverBoundingBox(ev)){
+            canvas.style.cursor = "pointer";
+            elementos[i].hover=true;
+            return;
+
+        }
+        elementos[i].hover=false;
+
+    drawElements(ctx,elementos,imagens);
+    canvas.style.cursor = "default";
+
+    }
+
+  }
 
   clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound){
     var ctx=canvas.getContext("2d");
@@ -129,8 +169,10 @@ class Level{
     if(ev.code=="Escape"){
       if(gamestate=="run"){
         var elementos=new Array();
-        var sair=new Component(195,100,imagens.sair.naturalWidth,imagens.sair.naturalHeight,imagens.sair,imagens.sairHover);
+        var sair=new Component(500,450,imagens.sair.naturalWidth,imagens.sair.naturalHeight,imagens.sair,imagens.sairHover);
+        var reiniciar=new Component(500,330,imagens.reiniciar.naturalWidth,imagens.reiniciar.naturalHeight,imagens.reiniciar,imagens.reiniciarHover);
         elementos.push(sair);
+        elementos.push(reiniciar);
         return ["pause",elementos]
 
       }

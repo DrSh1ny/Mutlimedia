@@ -151,7 +151,7 @@ class Camera{
 
     ctx.beginPath();    //iner menu box
     ctx.fillStyle = "rgba(0,0,0,0.3";
-    ctx.rect(ctx.canvas.width/2-500, ctx.canvas.height/2-200, 1000,400);
+    ctx.rect(ctx.canvas.width/2-400, ctx.canvas.height/2-150, 800,300);
     ctx.fill();
 
     for(let i=0;i<elementos.length;i++){
