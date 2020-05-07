@@ -37,7 +37,7 @@ class Level{
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
 		var endPoint=this.endPoint;
 		var self=this;
-
+    var elementosNivel=new Array();
     //for character movement
     var id;
     var d = new Date();
@@ -84,8 +84,7 @@ class Level{
         id=requestAnimationFrame(render);
       }
       else if(gamestate=="pause"){
-        
-        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
+        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,elementosNivel);
         id=requestAnimationFrame(render);
       }
 			
@@ -96,7 +95,10 @@ class Level{
     function mouseMoveLevelHandler(ev){
         return;}
     function keyUpLevelHandler(ev){
-        gamestate=self.keyUpLevelHandlerOuter(ev,gamestate);
+      var resultado=self.keyUpLevelHandlerOuter(ev,gamestate,imagens,elementosNivel);
+        gamestate=resultado[0];
+        elementosNivel=resultado[1];
+        
       return;}
       
     function bulletFiredHandler(ev){
@@ -123,16 +125,20 @@ class Level{
     cancelAnimationFrame(id);	//stop rendering
   }
   
-  keyUpLevelHandlerOuter(ev,gamestate){
+  keyUpLevelHandlerOuter(ev,gamestate,imagens,elementos){
     if(ev.code=="Escape"){
       if(gamestate=="run"){
-        return "pause"
+        var elementos=new Array();
+        var sair=new Component(195,100,imagens.sair.naturalWidth,imagens.sair.naturalHeight,imagens.sair,imagens.sairHover);
+        elementos.push(sair);
+        return ["pause",elementos]
+
       }
       if(gamestate=="pause"){
-        return "run"
+        return ["run",[]]
       }
     }
-    return gamestate;
+    return [gamestate,elementos];
   }
 
   shotsHandler(char,assets,shooters) {

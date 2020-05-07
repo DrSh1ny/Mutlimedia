@@ -140,8 +140,25 @@ class Camera{
     }
   }
 
-  drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx){
+  drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,elementos){
+    ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+    this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx);
+
+    ctx.beginPath();  //darken whole scene
+    ctx.fillStyle = "rgba(0,0,0,0.3";
+    ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fill();
+
+    ctx.beginPath();    //iner menu box
+    ctx.fillStyle = "rgba(0,0,0,0.3";
+    ctx.rect(ctx.canvas.width/2-500, ctx.canvas.height/2-200, 1000,400);
+    ctx.fill();
+
+    for(let i=0;i<elementos.length;i++){
+      elementos[i].render(ctx);
+    }
     
+
   }
 
 }
