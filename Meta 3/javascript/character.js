@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -55,6 +55,7 @@ class Character {
 
         var self = this;
         this.imagens=imagens;
+        this.sons=sons;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
         this.shooters=shooters;
 
@@ -343,6 +344,7 @@ class Character {
               }
               character.shots.push(shot);
               this.lastShot = time;
+              this.sons.sword2.play();
             }
           }
 

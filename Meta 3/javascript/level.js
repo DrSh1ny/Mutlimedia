@@ -43,7 +43,7 @@ class Level{
     var d = new Date();
     var lastFrame =d.getTime();
 
-    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens);
+    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
     assets.push(char);
 
     //camera
@@ -51,6 +51,7 @@ class Level{
     //var camera=new Camera(0,0,1066,600);
     var mapa = {x:0, y:0, width:1600, height:900};
 
+    var gamestate="run";
 
     canvas.addEventListener("bulletFired",bulletFiredHandler);
     document.addEventListener("keyup",keyUpLevelHandler);
@@ -60,10 +61,10 @@ class Level{
     canvas.addEventListener("mousemove",mouseMoveLevelHandler);
 
 
-    //HEART
+   
     levelSound.volume*=0.3;
     levelSound.play();
-    var gamestate="run";
+    
     render();
     
     
@@ -110,8 +111,9 @@ class Level{
       return;}
       
     function bulletFiredHandler(ev){
-			var newBullet=self.bulletFiredHandlerOuter(ev);
-      bullets.push(newBullet);}
+			var newBullet=self.bulletFiredHandlerOuter(ev,sounds,char);
+      bullets.push(newBullet);
+    }
 
     
     return elementos;
@@ -239,7 +241,13 @@ class Level{
 	}
 
 	//some shooter fired a bullet
-	bulletFiredHandlerOuter(ev){    
+	bulletFiredHandlerOuter(ev,sons,char){
+    var xDistance=Math.abs(char.posX-ev.bullet.posX);
+		var yDistance=Math.abs(char.posY-ev.bullet.posY);
+		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
+		var final=1-(distance/1500);
+    sons.gun.volume=final;
+    sons.gun.play();
 		return ev.bullet;
 	}
 
