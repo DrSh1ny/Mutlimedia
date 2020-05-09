@@ -89,13 +89,25 @@ function menuNiveis(canvas,elements,imagens){
 
     var elementos= new Array();
 
-    var capitulo1 = new Component(50,height/4,400,40,imagens.capitulo1,imagens.capitulo1Hover);
-    var capitulo2 = new Component(50+width/3,height/4,400,40,imagens.capitulo2,imagens.capitulo2Hover);
-    var capitulo3 = new Component(50+2*width/3,height/4,400,40,imagens.capitulo3,imagens.capitulo3Hover);
+    var capitulo1 = new Component(50,height/4,400,80,imagens.capitulo1,imagens.capitulo1Hover,);
+    var capitulo2 = new Component(50+width/3,height/4,400,80,imagens.capitulo2,imagens.capitulo2Hover);
+    var capitulo3 = new Component(50+2*width/3,height/4,400,80,imagens.capitulo3,imagens.capitulo3Hover);
 
-    var um = new Component(80,1.2*height/4+49,40,40,imagens.um,imagens.umHover);
-    var dois = new Component(130,1.2*height/4+50,40,40,imagens.dois,imagens.doisHover);
-    var tres = new Component(190,1.2*height/4+50,40,40,imagens.tres,imagens.tresHover);
+    var um = new Component(60,350,80,80,imagens.um,imagens.umHover);
+    var dois = new Component(140,350,80,80,imagens.dois,imagens.doisHover);
+    var tres = new Component(240,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
+    var dois2 = new Component(670,350,80,80,imagens.dois,imagens.doisHover);
+    var tres2 = new Component(750,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
+    var dois2 = new Component(670,350,80,80,imagens.dois,imagens.doisHover);
+    var tres2 = new Component(770,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um3 = new Component(1120,350,80,80,imagens.um,imagens.umHover);
+    var dois3 = new Component(1200,350,80,80,imagens.dois,imagens.doisHover);
+    var tres3 = new Component(1300,350,80,80,imagens.tres,imagens.tresHover);
 
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
@@ -106,6 +118,12 @@ function menuNiveis(canvas,elements,imagens){
     elementos.push(um);
     elementos.push(dois);
     elementos.push(tres);
+    elementos.push(um2);
+    elementos.push(dois2);
+    elementos.push(tres2);
+    elementos.push(um3);
+    elementos.push(dois3);
+    elementos.push(tres3);
 
     elementos.push(botaoVoltar);
     return elementos;
@@ -389,7 +407,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
