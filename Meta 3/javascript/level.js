@@ -32,7 +32,8 @@ class Level{
 		var bullets=new Array();  //bullet containment
 		
 		var imagens=this.imagens;
-		var sounds=this.sounds;
+    var sounds=this.sounds;
+    var volumeInicial=sounds.levelSound2.volume;
 		var levelSound=sounds.levelSound2;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
 		var endPoint=this.endPoint;
@@ -63,6 +64,7 @@ class Level{
 
    
     levelSound.volume*=0.3;
+    sounds.gun.volume*=0.1;
     levelSound.play();
     
     render();
@@ -70,7 +72,7 @@ class Level{
     
     function render(time){
       if(gamestate=="end" || self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
-        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
+        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
       }
       else if(gamestate=="restart"){
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
@@ -156,11 +158,14 @@ class Level{
 
   }
 
-  clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound){
+  clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial){
     var ctx=canvas.getContext("2d");
     for(let i=0;i<shooters.length;i++){
       clearInterval(shooters[i].id);//stop bullet firing   
     }
+    Object.keys(sounds).forEach(function(key,index) {
+      sounds[key].volume=volumeInicial;
+    });
     document.removeEventListener("keyup",keyUpLevelHandler);
     canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
     canvas.addEventListener("click",canvas.eventListeners.click);
@@ -246,7 +251,7 @@ class Level{
 		var yDistance=Math.abs(char.posY-ev.bullet.posY);
 		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
 		var final=1-(distance/1500);
-    sons.gun.volume=final;
+    sons.gun.volume=sons.levelSound2.volume*final;
     sons.gun.play();
 		return ev.bullet;
 	}
