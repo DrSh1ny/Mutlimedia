@@ -94,20 +94,16 @@ function menuNiveis(canvas,elements,imagens){
     var capitulo3 = new Component(50+2*width/3,height/4,400,80,imagens.capitulo3,imagens.capitulo3Hover);
 
     var um = new Component(60,350,80,80,imagens.um,imagens.umHover);
-    var dois = new Component(140,350,80,80,imagens.dois,imagens.doisHover);
-    var tres = new Component(240,350,80,80,imagens.tres,imagens.tresHover);
+    var dois = new Component(160,350,80,80,imagens.dois,imagens.doisHover);
+    var tres = new Component(260,350,80,80,imagens.tres,imagens.tresHover);
 
     var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
-    var dois2 = new Component(670,350,80,80,imagens.dois,imagens.doisHover);
-    var tres2 = new Component(750,350,80,80,imagens.tres,imagens.tresHover);
-
-    var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
-    var dois2 = new Component(670,350,80,80,imagens.dois,imagens.doisHover);
-    var tres2 = new Component(770,350,80,80,imagens.tres,imagens.tresHover);
+    var dois2 = new Component(690,350,80,80,imagens.dois,imagens.doisHover);
+    var tres2 = new Component(790,350,80,80,imagens.tres,imagens.tresHover);
 
     var um3 = new Component(1120,350,80,80,imagens.um,imagens.umHover);
-    var dois3 = new Component(1200,350,80,80,imagens.dois,imagens.doisHover);
-    var tres3 = new Component(1300,350,80,80,imagens.tres,imagens.tresHover);
+    var dois3 = new Component(1220,350,80,80,imagens.dois,imagens.doisHover);
+    var tres3 = new Component(1320,350,80,80,imagens.tres,imagens.tresHover);
 
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
@@ -309,7 +305,8 @@ function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
 }
 
 function canvasClickHandler(ev, elements,imagens,canvas, sounds){
-
+    var x=ev.offsetX;
+    var y=ev.offsetY;
     for(let i=0;i<elements.length;i++){
         if (elements[i].mouseOverBoundingBox(ev)){
 
@@ -355,11 +352,16 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "um":
+                    if(x<400){
                     canvas.style.cursor = "default";
 					sounds.levelButtonSound.play()
                     var elementos=mainAntigo(imagens,sounds);
 
                     return elementos;
+                    }
+                    else{
+                        return elements;
+                    }
 
                 case "60hz":
                     canvas.framerate=60;
