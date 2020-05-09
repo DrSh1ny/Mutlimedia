@@ -192,10 +192,10 @@ function keyMenu(canvas,elements,imagens,sounds){
     var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda,imagens.esquerdaHover);
     var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita,imagens.direitaHover);
     var saltar=new Component(197,380,imagens.saltar.naturalWidth,imagens.saltar.naturalHeight,imagens.saltar,imagens.saltarHover);
-    //var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar);
+    var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar,imagens.atacarHover);
     var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
     elementos.push(voltar);
-    //elementos.push(atacar);
+    elementos.push(atacar);
     elementos.push(saltar);
     elementos.push(esquerda);
     elementos.push(direita);
@@ -245,7 +245,7 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
     drawElements(ctx,elementos,imagens);
     Object.keys(keys).forEach(function(key,index) {
         
-        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump")){
+        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump") ||  (selected=="atacar" && key=="attack")){
             ctx.fillStyle="#ffffff";
             ctx.font = '48px xirod';
         }
@@ -257,7 +257,7 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
     });
 
     if(selected!=null){
-        ctx.fillText("Pressione uma tecla!", 370, 600);
+        ctx.fillText("Pressione uma tecla!", 370, 700);
     }
 
 }
@@ -272,6 +272,9 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
             break;
         case "saltar":
             keys.jump=ev.code;
+            break;
+        case "atacar":
+            keys.attack=ev.code;
             break;
         default:
             break;

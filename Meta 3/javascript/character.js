@@ -184,6 +184,7 @@ class Character {
         if(character.up && character.grounded){
             character.speedY+=-character.boostY;
             character.grounded=false;
+            
 
         }
         //no key
@@ -239,6 +240,7 @@ class Character {
                     character.posY=asset.posY-character.height;
                     character.speedY=0;
                     character.grounded=true;
+                   
                 }
                 else{
                     character.posY=asset.posY+asset.height;
@@ -268,6 +270,7 @@ class Character {
                     character.posY=shooter.posY-character.height;
                     character.speedY=0;
                     character.grounded=true;
+                    
                 }
                 else{
                     character.posY=shooter.posY+shooter.height;
