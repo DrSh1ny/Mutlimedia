@@ -71,6 +71,10 @@ class Level{
       if(gamestate=="end" || self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
       }
+      else if(gamestate=="restart"){
+        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
+        mainAntigo(imagens,sounds);
+      }
       else if(gamestate=="run"){     
         var timePassed=time-lastFrame;
 
@@ -121,7 +125,7 @@ class Level{
           case "sair":
             return "end";
           case "reiniciar":
-            return "end";
+            return "restart";
           default:
             return gamestate;
         }
