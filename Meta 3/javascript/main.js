@@ -316,15 +316,21 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     var elementos=menuModo(canvas,elements,imagens);
 					sounds.buttonSound.play();
                     return elementos;
+
                 case "Opcao":
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
                     return elementos;
+
                 case "Keybinding":
                     sounds.buttonSound.play();
                     var elementos=keyMenu(canvas,elements,imagens,sounds);
                     return elementos;
-                    
+
+                case "Help":
+                    ajuda();
+                    return elements;
+
                 case "minus":
                     Object.keys(sounds).forEach(function(key,index) {
                         sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume-0.1));
@@ -467,6 +473,10 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 }
 
+function ajuda(){
+    var nWindow = window.open("","","width = 700, height = 150");
+    nWindow.document.write("<h1><b>Instruções de Jogo</b></h1>A personagem tem <b>3 vidas</b>. Quando estas chegam a 0, é game over!<br>A personagem consegue <b>saltar</b>, <b>andar</b> para a direita ou esquerda e <b>disparar</b> projécteis.<br>As teclas variam consoante as suas bindings que podem ser vistas no menu de bindings nas opcões.<br>")
+  }
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
