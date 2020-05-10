@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;

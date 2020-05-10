@@ -352,7 +352,7 @@ class Level{
             break;
            
           case 3: //caixa2
-            var asset=new Component(posX,posY,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
+            var asset=new Component(posX,posY-this.imagens.box2.naturalHeight,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
             this.assets.push(asset);
             break;
             
@@ -372,9 +372,9 @@ class Level{
             this.assetsAnimated.push(grass);
             break;
 			
-					case 234: //shooterRight
-						var shooter=new Shooter(posX,posY,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-						this.shooters.push(shooter);
+					case 7: //shooterRight
+            var shooter=new Shooter(posX,posY-this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+            this.shooters.push(shooter);
 						break;
 
 					case 14: //shooterLeft
@@ -411,7 +411,22 @@ class Level{
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
-					
+          
+          case 40: //bridge
+            var asset=new Component(posX,posY-this.imagens.bridge.naturalHeight,this.imagens.bridge.naturalWidth,this.imagens.bridge.naturalHeight,this.imagens.bridge);
+            this.assets.push(asset);
+            break;
+
+					case 41: //bridgeRight
+						var asset=new Component(posX,posY-this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight.naturalWidth,this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight);
+						this.assets.push(asset);
+					  break;
+
+					case 42: //bridgeLeft
+						var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
+						this.assets.push(asset);
+            break;
+            
           default:
             break;
         }
