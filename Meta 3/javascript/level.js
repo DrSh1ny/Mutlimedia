@@ -4,7 +4,7 @@
 
 class Level{
 
-  constructor(imagens,sounds,width,height,path,background,character){
+  constructor(imagens,sounds,width,height,path,background,character,levelSound){
     this.charX;
     this.charY;
 
@@ -22,6 +22,7 @@ class Level{
     this.path=path;
     this.background=background;
     this.character=character;
+    this.levelSound=levelSound;
   }
 
   
@@ -38,7 +39,7 @@ class Level{
 		var imagens=this.imagens;
     var sounds=this.sounds;
     var volumeInicial=sounds.levelSound2.volume;
-		var levelSound=sounds.levelSound2;
+		var levelSound=this.levelSound;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
 		var endPoint=this.endPoint;
 		var self=this;
@@ -85,7 +86,7 @@ class Level{
       else if(gamestate=="restart"){
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
 
-        var nivel=new Level(imagens,sounds,self.width,self.height,self.path,self.background,self.character);
+        var nivel=new Level(imagens,sounds,self.width,self.height,self.path,self.background,self.character,self.levelSound);
         nivel.loadLevel();
         nivel.run();
       }
@@ -98,14 +99,14 @@ class Level{
         //character movement
         char.move(char,timePassed,ctx);
         //rendering of everything
-        camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx);
+        camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,self.background);
         camera.drawHUD(ctx,char,imagens);
         
         lastFrame=time;//for move function
         id=requestAnimationFrame(render);
       }
       else if(gamestate=="pause"){
-        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,elementosNivel);
+        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,elementosNivel,self.background);
         id=requestAnimationFrame(render);
       }
 			

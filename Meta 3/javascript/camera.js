@@ -54,8 +54,8 @@ class Camera{
   }
 
   //chama o metodo draw da classe sprite
-  render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx){
-    
+  render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,background){
+    ctx.drawImage(background,0,0);
     //the state saved will always be the default one, matrix starting at 0;0.
     ctx.save();
     //move the matrix to the area we want to show, the camara.
@@ -89,7 +89,7 @@ class Camera{
 
   //preciso de saber o tamanho do mapa completo, para poder calcular os movimentos da camara em relacao a este
   //considerei que a personagem vai estar na segunda posicao do array de sprites
-  updateAnim(images,char,sprites,spritesAnimated,shooters,bullets, mapa, ctx){
+  updateAnim(images,char,sprites,spritesAnimated,shooters,bullets, mapa, ctx,background){
 
     var cw = ctx.canvas.width;
     var ch = ctx.canvas.height;
@@ -126,7 +126,7 @@ class Camera{
 
 
     //chamar o render
-    this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,);
+    this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,background);
 
 
     
@@ -140,9 +140,9 @@ class Camera{
     }
   }
 
-  drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,elementos){
+  drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,elementos,background){
     ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
-    this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx);
+    this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,background);
 
     ctx.beginPath();  //darken whole scene
     ctx.fillStyle = "rgba(0,0,0,0.3";

@@ -377,6 +377,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 function chooseLevel(x,y,imagens,sons,nivel,canvas){
     var background=imagens.background;
     var personagem=imagens.afonso1;
+    var levelSound=sons.levelSound2;
     var path="../resources/mapa1.json";
 
     canvas.style.cursor="default";
@@ -433,7 +434,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             break;
     }
 
-    var nivel=new Level(imagens,sons,1600,900,path,background,personagem);
+    var nivel=new Level(imagens,sons,1600,900,path,background,personagem,levelSound);
     nivel.loadLevel();
     var elementos=nivel.run();
     return elementos;
@@ -466,7 +467,7 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
