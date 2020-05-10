@@ -179,9 +179,9 @@ function optionsMenu(canvas,elements,imagens,sons){
 
 
 function mainAntigo(imagens,sounds){
-    var nivel=new Level(imagens,sounds,1600,900);
-    nivel.loadLevel("../resources/mapa2.json");
-    var elementos =nivel.run();
+    var nivel=new Level(imagens,sounds,1600,900,"../resources/mapa2.json",imagens.background,imagens.afonso1);
+    nivel.loadLevel();
+    var elementos=nivel.run();
     return elementos;
 }
 
@@ -352,16 +352,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "um":
-                    if(x<400){
-                    canvas.style.cursor = "default";
-					sounds.levelButtonSound.play()
-                    var elementos=mainAntigo(imagens,sounds);
-
-                    return elementos;
-                    }
-                    else{
-                        return elements;
-                    }
+                    return chooseLevel(x,y,imagens,sounds,"um",canvas);
 
                 case "60hz":
                     canvas.framerate=60;
@@ -382,6 +373,72 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
     return elements;
 }
 
+
+function chooseLevel(x,y,imagens,sons,nivel,canvas){
+    var background=imagens.background;
+    var personagem=imagens.afonso1;
+    var path="../resources/mapa1.json";
+
+    canvas.style.cursor="default";
+    
+    switch (nivel) {
+        case "um":
+            if(x<400){
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa4.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa7.json";
+                break;
+            }
+            break;
+        case "dois":
+            if(x<400){
+                path="../resources/mapa2.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa5.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa8.json";
+                break;
+            }
+            break;
+        case "tres":
+            if(x<400){
+                path="../resources/mapa3.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa6.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa9.json";
+                break;
+            }
+            break;
+        default:
+            break;
+    }
+
+    var nivel=new Level(imagens,sons,1600,900,path,background,personagem);
+    nivel.loadLevel();
+    var elementos=nivel.run();
+    return elementos;
+
+}
 
 function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
     var x=ev.offsetX;

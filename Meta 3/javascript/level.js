@@ -4,7 +4,7 @@
 
 class Level{
 
-  constructor(imagens,sounds,width,height){
+  constructor(imagens,sounds,width,height,path,background,character){
     this.charX;
     this.charY;
 
@@ -17,7 +17,11 @@ class Level{
     this.shooters;
 
 		this.imagens=imagens;
-		this.sounds=sounds;
+    this.sounds=sounds;
+    
+    this.path=path;
+    this.background=background;
+    this.character=character;
   }
 
   
@@ -44,7 +48,12 @@ class Level{
     var d = new Date();
     var lastFrame =d.getTime();
 
-    var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
+    switch (this.character) {
+      case imagens.afonso1:
+        var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
+        break;
+    }
+    //var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
     assets.push(char);
 
     //camera
@@ -68,15 +77,17 @@ class Level{
     levelSound.play();
     
     render();
-    
-    
+
     function render(time){
       if(gamestate=="end" || self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
       }
       else if(gamestate=="restart"){
-        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound);
-        mainAntigo(imagens,sounds);
+        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
+
+        var nivel=new Level(imagens,sounds,self.width,self.height,self.path,self.background,self.character);
+        nivel.loadLevel();
+        nivel.run();
       }
       else if(gamestate=="run"){     
         var timePassed=time-lastFrame;
@@ -290,9 +301,9 @@ class Level{
 		
 	}
 
-  loadLevel(file_path){
+  loadLevel(){
     //get the data in the file in a string
-    var text = this.read(file_path);
+    var text = this.read(this.path);
     
     
     //parse the string using JSON.parse()

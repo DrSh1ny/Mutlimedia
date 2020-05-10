@@ -185,7 +185,6 @@ class Character {
             character.speedY+=-character.boostY;
             character.grounded=false;
             
-
         }
         //no key
         if(!character.right && !character.left){
