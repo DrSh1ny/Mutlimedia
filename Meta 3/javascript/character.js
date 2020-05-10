@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -72,6 +72,8 @@ class Character {
 
         this.frame=0;       //para a animacao no this.render
         this.frameCount=0;  //para a animacao no this.render
+        this.framePeriod=framePeriod;
+        this.nFrames=nFrames;
         this.lastDirection="right";  //para a animacao no this.render
         
         this.img=img;
@@ -86,14 +88,15 @@ class Character {
 
     render(ctx) {
         var row=this.getRow();
-
-        ctx.drawImage(this.img,this.frame*64,row*92,64,92, this.posX, this.posY, this.width, this.height);
+        var frameWidth=this.img.naturalWidth/this.nFrames; 
+        var frameHeight=this.img.naturalHeight/6; //num de estados
+        ctx.drawImage(this.img,this.frame*frameWidth,row*frameHeight,frameWidth,frameHeight, this.posX, this.posY, this.width, this.height);
         
         this.frameCount+=1;
         
-        if(this.frameCount>20){
+        if(this.frameCount>this.framePeriod){
             this.frameCount=0;
-            this.frame=(this.frame+1)%4;
+            this.frame=(this.frame+1)%this.nFrames;
         }
         
     }
@@ -133,15 +136,16 @@ class Character {
         canvas.width = this.width;
         canvas.height = this.height;
         var ctx = canvas.getContext("2d");
-        
+        var frameWidth=this.img.naturalWidth/this.nFrames; 
+        var frameHeight=this.img.naturalHeight/6; //num de estados
         var arrayImgData=[];
         
         for(let y=0;y<6;y++){
-            for(let x=0;x<4;x++){
+            for(let x=0;x<this.nFrames;x++){
                 //limpar tela
                 ctx.clearRect(0,0,this.width,this.height);
                 //desenhar frame
-                ctx.drawImage(img,x*64,y*92,64,92,0,0, this.width, this.height);
+                ctx.drawImage(img,x*frameWidth,y*frameHeight,frameWidth,frameHeight,0,0, this.width, this.height);
                 //captar array de pixeis
                 var frame=ctx.getImageData(0,0,this.width,this.height);
                 //colocar frame no array principal
