@@ -406,7 +406,7 @@ class Character {
 					let xLocalB= Math.floor(x-leftB);
 					let yLocalB= Math.floor(y-topB);
 
-					if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0){
+					if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && array2[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
                         if(yMax-yMin<xMax-xMin){
                             return "vertical"
                         }
