@@ -560,7 +560,6 @@ function hoverOuter(ev,canvas,ctx,imagens,sons,frames,slide,som,comecar){
 }
 
 function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,comecar){
-    console.log(slide);
     
     if(slide==-1 && comecar.mouseOverBoundingBox(ev)){
         canvas.removeEventListener("mousemove",evL1);
