@@ -68,6 +68,7 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
 function reduceVolume(som,id){
     som.volume=Math.max(som.volume-0.005,0);
     if(som.volume<=0){
+        som.pause();
         clearInterval(id);
     }
 }
