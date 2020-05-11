@@ -94,7 +94,7 @@ class Level{
         var timePassed=time-lastFrame;
 
         self.shotsHandler(char,assets,shooters);
-        self.bulletHandler(char,bullets,assets,shooters);
+        self.bulletHandler(char,bullets,assets,shooters,sounds);
         self.soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound);
         //character movement
         char.move(char,timePassed,ctx);
@@ -269,7 +269,7 @@ class Level{
 	}
 
 
-  bulletHandler(char,bullets,assets,shooters){   //check collition of bullets
+  bulletHandler(char,bullets,assets,shooters,sons){   //check collition of bullets
     
 		for(let i=0;i<bullets.length;i++){
 			bullets[i].move();
@@ -277,6 +277,7 @@ class Level{
 			if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
 				bullets.splice(i,1);
         char.lives--;
+        sons.shout.play();
         continue;
       }
       
