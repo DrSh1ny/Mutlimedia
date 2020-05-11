@@ -564,6 +564,7 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     
     if(slide==-1 && comecar.mouseOverBoundingBox(ev)){
         canvas.removeEventListener("mousemove",evL1);
+        som.currentTime=30;
         som.play();
         slide++;
         drawFrame(canvas,ctx,frames[slide],imagens);
@@ -573,7 +574,9 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     }
     else if(slide>frames.length-2){
         canvas.removeEventListener("click",evL2);
+        var id=setInterval(reduceVolume,30,som,id);
         main(imagens,sons);
+
     }
     else{
         slide++;
@@ -582,6 +585,13 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     }
     
     return slide;
+}
+
+function reduceVolume(som,id){
+    som.volume=Math.max(som.volume-0.005,0);
+    if(som.volume<=0){
+        clearInterval(id);
+    }
 }
 
 function drawFrame(canvas,ctx,frame,imagens,start=null,comecar){
