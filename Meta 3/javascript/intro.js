@@ -42,6 +42,7 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     
     if(slide==-1 && comecar.mouseOverBoundingBox(ev)){
         canvas.removeEventListener("mousemove",evL1);
+        som.currentTime=1;
         som.play();
         slide++;
         drawFrame(canvas,ctx,frames[slide],imagens);
