@@ -560,6 +560,8 @@ function hoverOuter(ev,canvas,ctx,imagens,sons,frames,slide,som,comecar){
 }
 
 function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,comecar){
+    console.log(slide);
+    
     if(slide==-1 && comecar.mouseOverBoundingBox(ev)){
         canvas.removeEventListener("mousemove",evL1);
         som.play();
@@ -569,14 +571,14 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     else if(slide==-1 && !(comecar.mouseOverBoundingBox(ev))){
         drawFrame(canvas,ctx,null,imagens,comecar);
     }
-    else if(slide>=frames.length){
+    else if(slide>frames.length-2){
         canvas.removeEventListener("click",evL2);
         main(imagens,sons);
-        slide++;
     }
     else{
-        drawFrame(canvas,ctx,frames[slide],imagens);
         slide++;
+        drawFrame(canvas,ctx,frames[slide],imagens);
+        
     }
     
     return slide;
@@ -610,6 +612,6 @@ function drawFrame(canvas,ctx,frame,imagens,start=null,comecar){
     
     ctx.font = '30px Xirod';
     ctx.fillText("Clique para continuar", canvas.width/2,800);
-    
+
 }
 
