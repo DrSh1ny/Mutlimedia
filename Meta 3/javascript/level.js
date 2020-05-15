@@ -175,13 +175,14 @@ class Level{
     for(let i=0;i<shooters.length;i++){
       clearInterval(shooters[i].id);//stop bullet firing   
     }
-    Object.keys(sounds).forEach(function(key,index) {
-      sounds[key].volume=volumeInicial;
-    });
+    
     document.removeEventListener("keyup",keyUpLevelHandler);
     canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
     canvas.addEventListener("click",canvas.eventListeners.click);
     canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
+    Object.keys(sounds).forEach(function(key,index) {
+      sounds[key].volume=volumeInicial;
+    });
     drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
     levelSound.pause();
     levelSound.currentTime = 0;
