@@ -178,12 +178,7 @@ function optionsMenu(canvas,elements,imagens,sons){
 }
 
 
-function mainAntigo(imagens,sounds){
-    var nivel=new Level(imagens,sounds,1600,900,"../resources/mapa2.json",imagens.background,imagens.afonso1);
-    nivel.loadLevel();
-    var elementos=nivel.run();
-    return elementos;
-}
+
 
 
 function drawElements(ctx,elements,imagens){
@@ -444,7 +439,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             break;
     }
 
-    var nivel=new Level(imagens,sons,1600,900,path,background,personagem,levelSound);
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound);
     nivel.loadLevel();
     var elementos=nivel.run();
     return elementos;

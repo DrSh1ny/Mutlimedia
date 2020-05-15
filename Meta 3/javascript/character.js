@@ -2,12 +2,14 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
         this.lastY= posY;
 
+        this.levelWidth=levelWidth; //keep player in game boudaries
+        
         var canvas = document.getElementById("canvas");
         this.framerate=canvas.framerate;
         if(this.framerate==144){//144hz monitor
@@ -222,6 +224,10 @@ class Character {
         if(character.posX<0){
             character.posX=0;
         }
+        if(character.posX+character.width>character.levelWidth){
+            character.posX=character.levelWidth-character.width;
+        }
+        
         
         //move
         character.posX+=character.speedX;

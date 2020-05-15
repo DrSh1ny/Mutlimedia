@@ -4,12 +4,11 @@
 
 class Level{
 
-  constructor(imagens,sounds,width,height,path,background,character,levelSound){
+  constructor(imagens,sounds,path,background,character,levelSound){
     this.charX;
     this.charY;
 
-    this.width=width;
-    this.height=height;
+    
 
     this.sprites
     this.assets;
@@ -51,7 +50,7 @@ class Level{
 
     switch (this.character) {
       case imagens.afonso1:
-        var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds,4,10);
+        var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds,4,10,this.width);
         break;
     }
     //var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
@@ -60,7 +59,7 @@ class Level{
     //camera
     var camera=new Camera(0,0,800,450);
     //var camera=new Camera(0,0,1066,600);
-    var mapa = {x:0, y:0, width:1600, height:900};
+    var mapa = {x:0, y:0, width:self.width, height:self.height};
 
     var gamestate="run";
 
@@ -311,7 +310,7 @@ class Level{
     
     //parse the string using JSON.parse()
     var obj = JSON.parse(text);
- 
+
     //need to know framerate to set projectile and animation velocity 
     var canvas = document.getElementById("canvas");
     var fator=1;
@@ -323,25 +322,24 @@ class Level{
     this.charX = obj.properties[0].value;
     this.charY = obj.properties[1].value;
     this.sprites = obj.layers[0].data;
+    this.width=obj.width;
+    this.height=obj.height;
 
-  
+    
     //more can be added as long as the constructor and the level file are updated
     //translate the matrix into an array of components
-    //divide level space into grids
-    //calculate unit square width and height
-    var squareWidth=this.width/1600;
-    var squareHeight=this.height/900;
+    
 
     this.assets=new Array();
     this.assetsAnimated=new Array();
     this.shooters=new Array();
   
-    for(let x=0;x<1600;x++){
-      for(let y=0;y<900;y++){
-        var posX=x*squareWidth;
-        var posY=y*squareHeight;
+    for(let x=0;x<this.width;x++){
+      for(let y=0;y<this.height;y++){
+        var posX=x;
+        var posY=y;
         
-				var pos=y*1600 + x;
+				var pos=y*(this.width) + x;
 				
 				if(this.sprites[pos]!=0){
 					console.log(this.sprites[pos]);

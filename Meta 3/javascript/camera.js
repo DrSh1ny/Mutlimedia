@@ -59,6 +59,7 @@ class Camera{
     //the state saved will always be the default one, matrix starting at 0;0.
     ctx.save();
     //move the matrix to the area we want to show, the camara.
+  
     ctx.scale(mapa.width/this.width,mapa.height/this.height);
     ctx.translate(-this.x, -this.y);
      
@@ -140,6 +141,7 @@ class Camera{
     }
   }
 
+  
   drawPauseMenu(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,elementos,background){
     ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
     this.render(images,char,sprites,spritesAnimated,shooters,bullets,mapa, ctx,background);
