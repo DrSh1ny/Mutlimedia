@@ -85,7 +85,7 @@ class Level{
       else if(gamestate=="restart"){
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
 
-        var nivel=new Level(imagens,sounds,self.width,self.height,self.path,self.background,self.character,self.levelSound);
+        var nivel=new Level(imagens,sounds,self.path,self.background,self.character,self.levelSound);
         nivel.loadLevel();
         nivel.run();
       }
