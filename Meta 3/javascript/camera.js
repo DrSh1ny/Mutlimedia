@@ -60,7 +60,9 @@ class Camera{
     ctx.save();
     //move the matrix to the area we want to show, the camara.
   
-    ctx.scale(mapa.width/this.width,mapa.height/this.height);
+    
+    
+    ctx.scale(ctx.canvas.width/this.width,ctx.canvas.height/this.height);
     ctx.translate(-this.x, -this.y);
      
     for (let i = 0; i < sprites.length ; i++){

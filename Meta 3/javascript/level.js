@@ -263,7 +263,7 @@ class Level{
 		var yDistance=Math.abs(char.posY-ev.bullet.posY);
 		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
 		var final=1-(distance/1500);
-    sons.gun.volume=sons.levelSound2.volume*final;
+    sons.gun.volume=Math.max(0,sons.levelSound2.volume*final);
     sons.gun.play();
 		return ev.bullet;
 	}
@@ -325,7 +325,7 @@ class Level{
     this.width=obj.width;
     this.height=obj.height;
 
-    
+    var array=this.getIDS(obj);
     //more can be added as long as the constructor and the level file are updated
     //translate the matrix into an array of components
     
@@ -341,88 +341,81 @@ class Level{
         
 				var pos=y*(this.width) + x;
 				
-				if(this.sprites[pos]!=0){
-					console.log(this.sprites[pos]);
-					
-				}
+				
         switch (this.sprites[pos]) {
-          case 2: //caixa1
+          case array[0]: //caixa1
             var asset=new Component(posX,posY-this.imagens.box1.naturalHeight,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
             this.assets.push(asset);
             break;
            
-          case 3: //caixa2
+          case array[1]: //caixa2
             var asset=new Component(posX,posY-this.imagens.box2.naturalHeight,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
             this.assets.push(asset);
             break;
             
-          case 1: //plataforma
+          case array[2]: //plataforma
             var asset=new Component(posX,posY-this.imagens.plataforma.naturalHeight,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
             this.assets.push(asset);
             break;
             
-          case 11: //endPoint (star)
-            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end.naturalHeight,this.imagens.end.naturalWidth/3,this.imagens.end.naturalHeight,this.imagens.end,Math.round(30/fator),3,0);
-            this.assetsAnimated.push(endPoint);
-            this.endPoint=endPoint;
-            break;
 
-          case 4: //grass
+          case array[3]: //grass
             var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,Math.round(60/fator),3,Math.round(Math.random()*2));
             this.assetsAnimated.push(grass);
             break;
 			
-					case 7: //shooterRight
+					case array[4]: //shooterRight
             var shooter=new Shooter(posX,posY-this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
             this.shooters.push(shooter);
 						break;
 
-					case 14: //shooterLeft
+					case array[5]: //shooterLeft
 						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
             this.shooters.push(shooter);
 						break;
 
-					case 8: //ground
+					case array[6]: //ground
 						var asset=new Component(posX,posY-this.imagens.ground.naturalHeight,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
 						this.assets.push(asset);
 						break;
 
-					case 9: //groundRight
+					case array[7]: //groundRight
 						var asset=new Component(posX,posY-this.imagens.groundRight.naturalHeight,this.imagens.groundRight.naturalWidth,this.imagens.groundRight.naturalHeight,this.imagens.groundRight);
 						this.assets.push(asset);
 						break;
 
-					case 10: //groundLeft
+					case array[8]: //groundLeft
 						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
 						this.assets.push(asset);
 						break;
 					
-					case 15: //lamp
+					case array[9]: //lamp
             var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,Math.round(15/fator),16,0);
             this.assetsAnimated.push(lamp);
             break;
-					case 31: //plataformaIce
+					case array[10]: //plataformaIce
             var asset=new Component(posX,posY-this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce.naturalWidth,this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce);
             this.assets.push(asset);
             break;
 
-          case 32: //end2
+          case array[11]: //end2
+            console.log("WTF");
             var endPoint=new ComponentAnimated(posX,posY-this.imagens.end2.naturalHeight,this.imagens.end2.naturalWidth/8,this.imagens.end2.naturalHeight,this.imagens.end2,Math.round(20/fator),8,0);
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
           
-          case 40: //bridge
+          case array[12]: //bridge
             var asset=new Component(posX,posY-this.imagens.bridge.naturalHeight,this.imagens.bridge.naturalWidth,this.imagens.bridge.naturalHeight,this.imagens.bridge);
             this.assets.push(asset);
             break;
 
-					case 41: //bridgeRight
+					case array[13]: //bridgeRight
 						var asset=new Component(posX,posY-this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight.naturalWidth,this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight);
 						this.assets.push(asset);
 					  break;
 
-					case 42: //bridgeLeft
+					case array[14]: //bridgeLeft
 						var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
 						this.assets.push(asset);
             break;
@@ -434,6 +427,27 @@ class Level{
       }
     }
     
+    
+  }
+
+  getIDS(obj){
+    var array=["box1","box2","plataforma","grass","shooterRight","shooterLeft","ground","groundRight","groundLeft","lamp","plataformaIce","end2","bridge","bridgeRight","bridgeLeft"];
+    var tilesets=obj.tilesets;
+    
+    
+    for(let i=0;i<array.length;i++){
+      for(let j=0;j<tilesets.length;j++){
+        var name=tilesets[j].name;
+        if(name==array[i]){
+          console.log(array[i]);
+          console.log(name);
+          
+          array[i]=tilesets[j].firstgid;
+        }
+      }
+    }
+
+    return array;
     
   }
 
