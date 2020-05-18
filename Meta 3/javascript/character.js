@@ -2,12 +2,14 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
         this.lastY= posY;
 
+        this.levelWidth=levelWidth; //keep player in game boudaries
+        
         var canvas = document.getElementById("canvas");
         this.framerate=canvas.framerate;
         if(this.framerate==144){//144hz monitor
@@ -18,6 +20,7 @@ class Character {
         this.acelYUp = 0.2;
         this.acelYDown=0.5;
         this.frictionX=0.92;
+        this.airFriction=0.96;
         this.speedLimitX=2;
         this.speedLimitY=30;
         this.boostX=30;
@@ -30,6 +33,7 @@ class Character {
             this.acelYUp = 1.5;
             this.acelYDown=3.75;
             this.frictionX=0.87;
+            this.airFriction=0.92;
             this.speedLimitX=4;
             this.speedLimitY=25;
             this.boostX=40;
@@ -53,6 +57,7 @@ class Character {
 
         var self = this;
         this.imagens=imagens;
+        this.sons=sons;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
         this.shooters=shooters;
 
@@ -69,6 +74,8 @@ class Character {
 
         this.frame=0;       //para a animacao no this.render
         this.frameCount=0;  //para a animacao no this.render
+        this.framePeriod=framePeriod;
+        this.nFrames=nFrames;
         this.lastDirection="right";  //para a animacao no this.render
         
         this.img=img;
@@ -83,14 +90,15 @@ class Character {
 
     render(ctx) {
         var row=this.getRow();
-
-        ctx.drawImage(this.img,this.frame*64,row*92,64,92, this.posX, this.posY, this.width, this.height);
+        var frameWidth=this.img.naturalWidth/this.nFrames; 
+        var frameHeight=this.img.naturalHeight/6; //num de estados
+        ctx.drawImage(this.img,this.frame*frameWidth,row*frameHeight,frameWidth,frameHeight, this.posX, this.posY, this.width, this.height);
         
         this.frameCount+=1;
         
-        if(this.frameCount>20){
+        if(this.frameCount>this.framePeriod){
             this.frameCount=0;
-            this.frame=(this.frame+1)%4;
+            this.frame=(this.frame+1)%this.nFrames;
         }
         
     }
@@ -130,15 +138,16 @@ class Character {
         canvas.width = this.width;
         canvas.height = this.height;
         var ctx = canvas.getContext("2d");
-        
+        var frameWidth=this.img.naturalWidth/this.nFrames; 
+        var frameHeight=this.img.naturalHeight/6; //num de estados
         var arrayImgData=[];
         
         for(let y=0;y<6;y++){
-            for(let x=0;x<4;x++){
+            for(let x=0;x<this.nFrames;x++){
                 //limpar tela
                 ctx.clearRect(0,0,this.width,this.height);
                 //desenhar frame
-                ctx.drawImage(img,x*64,y*92,64,92,0,0, this.width, this.height);
+                ctx.drawImage(img,x*frameWidth,y*frameHeight,frameWidth,frameHeight,0,0, this.width, this.height);
                 //captar array de pixeis
                 var frame=ctx.getImageData(0,0,this.width,this.height);
                 //colocar frame no array principal
@@ -181,7 +190,7 @@ class Character {
         if(character.up && character.grounded){
             character.speedY+=-character.boostY;
             character.grounded=false;
-
+            
         }
         //no key
         if(!character.right && !character.left){
@@ -189,7 +198,7 @@ class Character {
                 friction=character.frictionX;
             }
             else{
-                friction=character.frictionX;
+                friction=character.airFriction;
             }
             character.acelX=0;
         }
@@ -215,6 +224,10 @@ class Character {
         if(character.posX<0){
             character.posX=0;
         }
+        if(character.posX+character.width>character.levelWidth){
+            character.posX=character.levelWidth-character.width;
+        }
+        
         
         //move
         character.posX+=character.speedX;
@@ -236,6 +249,7 @@ class Character {
                     character.posY=asset.posY-character.height;
                     character.speedY=0;
                     character.grounded=true;
+                   
                 }
                 else{
                     character.posY=asset.posY+asset.height;
@@ -265,6 +279,7 @@ class Character {
                     character.posY=shooter.posY-character.height;
                     character.speedY=0;
                     character.grounded=true;
+                    
                 }
                 else{
                     character.posY=shooter.posY+shooter.height;
@@ -341,6 +356,7 @@ class Character {
               }
               character.shots.push(shot);
               this.lastShot = time;
+              this.sons.sword2.play();
             }
           }
 
@@ -396,7 +412,7 @@ class Character {
 					let xLocalB= Math.floor(x-leftB);
 					let yLocalB= Math.floor(y-topB);
 
-					if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0){
+					if(array1[yLocalA*sprite1.width*4 + xLocalA*4 +3]!=0 && array2[yLocalB*sprite2.width*4 + xLocalB*4 +3]!=0){
                         if(yMax-yMin<xMax-xMin){
                             return "vertical"
                         }

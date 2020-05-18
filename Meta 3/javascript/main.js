@@ -111,13 +111,21 @@ function menuNiveis(canvas,elements,imagens){
 
     var elementos= new Array();
 
-    var capitulo1 = new Component(50,height/4,400,40,imagens.capitulo1,imagens.capitulo1Hover);
-    var capitulo2 = new Component(50+width/3,height/4,400,40,imagens.capitulo2,imagens.capitulo2Hover);
-    var capitulo3 = new Component(50+2*width/3,height/4,400,40,imagens.capitulo3,imagens.capitulo3Hover);
+    var capitulo1 = new Component(50,height/4,400,80,imagens.capitulo1,imagens.capitulo1Hover,);
+    var capitulo2 = new Component(50+width/3,height/4,400,80,imagens.capitulo2,imagens.capitulo2Hover);
+    var capitulo3 = new Component(50+2*width/3,height/4,400,80,imagens.capitulo3,imagens.capitulo3Hover);
 
-    var um = new Component(80,1.2*height/4+49,40,40,imagens.um,imagens.umHover);
-    var dois = new Component(130,1.2*height/4+50,40,40,imagens.dois,imagens.doisHover);
-    var tres = new Component(190,1.2*height/4+50,40,40,imagens.tres,imagens.tresHover);
+    var um = new Component(60,350,80,80,imagens.um,imagens.umHover);
+    var dois = new Component(160,350,80,80,imagens.dois,imagens.doisHover);
+    var tres = new Component(260,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
+    var dois2 = new Component(690,350,80,80,imagens.dois,imagens.doisHover);
+    var tres2 = new Component(790,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um3 = new Component(1120,350,80,80,imagens.um,imagens.umHover);
+    var dois3 = new Component(1220,350,80,80,imagens.dois,imagens.doisHover);
+    var tres3 = new Component(1320,350,80,80,imagens.tres,imagens.tresHover);
 
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
@@ -128,6 +136,12 @@ function menuNiveis(canvas,elements,imagens){
     elementos.push(um);
     elementos.push(dois);
     elementos.push(tres);
+    elementos.push(um2);
+    elementos.push(dois2);
+    elementos.push(tres2);
+    elementos.push(um3);
+    elementos.push(dois3);
+    elementos.push(tres3);
 
     elementos.push(botaoVoltar);
     return elementos;
@@ -186,12 +200,7 @@ function optionsMenu(canvas,elements,imagens,sons){
 }
 
 
-function mainAntigo(imagens,sounds){
-    var nivel=new Level(imagens,sounds,1600,900);
-    nivel.loadLevel("../resources/mapa2.json");
-    var elementos =nivel.run();
-    return elementos;
-}
+
 
 
 function drawElements(ctx,elements,imagens){
@@ -214,10 +223,10 @@ function keyMenu(canvas,elements,imagens,sounds){
     var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda,imagens.esquerdaHover);
     var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita,imagens.direitaHover);
     var saltar=new Component(197,380,imagens.saltar.naturalWidth,imagens.saltar.naturalHeight,imagens.saltar,imagens.saltarHover);
-    //var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar);
+    var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar,imagens.atacarHover);
     var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
     elementos.push(voltar);
-    //elementos.push(atacar);
+    elementos.push(atacar);
     elementos.push(saltar);
     elementos.push(esquerda);
     elementos.push(direita);
@@ -267,7 +276,7 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
     drawElements(ctx,elementos,imagens);
     Object.keys(keys).forEach(function(key,index) {
         
-        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump")){
+        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump") ||  (selected=="atacar" && key=="attack")){
             ctx.fillStyle="#ffffff";
             ctx.font = '48px xirod';
         }
@@ -279,7 +288,7 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
     });
 
     if(selected!=null){
-        ctx.fillText("Pressione uma tecla!", 370, 600);
+        ctx.fillText("Pressione uma tecla!", 370, 700);
     }
 
 }
@@ -294,6 +303,9 @@ function typeBindedKeys(canvas,imagens,elementos,keys,selected){
             break;
         case "saltar":
             keys.jump=ev.code;
+            break;
+        case "atacar":
+            keys.attack=ev.code;
             break;
         default:
             break;
@@ -310,7 +322,8 @@ function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
 }
 
 function canvasClickHandler(ev, elements,imagens,canvas, sounds){
-
+    var x=ev.offsetX;
+    var y=ev.offsetY;
     for(let i=0;i<elements.length;i++){
         if (elements[i].mouseOverBoundingBox(ev)){
 
@@ -320,15 +333,21 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     var elementos=menuModo(canvas,elements,imagens);
 					sounds.buttonSound.play();
                     return elementos;
+
                 case "Opcao":
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
                     return elementos;
+
                 case "Keybinding":
                     sounds.buttonSound.play();
                     var elementos=keyMenu(canvas,elements,imagens,sounds);
                     return elementos;
-                    
+
+                case "Help":
+                    ajuda();
+                    return elements;
+
                 case "minus":
                     Object.keys(sounds).forEach(function(key,index) {
                         sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume-0.1));
@@ -356,11 +375,11 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "um":
-                    canvas.style.cursor = "default";
-					sounds.levelButtonSound.play()
-                    var elementos=mainAntigo(imagens,sounds);
-
-                    return elementos;
+                    return chooseLevel(x,y,imagens,sounds,"um",canvas);
+                case "dois":
+                    return chooseLevel(x,y,imagens,sounds,"dois",canvas);
+                case "tres":
+                    return chooseLevel(x,y,imagens,sounds,"tres",canvas);
 
                 case "60hz":
                     canvas.framerate=60;
@@ -381,6 +400,73 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
     return elements;
 }
 
+
+function chooseLevel(x,y,imagens,sons,nivel,canvas){
+    var background=imagens.background;
+    var personagem=imagens.afonso1;
+    var levelSound=sons.levelSound2;
+    var path="../resources/mapa1.json";
+
+    canvas.style.cursor="default";
+    
+    switch (nivel) {
+        case "um":
+            if(x<400){
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa4.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa7.json";
+                break;
+            }
+            break;
+        case "dois":
+            if(x<400){
+                path="../resources/mapa2.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa5.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa8.json";
+                break;
+            }
+            break;
+        case "tres":
+            if(x<400){
+                path="../resources/mapa3.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                path="../resources/mapa6.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa9.json";
+                break;
+            }
+            break;
+        default:
+            break;
+    }
+
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound);
+    nivel.loadLevel();
+    var elementos=nivel.run();
+    return elementos;
+
+}
 
 function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
     var x=ev.offsetX;
@@ -404,12 +490,16 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 }
 
+function ajuda(){
+    var nWindow = window.open("","","width = 700, height = 150");
+    nWindow.document.write("<h1><b>Instruções de Jogo</b></h1>A personagem tem <b>3 vidas</b>. Quando estas chegam a 0, é game over!<br>A personagem consegue <b>saltar</b>, <b>andar</b> para a direita ou esquerda e <b>disparar</b> projécteis.<br>As teclas variam consoante as suas bindings que podem ser vistas no menu de bindings nas opcões.<br>")
+  }
 
 function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","box1","capitulo1","capitulo2","capitulo3","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
-	var	resourcesSound = ["levelSound2","levelSound1","levelButtonSound", "buttonSound"];
+    var resourcesImg=["comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+	var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
 
@@ -439,10 +529,13 @@ function loadingScreen() {
         loaded++;
 
         if(loaded==toLoad){
-            main(imagens, sounds);
+            //main(imagens, sounds);
+            intro(imagens,sounds);
         }
     }
 
 
 }
+
+
 
