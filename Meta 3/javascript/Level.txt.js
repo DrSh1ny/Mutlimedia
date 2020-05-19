@@ -8,7 +8,7 @@ class Level{
     this.charX;
     this.charY;
 
-    
+
 
     this.sprites
     this.assets;
@@ -17,20 +17,19 @@ class Level{
 
 		this.imagens=imagens;
     this.sounds=sounds;
-    
+
     this.path=path;
     this.background=background;
     this.character=character;
     this.levelSound=levelSound;
 
-    
     this.timeIni = 0;
     this.timeLevel = 0;
     this.timePaused = 0;
     this.timePausedIni = 0;
   }
 
-  
+
   run(){
     var canvas=document.getElementById("canvas");
     var ctx=canvas.getContext("2d");
@@ -38,9 +37,9 @@ class Level{
     var nh=canvas.height;
     var assets=this.assets; //todos os componenentes do nivel e o character incluido excluindo os shooters
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
-    var shooters=this.shooters; 
+    var shooters=this.shooters;
 		var bullets=new Array();  //bullet containment
-		
+
 		var imagens=this.imagens;
     var sounds=this.sounds;
     var volumeInicial=sounds.levelSound2.volume;
@@ -56,6 +55,7 @@ class Level{
 
     //for the time spent in the level
     this.timeIni = d.getTime();
+
 
     switch (this.character) {
       case imagens.afonso1:
@@ -80,11 +80,12 @@ class Level{
     canvas.addEventListener("mousemove",mouseMoveLevelHandler);
 
 
-   
+
     levelSound.volume*=0.3;
     sounds.gun.volume*=0.1;
     levelSound.play();
-    
+
+
     var flag = 0;
     var d2 = new Date();
 
@@ -92,8 +93,8 @@ class Level{
 
     function render(time){
       gamestate = self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate);
-      if(gamestate=="end"){//evaluate ending conditions
-        //self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
+      if(gamestate=="end"){ //evaluate ending conditions
+        //eu queria que isto fosse executado so uma vez, por isso fiz assim, nao e o melhor, mas nao me lembrei de mais nada
         if (flag == 0){
           d2 = new Date();
           gamestate = "end";
@@ -106,7 +107,6 @@ class Level{
         self.endLevelMenu(ctx, self.timeLevel);
         id=requestAnimationFrame(render);
         flag ++;
-      
       }
       else if(gamestate == "finished"){
         //quando o user clicar o gamestate vai passar a finished e voltamos para o menu principal
@@ -116,11 +116,13 @@ class Level{
         self.timeLevel = d.getTime() - self.timeIni - self.timePaused;
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
 
+        self.clearBotBullets(canvas, shooters, bulletFiredHandler);
+
         var nivel=new Level(imagens,sounds,self.path,self.background,self.character,self.levelSound);
         nivel.loadLevel();
         nivel.run();
       }
-      else if(gamestate=="run"){     
+      else if(gamestate=="run"){
         var timePassed=time-lastFrame;
 
         self.shotsHandler(char,assets,shooters);
@@ -131,7 +133,7 @@ class Level{
         //rendering of everything
         camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,self.background);
         camera.drawHUD(ctx,char,imagens);
-        
+
         lastFrame=time;//for move function
         id=requestAnimationFrame(render);
       }
@@ -139,9 +141,9 @@ class Level{
         camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,elementosNivel,self.background);
         id=requestAnimationFrame(render);
       }
-			
+
 		}
-    
+
     function clickLevelHandler(ev){
         gamestate=self.clickLevelHandlerOuter(ev,ctx,elementosNivel,imagens,gamestate);
         return;}
@@ -153,16 +155,14 @@ class Level{
         gamestate=resultado[0];
         elementosNivel=resultado[1];
       return;}
-      
+
     function bulletFiredHandler(ev){
 			var newBullet=self.bulletFiredHandlerOuter(ev,sounds,char);
       bullets.push(newBullet);
     }
 
-    
     return elementos;
   }
-  
 
   clearBotBullets(canvas, shooters, bulletFiredHandler){
     for(let i=0;i<shooters.length;i++){
@@ -187,16 +187,19 @@ class Level{
     ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
   }
 
+
   clickLevelHandlerOuter(ev,ctx,elementos,imagens,gamestate){
-    for(let i=0;i<elementos.length;i++){
-      if (elementos[i].mouseOverBoundingBox(ev)){
-        switch (elementos[i].img.id) {
-          case "sair":
-            return "end";
-          case "reiniciar":
-            return "restart";
-          default:
-            return gamestate;
+    if (gamestate == "pause"){
+      for(let i=0;i<elementos.length;i++){
+        if (elementos[i].mouseOverBoundingBox(ev)){
+          switch (elementos[i].img.id) {
+            case "sair":
+              return "end";
+            case "reiniciar":
+              return "restart";
+            default:
+              return gamestate;
+          }
         }
       }
     }
@@ -207,11 +210,11 @@ class Level{
     }
     return gamestate;
   }
-  
+
   mouseLevelHandlerOuter(ev,ctx,elementos,imagens){
     var x=ev.offsetX;
     var y=ev.offsetY;
-    
+
     for(let i=0;i<elementos.length;i++){
         if (elementos[i].mouseOverBoundingBox(ev)){
             canvas.style.cursor = "pointer";
@@ -235,7 +238,6 @@ class Level{
       clearInterval(shooters[i].id);//stop bullet firing
     }
     */
-    this.clearBotBullets(canvas, shooters, bulletFiredHandler);
     document.removeEventListener("keyup",keyUpLevelHandler);
     //canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
     canvas.addEventListener("click",canvas.eventListeners.click);
@@ -248,8 +250,8 @@ class Level{
     levelSound.currentTime = 0;
     cancelAnimationFrame(id);	//stop rendering
   }
-  
-  keyUpLevelHandlerOuter(ev,gamestate,imagens,elementos){
+
+  keyUpLevelHandlerOuter(ev,gamestate,imagens,elementos){//passar o tempo em que entrou em pausa
     var d = new Date();
 
     if(ev.code=="Escape"){
@@ -287,7 +289,7 @@ class Level{
         char.shots.shift();
         continue;
       }
-      
+
       //se o projetil colidir com um asset
       for(let j=0;j<assets.length-1;j++){
         if(assets[j].checkPixelCollisionComponent(assets[j],char.shots[i])){
@@ -307,10 +309,10 @@ class Level{
 
       }
     }
-      
-    
 
-	//reach end | out of lives | out of level bounds 
+
+
+	//reach end | out of lives | out of level bounds
 	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate){
     //mostrar o menu de fim de nível
     //mostrar tempo e ranking, depois ir para o menu de niveis
@@ -346,7 +348,7 @@ class Level{
 
 
   bulletHandler(char,bullets,assets,shooters,sons){   //check collition of bullets
-    
+
 		for(let i=0;i<bullets.length;i++){
 			bullets[i].move();
 
@@ -356,44 +358,44 @@ class Level{
         sons.shout.play();
         continue;
       }
-      
+
       for(let j=0;j<assets.length-1;j++){
         if(bullets[i].shooter!=assets[j] && assets[j].checkPixelCollisionComponent(assets[j],bullets[i])){
           bullets.splice(i,1);
           break;
         }
       }
-      
+
     }
 
-} 			
-		
+}
+
 	soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound){
 		var xDistance=Math.abs(char.posX-endPoint.posX);
 		var yDistance=Math.abs(char.posY-endPoint.posY);
 		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
 		var final=1-(distance/1500);
-		 
+
 		//levelSound.volume*=0.1; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
-		
-		
+
+
 	}
 
   loadLevel(){
     //get the data in the file in a string
     var text = this.read(this.path);
-    
-    
+
+
     //parse the string using JSON.parse()
     var obj = JSON.parse(text);
 
-    //need to know framerate to set projectile and animation velocity 
+    //need to know framerate to set projectile and animation velocity
     var canvas = document.getElementById("canvas");
     var fator=1;
     if(canvas.framerate==60){
       fator=2.4;
     }
-    
+
     //assign the data to the respective atribute of the level
     this.charX = obj.properties[0].value;
     this.charY = obj.properties[1].value;
@@ -404,42 +406,42 @@ class Level{
     var array=this.getIDS(obj);
     //more can be added as long as the constructor and the level file are updated
     //translate the matrix into an array of components
-    
+
 
     this.assets=new Array();
     this.assetsAnimated=new Array();
     this.shooters=new Array();
-  
+
     for(let x=0;x<this.width;x++){
       for(let y=0;y<this.height;y++){
         var posX=x;
         var posY=y;
-        
+
 				var pos=y*(this.width) + x;
-				
-				
+
+
         switch (this.sprites[pos]) {
           case array[0]: //caixa1
             var asset=new Component(posX,posY-this.imagens.box1.naturalHeight,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
             this.assets.push(asset);
             break;
-           
+
           case array[1]: //caixa2
             var asset=new Component(posX,posY-this.imagens.box2.naturalHeight,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
             this.assets.push(asset);
             break;
-            
+
           case array[2]: //plataforma
             var asset=new Component(posX,posY-this.imagens.plataforma.naturalHeight,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
             this.assets.push(asset);
             break;
-            
+
 
           case array[3]: //grass
             var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,Math.round(60/fator),3,Math.round(Math.random()*2));
             this.assetsAnimated.push(grass);
             break;
-			
+
 					case array[4]: //shooterRight
             var shooter=new Shooter(posX,posY-this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
             this.shooters.push(shooter);
@@ -464,7 +466,7 @@ class Level{
 						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
 						this.assets.push(asset);
 						break;
-					
+
 					case array[9]: //lamp
             var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,Math.round(15/fator),16,0);
             this.assetsAnimated.push(lamp);
@@ -480,7 +482,7 @@ class Level{
             this.assetsAnimated.push(endPoint);
             this.endPoint=endPoint;
             break;
-          
+
           case array[12]: //bridge
             var asset=new Component(posX,posY-this.imagens.bridge.naturalHeight,this.imagens.bridge.naturalWidth,this.imagens.bridge.naturalHeight,this.imagens.bridge);
             this.assets.push(asset);
@@ -495,36 +497,36 @@ class Level{
 						var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
 						this.assets.push(asset);
             break;
-            
+
           default:
             break;
         }
 
       }
     }
-    
-    
+
+
   }
 
   getIDS(obj){
     var array=["box1","box2","plataforma","grass","shooterRight","shooterLeft","ground","groundRight","groundLeft","lamp","plataformaIce","end2","bridge","bridgeRight","bridgeLeft"];
     var tilesets=obj.tilesets;
-    
-    
+
+
     for(let i=0;i<array.length;i++){
       for(let j=0;j<tilesets.length;j++){
         var name=tilesets[j].name;
         if(name==array[i]){
           console.log(array[i]);
           console.log(name);
-          
+
           array[i]=tilesets[j].firstgid;
         }
       }
     }
 
     return array;
-    
+
   }
 
   //reads data from a file and returns it
@@ -542,7 +544,7 @@ class Level{
 
       rawFile.open("GET", file_path, false);
       rawFile.send(null);
-      
+
       return allText;
   }
 
