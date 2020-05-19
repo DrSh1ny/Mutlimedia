@@ -59,7 +59,7 @@ function main(imagens, sounds){
                 keys.attack = c.substring(name.length, c.length);
             }else if (c.indexOf("saltar") == 0) {
                 keys.jump = c.substring(name.length, c.length);
-            }else if (c.indexOf("saltar") == 0){
+            }else if (c.indexOf("som") == 0){
                 Object.keys(sounds).forEach(function(key,index) {
                     sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
                 });
