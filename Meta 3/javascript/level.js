@@ -120,6 +120,7 @@ class Level{
         nivel.loadLevel();
         nivel.run();
       }
+      
       else if(gamestate=="run"){     
         var timePassed=time-lastFrame;
 
