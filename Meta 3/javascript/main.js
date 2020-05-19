@@ -16,7 +16,7 @@ function main(imagens, sounds){
     var imagens=imagens;
 	var sounds = sounds;
     var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space",attack:"KeyE"};
-
+    
     var clickHandler=function(ev){
         elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
         drawElements(ctx,elements,imagens);
@@ -26,13 +26,14 @@ function main(imagens, sounds){
         canvasMouseMoveHandlder(ev,elements,imagens,canvas);
     }
 
+    
+    activateCookie();
     canvas.keys=keys;
     canvas.eventListeners={click:clickHandler , mouseMove:mouseMoveHandler};
     canvas.framerate=60;
-
+    
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
-
 	elements=mainMenu(canvas,elements,imagens);
     drawElements(ctx,elements,imagens);
     
@@ -40,7 +41,35 @@ function main(imagens, sounds){
     canvas.addEventListener("click",clickHandler);
     canvas.addEventListener("mousemove",mouseMoveHandler);
 
-
+    function activateCookie(){
+        
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        console.log(decodedCookie);
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf("direita") == 0) {
+                keys.right = c.substring(name.length, c.length);
+            }else if (c.indexOf("esquerda") == 0) {
+                keys.left = c.substring(name.length, c.length);
+            }else if (c.indexOf("atacar") == 0) {
+                keys.attack = c.substring(name.length, c.length);
+            }else if (c.indexOf("saltar") == 0) {
+                keys.jump = c.substring(name.length, c.length);
+            }else if (c.indexOf("saltar") == 0){
+                Object.keys(sounds).forEach(function(key,index) {
+                    sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
+                });
+            }
+            
+            
+        }
+        
+        
+    }
 }
 
 
@@ -337,11 +366,15 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                 case "Opcao":
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+                    
                     return elementos;
 
                 case "Keybinding":
                     sounds.buttonSound.play();
                     var elementos=keyMenu(canvas,elements,imagens,sounds);
+                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+
                     return elementos;
 
                 case "Help":
@@ -353,7 +386,8 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                         sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume-0.1));
                     });
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds);
+                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
                     return elementos;
 
                 case "plus":
@@ -361,7 +395,9 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                         sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
                     });
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds);
+
+                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
                     return elementos;
 
 				case "Voltar":
@@ -371,16 +407,18 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
                 case "modo_classico":
                     var elementos=menuNiveis(canvas,elements,imagens);
-					sounds.buttonSound.play();
+                    sounds.buttonSound.play();
+                    
                     return elementos;
 
                 case "um":
+                    
                     return chooseLevel(x,y,imagens,sounds,"um",canvas);
                 case "dois":
                     return chooseLevel(x,y,imagens,sounds,"dois",canvas);
                 case "tres":
                     return chooseLevel(x,y,imagens,sounds,"tres",canvas);
-
+                    
                 case "60hz":
                     canvas.framerate=60;
                     sounds.buttonSound.play();
@@ -396,6 +434,14 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
 			}
         }
+    }
+    function setCookie(username,sound,jump,left,right,shoot){
+        var d = new Date();
+        d.setTime(d.getTime() + (30*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        var string = ";username="+encodeURIComponent(username)+"; som="+encodeURIComponent(sound)+";saltar="+encodeURIComponent(jump)+";esquerda="+encodeURIComponent(left)+";direita="+encodeURIComponent(right)+";atacar="+encodeURIComponent(shoot)+";"+expires;
+        document.cookie = string;
+        console.log(string);
     }
     return elements;
 }
@@ -530,12 +576,18 @@ function loadingScreen() {
 
         if(loaded==toLoad){
             //main(imagens, sounds);
+            
             intro(imagens,sounds);
         }
     }
 
 
 }
+
+
+
+
+
 
 
 

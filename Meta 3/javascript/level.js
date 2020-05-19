@@ -79,6 +79,7 @@ class Level{
     render();
 
     function render(time){
+      console.log(time)
       if(gamestate=="end" || self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa)){ //evaluate ending conditions
         self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
       }
