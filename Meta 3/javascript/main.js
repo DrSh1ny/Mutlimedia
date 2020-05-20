@@ -439,9 +439,10 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
         var d = new Date();
         d.setTime(d.getTime() + (30*24*60*60*1000));
         var expires = "expires="+ d.toUTCString();
-        var string = ";username="+encodeURIComponent(username)+"; som="+encodeURIComponent(sound)+";saltar="+encodeURIComponent(jump)+";esquerda="+encodeURIComponent(left)+";direita="+encodeURIComponent(right)+";atacar="+encodeURIComponent(shoot)+";"+expires;
+        var string = "username="+encodeURIComponent(username)+"; som="+encodeURIComponent(sound)+";saltar="+encodeURIComponent(jump)+";esquerda="+encodeURIComponent(left)+";direita="+encodeURIComponent(right)+";atacar="+encodeURIComponent(shoot)+";"+expires;
         document.cookie = string;
         console.log(string);
+        console.log( document.cookie);
     }
     return elements;
 }
