@@ -38,6 +38,7 @@ function hoverOuter(ev,canvas,ctx,imagens,sons,frames,slide,som,comecar){
     }
 }
 
+
 function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,comecar){
     
     if(slide==-1 && comecar.mouseOverBoundingBox(ev)){
@@ -47,19 +48,20 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
         slide++;
         drawFrame(canvas,ctx,frames[slide],imagens);
     }
+
     else if(slide==-1 && !(comecar.mouseOverBoundingBox(ev))){
         drawFrame(canvas,ctx,null,imagens,comecar);
     }
+
     else if(slide>frames.length-2){
         canvas.removeEventListener("click",evL2);
         var id=setInterval(reduceVolume,30,som,id);
         main(imagens,sons);
-
     }
+
     else{
         slide++;
-        drawFrame(canvas,ctx,frames[slide],imagens);
-        
+        drawFrame(canvas,ctx,frames[slide],imagens); 
     }
     
     return slide;
@@ -72,6 +74,7 @@ function reduceVolume(som,id){
         clearInterval(id);
     }
 }
+
 
 function drawFrame(canvas,ctx,frame,imagens,start=null,comecar){
     if(start!=null){
@@ -101,5 +104,49 @@ function drawFrame(canvas,ctx,frame,imagens,start=null,comecar){
     
     ctx.font = '30px Xirod';
     ctx.fillText("Clique para continuar", canvas.width/2,800);
+
+}
+
+
+function loadingScreen() {
+    var imagens={}; //onde vao ser guardadas todas as imagens do programa
+	var sounds = {};
+    var resourcesImg=["comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+	var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
+    var toLoad=resourcesImg.length + resourcesSound.length;
+    var loaded=0;
+
+
+    for(let i=0,l=resourcesImg.length;i<l;i++){
+        let source=resourcesImg[i];
+        let imagem=new Image();
+
+        imagens[source]=imagem;
+        imagem.id=source;
+        imagem.addEventListener("load", resourcesLoadedHandler);
+        imagem.src="../resources/"+source+".png";
+    }
+
+    for(let i=0,l=resourcesSound.length;i<l;i++){
+        let source = resourcesSound[i];
+        let sound = new Audio();
+
+        sounds[source] = sound;
+        sound.id = source;
+        sound.src = "../resources/sounds/" + source + ".mp3";
+        resourcesLoadedHandler();
+    }
+
+
+    function resourcesLoadedHandler(ev){
+        loaded++;
+
+        if(loaded==toLoad){
+            //main(imagens, sounds);
+            
+            intro(imagens,sounds);
+        }
+    }
+
 
 }

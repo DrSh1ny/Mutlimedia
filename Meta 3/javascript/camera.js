@@ -165,4 +165,20 @@ class Camera{
 
   }
 
+  drawEndLevelMenu(ctx, time){
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    //mudar a cor da canvas
+    ctx.fillStyle='rgba(0, 0, 0, 0.87)';
+    ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
+
+    ctx.font = '30px Xirod';
+    ctx.textAlign = "center";
+    ctx.fillStyle = 'white';
+
+    //mostrar o tempo que o user demorou no nivel
+    ctx.fillText("Time: " + time + "ms", ctx.canvas.width/2, ctx.canvas.height/2);
+
+    ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
+  }
+
 }

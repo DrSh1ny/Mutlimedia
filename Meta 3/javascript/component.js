@@ -182,6 +182,8 @@ class Component{
 
 }
 
+
+
 class ComponentAnimated extends Component{
       constructor(posX,posY,width,height,img,periodBetweenFrames,numberFrames,initialFrame){
             super(posX,posY,width,height,img,null);
