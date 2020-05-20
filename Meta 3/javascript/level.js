@@ -518,9 +518,6 @@ class Level{
       for(let j=0;j<tilesets.length;j++){
         var name=tilesets[j].name;
         if(name==array[i]){
-          console.log(array[i]);
-          console.log(name);
-          
           array[i]=tilesets[j].firstgid;
         }
       }
