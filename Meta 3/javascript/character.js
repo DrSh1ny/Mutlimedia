@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth,bulletImageLeft,bulletImageRight) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -54,6 +54,8 @@ class Character {
         this.shotDelay = 500;//passar depois as bullets
         this.lastShot = 0;
         this.bulletsRange = 400;
+        this.bulletImageLeft=bulletImageLeft;
+        this.bulletImageRight=bulletImageRight;
 
         var self = this;
         this.imagens=imagens;
@@ -349,10 +351,10 @@ class Character {
             var time = d.getTime();
             if(time - this.lastShot > this.shotDelay){//o primeiro disparo vai ser sempre permitido visto que o this.lasShot = 0, depois deste, este valor e atualizado e a partir dai so se dispara, no minimo em intervalos de this.shotDelay
               if(this.lastDirection=="right"){
-                var shot = new Bullet(this.posX+this.width/2,this.posY+this.height/4,this.imagens.swordRight.naturalWidth,this.imagens.swordRight.naturalHeight,this.imagens.swordRight,5*fator,0,this) //colocar os parametros para a criacao do projetil
+                var shot = new Bullet(this.posX+this.width/2,this.posY+this.height/4,this.bulletImageRight.naturalWidth,this.bulletImageRight.naturalHeight,this.bulletImageRight,5*fator,0,this) //colocar os parametros para a criacao do projetil
               }
               else{
-                var shot = new Bullet(this.posX-this.width/2,this.posY+this.height/4,this.imagens.swordLeft.naturalWidth,this.imagens.swordLeft.naturalHeight,this.imagens.swordLeft,-5*fator,0,this) //colocar os parametros para a criacao do projetil
+                var shot = new Bullet(this.posX-this.width/2,this.posY+this.height/4,this.bulletImageLeft.naturalWidth,this.bulletImageLeft.naturalHeight,this.bulletImageLeft,-5*fator,0,this) //colocar os parametros para a criacao do projetil
               }
               character.shots.push(shot);
               this.lastShot = time;
