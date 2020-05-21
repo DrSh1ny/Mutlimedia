@@ -505,11 +505,30 @@ class Level {
 
   }
 
+  getRankings(path){
+    var text = this.read(path);
+    return text;
+  }
+
+  setRankings(stringRankings,newRanking,path){
+    var text = stringRankings.split("<br>");
+    text.push(newRanking)
+    text.sort(function(a,b){return a.split(" ")[1]-b.split(" ")[1]})
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', path, true);
+    var allText = "";
+    for (let i = 0; i < 10; i++) {
+      allText = allText + text[i]+"<br>";
+
+    }
+    xhr.send(new FormData(allText))
+  }
+
   //reads data from a file and returns it
   read(file_path) {
     var allText = ""
     var rawFile = new XMLHttpRequest();
-
+    
     rawFile.onreadystatechange = function () {
       if (rawFile.readyState === 4) {
         if (rawFile.status === 200 || rawFile.status === 0) {
