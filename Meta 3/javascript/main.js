@@ -15,7 +15,7 @@ function main(imagens, sounds){
 	var elements = new Array()
     var imagens=imagens;
 	var sounds = sounds;
-    var keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space",attack:"KeyE"};
+    
     
     var clickHandler=function(ev){
         elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
@@ -26,11 +26,7 @@ function main(imagens, sounds){
         canvasMouseMoveHandlder(ev,elements,imagens,canvas);
     }
 
-    
-    activateCookie();
-    canvas.keys=keys;
     canvas.eventListeners={click:clickHandler , mouseMove:mouseMoveHandler};
-    canvas.framerate=60;
     
     ctx.imageSmoothingEnabled = false;
     canvas.style.backgroundImage = "url('../resources/background.png')";
@@ -41,35 +37,7 @@ function main(imagens, sounds){
     canvas.addEventListener("click",clickHandler);
     canvas.addEventListener("mousemove",mouseMoveHandler);
 
-    function activateCookie(){
-        
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        console.log(decodedCookie);
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-              c = c.substring(1);
-            }
-            if (c.indexOf("direita") == 0) {
-                keys.right = c.substring(name.length, c.length);
-            }else if (c.indexOf("esquerda") == 0) {
-                keys.left = c.substring(name.length, c.length);
-            }else if (c.indexOf("atacar") == 0) {
-                keys.attack = c.substring(name.length, c.length);
-            }else if (c.indexOf("saltar") == 0) {
-                keys.jump = c.substring(name.length, c.length);
-            }else if (c.indexOf("som") == 0){
-                Object.keys(sounds).forEach(function(key,index) {
-                    sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
-                });
-            }
-            
-            
-        }
-        
-        
-    }
+    
 }
 
 
@@ -122,11 +90,11 @@ function menuModo(canvas,elements,imagens){
 
     var elementos= new Array();
 
-    var botaoInfinito = new Component(40,height/2+5,700,110,imagens.modo_infinito,imagens.modo_infinitoHover);
-    var botaoClassico = new Component(width-740,height/2,700,100,imagens.modo_classico,imagens.modo_classicoHover);
+    
+    var botaoClassico = new Component(width/2-350,height/2,700,100,imagens.modo_classico,imagens.modo_classicoHover);
     var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
 
-    elementos.push(botaoInfinito);
+    
     elementos.push(botaoClassico);
     elementos.push(botaoVoltar);
     return elementos;
@@ -285,7 +253,8 @@ function keyMenu(canvas,elements,imagens,sounds){
             canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
             canvas.addEventListener("click",canvas.eventListeners.click);
 
-            canvas.keys=keys;
+            
+            setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
             
         }
     }
@@ -366,14 +335,14 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                 case "Opcao":
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
-                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
                     
                     return elementos;
 
                 case "Keybinding":
                     sounds.buttonSound.play();
                     var elementos=keyMenu(canvas,elements,imagens,sounds);
-                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
 
                     return elementos;
 
@@ -387,7 +356,8 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     });
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,sounds);
-                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+                    
                     return elementos;
 
                 case "plus":
@@ -397,12 +367,15 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     sounds.buttonSound.play();
                     var elementos=optionsMenu(canvas,elements,imagens,sounds);
 
-                    setCookie("",sounds["shout"].volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+                    
+                    
                     return elementos;
 
 				case "Voltar":
                     var elementos=mainMenu(canvas,elements,imagens);
-					sounds.buttonSound.play();
+                    sounds.buttonSound.play();
+                   
                     return elementos;
 
                 case "modo_classico":
@@ -422,11 +395,13 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                 case "60hz":
                     canvas.framerate=60;
                     sounds.buttonSound.play();
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
                     return elements;
 
                 case "144hz":
                     canvas.framerate=144;
                     sounds.buttonSound.play();
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
                     return elements;
 
 				default:
@@ -435,16 +410,42 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 			}
         }
     }
-    function setCookie(username,sound,jump,left,right,shoot){
-        var d = new Date();
-        d.setTime(d.getTime() + (30*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
-        var string = "username="+encodeURIComponent(username)+"; som="+encodeURIComponent(sound)+";saltar="+encodeURIComponent(jump)+";esquerda="+encodeURIComponent(left)+";direita="+encodeURIComponent(right)+";atacar="+encodeURIComponent(shoot)+";"+expires;
-        document.cookie = string;
-        console.log(string);
-        console.log( document.cookie);
-    }
+    
     return elements;
+}
+
+function setCookie(sound,jump,left,right,shoot,framerate,intro){
+    localStorage.setItem("sound", sound);
+    localStorage.setItem("jump", jump);
+    localStorage.setItem("left", left);
+    localStorage.setItem("right", right);
+    localStorage.setItem("shoot", shoot);
+    localStorage.setItem("framerate", framerate);
+    localStorage.setItem("intro", intro);
+}
+
+function getCookie(){
+    var valores=new Array();
+    valores.push(localStorage.getItem("sound"));
+    valores.push(localStorage.getItem("jump"));
+    valores.push(localStorage.getItem("left"));
+    valores.push(localStorage.getItem("right"));
+    valores.push(localStorage.getItem("shoot"));
+    valores.push(localStorage.getItem("framerate"));
+    valores.push(localStorage.getItem("intro"));
+    return valores;
+}
+
+
+function applyCookie(valores,sons,canvas){
+    Object.keys(sons).forEach(function(key,index) {
+        sons[key].volume=Math.max(0,Math.min(1,valores[0]));
+    });
+    canvas.keys.jump=valores[1];
+    canvas.keys.left=valores[2];
+    canvas.keys.right=valores[3];
+    canvas.keys.attack=valores[4];
+    canvas.framerate=Number(valores[5]);
 }
 
 
@@ -463,6 +464,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa4.json";
                 break;
             }
@@ -479,6 +481,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa5.json";
                 break;
             }
@@ -495,6 +498,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa6.json";
                 break;
             }
@@ -545,7 +549,7 @@ function ajuda(){
   function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
@@ -576,9 +580,23 @@ function ajuda(){
         loaded++;
 
         if(loaded==toLoad){
-            //main(imagens, sounds);
+            var valores=getCookie();
+            var canvas = document.getElementById("canvas");
+            canvas.keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space",attack:"KeyE"};
+            canvas.framerate=60;
+            if(valores[0]!=null){
+                applyCookie(valores,sounds,canvas);
+            }
             
-            intro(imagens,sounds);
+            if(!valores[6]){
+                intro(imagens,sounds);
+            }
+            else{
+                main(imagens, sounds);
+            }
+            
+            
+            
         }
     }
 

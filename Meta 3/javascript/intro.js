@@ -56,6 +56,7 @@ function nextFrameOuter(ev,canvas,ctx,imagens,sons,frames,slide,evL1,evL2,som,co
     else if(slide>frames.length-2){
         canvas.removeEventListener("click",evL2);
         var id=setInterval(reduceVolume,30,som,id);
+        setCookie(sons.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
         main(imagens,sons);
     }
 
