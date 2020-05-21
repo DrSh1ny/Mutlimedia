@@ -63,7 +63,7 @@ class Level {
         var char = new Character(Number(this.charX), Number(this.charY), 64, 88, this.imagens.afonso1, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.swordLeft,imagens.swordRight);
         break;
         case imagens.luisCamoes:
-        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.luisCamoes, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.swordLeft,imagens.swordRight);
+        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.luisCamoes, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.bookLeft,imagens.bookRight);
         break;
     }
     //var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
