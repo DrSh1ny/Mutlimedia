@@ -176,8 +176,9 @@ class Camera{
     ctx.fillStyle = 'white';
 
     //mostrar o tempo que o user demorou no nivel
-    ctx.fillText("Time: " + time + "ms", ctx.canvas.width/2, ctx.canvas.height/2);
-
+    ctx.fillText("Tempo decorrido:",ctx.canvas.width/2, ctx.canvas.height/2)
+     
+    ctx.fillText(time/1000 + " segundos", ctx.canvas.width/2, ctx.canvas.height/2+40);
     ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
   }
 
