@@ -252,7 +252,7 @@ function keyMenu(canvas,elements,imagens,sounds){
             document.removeEventListener("keyup", keyUpHandler);
             canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
             canvas.addEventListener("click",canvas.eventListeners.click);
-
+            //drawElements(ctx,mainMenu(canvas,elementos,imagens),imagens);
             
             setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
             
@@ -265,7 +265,7 @@ function keyMenu(canvas,elements,imagens,sounds){
     document.addEventListener("keyup", keyUpHandler);
     
 
-    return mainMenu(canvas,elements,imagens);
+    return mainMenu(canvas,elementos,imagens);
 }
 
 function typeBindedKeys(canvas,imagens,elementos,keys,selected){
@@ -334,7 +334,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
                 case "Opcao":
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
                     setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
                     
                     return elementos;
@@ -347,8 +347,12 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "Help":
-                    ajuda();
-                    return elements;
+                    var elementos = helpMenu(canvas, imagens, sounds);
+                    return elementos;
+
+                case "Creditos":
+                    var elementos = creditosMenu(canvas, imagens, sounds);
+                    return elementos;
 
                 case "minus":
                     Object.keys(sounds).forEach(function(key,index) {
@@ -544,10 +548,23 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 }
 
-function ajuda(){
-    var nWindow = window.open("","","width = 700, height = 150");
-    nWindow.document.write("<h1><b>Instruções de Jogo</b></h1>A personagem tem <b>3 vidas</b>. Quando estas chegam a 0, é game over!<br>A personagem consegue <b>saltar</b>, <b>andar</b> para a direita ou esquerda e <b>disparar</b> projécteis.<br>As teclas variam consoante as suas bindings que podem ser vistas no menu de bindings nas opcões.<br>")
-  }
+function helpMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    
+
+    return elementos;
+}
+
+function creditosMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    
+
+    return elementos;
+}
 
   function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
