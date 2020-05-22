@@ -454,12 +454,15 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
     var personagem=imagens.afonso1;
     var levelSound=sons.levelSound2;
     var path="../resources/mapa1.json";
-
+    var hasStory=null;
+    var story=null;
     canvas.style.cursor="default";
     
     switch (nivel) {
         case "um":
             if(x<400){
+                hasStory=1;
+                story=["teste"];
                 break;
             }
             else if(x>400 & x<1000){
@@ -512,7 +515,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             break;
     }
 
-    var nivel=new Level(imagens,sons,path,background,personagem,levelSound);
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound,hasStory,story);
     nivel.loadLevel();
     var elementos=nivel.run();
     return elementos;

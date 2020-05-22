@@ -182,4 +182,25 @@ class Camera{
     ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
   }
 
+  drawStoryFrame(ctx, text){
+    //split das frases por (br)
+    //dar display de todas
+
+    ctx.font = '48px Xirod';
+    ctx.textAlign = "center";
+
+    ctx.fillStyle='rgba(0, 0, 0, 0.87)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+
+
+    var lines = text.split("(br)");
+    for (let i = 0; i < lines.length ; i++){
+      ctx.fillText(lines[i], ctx.canvas.width/2, i*70+180);
+    }
+
+    ctx.font = '30px Xirod';
+    ctx.fillText("Clique para continuar", canvas.width/2,800);
+  }
+
 }

@@ -15,7 +15,7 @@ class Level{
     this.assetsAnimated;
     this.shooters;
 
-		this.imagens=imagens;
+    this.imagens=imagens;
     this.sounds=sounds;
 
     this.path=path;
@@ -27,6 +27,8 @@ class Level{
     this.timeLevel = 0;
     this.timePaused = 0;
     this.timePausedIni = 0;
+    this.hasStory = true;
+    this.slide = 0;
   }
 
 
@@ -38,15 +40,15 @@ class Level{
     var assets=this.assets; //todos os componenentes do nivel e o character incluido excluindo os shooters
     var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
     var shooters=this.shooters;
-		var bullets=new Array();  //bullet containment
+    var bullets=new Array();  //bullet containment
 
-		var imagens=this.imagens;
+    var imagens=this.imagens;
     var sounds=this.sounds;
     var volumeInicial=sounds.levelSound2.volume;
-		var levelSound=this.levelSound;
+    var levelSound=this.levelSound;
     var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
-		var endPoint=this.endPoint;
-		var self=this;
+    var endPoint=this.endPoint;
+    var self=this;
     var elementosNivel=new Array();
     //for character movement
     var id;
@@ -70,9 +72,17 @@ class Level{
     //var camera=new Camera(0,0,1066,600);
     var mapa = {x:0, y:0, width:self.width, height:self.height};
 
-    var gamestate="run";
 
-    canvas.addEventListener("bulletFired",bulletFiredHandler);
+    if (this.hasStory == true){
+      var gamestate="story";
+      var s = ["teste(br)teste", "teste 2"];
+    }
+    else{
+      var gamestate = "run";
+    }
+
+
+
     document.addEventListener("keyup",keyUpLevelHandler);
     canvas.removeEventListener("click",canvas.eventListeners.click);
     canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
@@ -122,6 +132,10 @@ class Level{
         nivel.loadLevel();
         nivel.run();
       }
+      else if(gamestate == "story"){
+        gamestate = self.story(ctx, s, gamestate, bulletFiredHandler);
+        id=requestAnimationFrame(render);
+      }
       else if(gamestate=="run"){
         var timePassed=time-lastFrame;
 
@@ -142,22 +156,22 @@ class Level{
         id=requestAnimationFrame(render);
       }
 
-		}
+    }
 
     function clickLevelHandler(ev){
-        gamestate=self.clickLevelHandlerOuter(ev,ctx,elementosNivel,imagens,gamestate);
-        return;}
+      gamestate=self.clickLevelHandlerOuter(ev,ctx,elementosNivel,imagens,gamestate);
+      return;}
     function mouseMoveLevelHandler(ev){
-        self.mouseLevelHandlerOuter(ev,ctx,elementosNivel,imagens);
-        return;}
+      self.mouseLevelHandlerOuter(ev,ctx,elementosNivel,imagens);
+      return;}
     function keyUpLevelHandler(ev){
       var resultado=self.keyUpLevelHandlerOuter(ev,gamestate,imagens,elementosNivel);
-        gamestate=resultado[0];
-        elementosNivel=resultado[1];
+      gamestate=resultado[0];
+      elementosNivel=resultado[1];
       return;}
 
     function bulletFiredHandler(ev){
-			var newBullet=self.bulletFiredHandlerOuter(ev,sounds,char);
+      var newBullet=self.bulletFiredHandlerOuter(ev,sounds,char);
       bullets.push(newBullet);
     }
 
@@ -208,7 +222,44 @@ class Level{
       //gamestate = "finished";
       return "finished";
     }
+    if (gamestate == "story"){//incrementar a string a ser mostrada na historia
+      this.slide ++
+      return gamestate
+    }
     return gamestate;
+  }
+
+
+  story(ctx, s, gamestate, bulletFiredHandler){//s é um array de strings com a história, slide e o numero da string a ser mostrada
+    if (this.slide < s.length){
+      this.drawStoryFrame(ctx, s[this.slide]);
+      return gamestate//retornar o mesmo gamestate que entrou, basicamente vai ser "story"
+    }
+    else{
+      ctx.canvas.addEventListener("bulletFired",bulletFiredHandler);
+      return "run"//comecar a correr o nivel porque a historia acabou
+    }
+  }
+
+  drawStoryFrame(ctx, text){
+    //split das frases por (br)
+    //dar display de todas
+
+    ctx.font = '48px Xirod';
+    ctx.textAlign = "center";
+
+    ctx.fillStyle='rgba(0, 0, 0, 0.87)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+
+
+    var lines = text.split("(br)");
+    for (let i = 0; i < lines.length ; i++){
+      ctx.fillText(lines[i], ctx.canvas.width/2, i*70+180);
+    }
+
+    ctx.font = '30px Xirod';
+    ctx.fillText("Clique para continuar", canvas.width/2,800);
   }
 
   mouseLevelHandlerOuter(ev,ctx,elementos,imagens){
@@ -216,16 +267,16 @@ class Level{
     var y=ev.offsetY;
 
     for(let i=0;i<elementos.length;i++){
-        if (elementos[i].mouseOverBoundingBox(ev)){
-            canvas.style.cursor = "pointer";
-            elementos[i].hover=true;
-            return;
+      if (elementos[i].mouseOverBoundingBox(ev)){
+        canvas.style.cursor = "pointer";
+        elementos[i].hover=true;
+        return;
 
-        }
-        elementos[i].hover=false;
+      }
+      elementos[i].hover=false;
 
-    drawElements(ctx,elementos,imagens);
-    canvas.style.cursor = "default";
+      drawElements(ctx,elementos,imagens);
+      canvas.style.cursor = "default";
 
     }
 
@@ -304,56 +355,56 @@ class Level{
           clearInterval(shooters[j].id);
           shooters.splice(j,1);
           return;
-          }
         }
-
       }
+
     }
+  }
 
 
 
-	//reach end | out of lives | out of level bounds
-	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate){
+  //reach end | out of lives | out of level bounds
+  evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate){
     //mostrar o menu de fim de nível
     //mostrar tempo e ranking, depois ir para o menu de niveis
     if(gamestate != "finished"){
-  		if(char.checkPixelCollisionSpriteAnimated(char,endPoint)){
-  			return "end";
-  		}
+      if(char.checkPixelCollisionSpriteAnimated(char,endPoint)){
+        return "end";
+      }
 
       if(char.posY+char.height>=mapa.y+mapa.height){
         return "end";
       }
 
-  		if(char.lives<1){
-  				return "end";
-  			}
+      if(char.lives<1){
+        return "end";
+      }
       return gamestate
     }
     else{
       return "finished";
     }
-	}
+  }
 
-	//some shooter fired a bullet
-	bulletFiredHandlerOuter(ev,sons,char){
+  //some shooter fired a bullet
+  bulletFiredHandlerOuter(ev,sons,char){
     var xDistance=Math.abs(char.posX-ev.bullet.posX);
-		var yDistance=Math.abs(char.posY-ev.bullet.posY);
-		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
-		var final=1-(distance/1500);
+    var yDistance=Math.abs(char.posY-ev.bullet.posY);
+    var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
+    var final=1-(distance/1500);
     sons.gun.volume=Math.max(0,sons.levelSound2.volume*final);
     sons.gun.play();
-		return ev.bullet;
-	}
+    return ev.bullet;
+  }
 
 
   bulletHandler(char,bullets,assets,shooters,sons){   //check collition of bullets
 
-		for(let i=0;i<bullets.length;i++){
-			bullets[i].move();
+    for(let i=0;i<bullets.length;i++){
+      bullets[i].move();
 
-			if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
-				bullets.splice(i,1);
+      if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
+        bullets.splice(i,1);
         char.lives--;
         sons.shout.play();
         continue;
@@ -368,18 +419,18 @@ class Level{
 
     }
 
-}
+  }
 
-	soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound){
-		var xDistance=Math.abs(char.posX-endPoint.posX);
-		var yDistance=Math.abs(char.posY-endPoint.posY);
-		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
-		var final=1-(distance/1500);
+  soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound){
+    var xDistance=Math.abs(char.posX-endPoint.posX);
+    var yDistance=Math.abs(char.posY-endPoint.posY);
+    var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
+    var final=1-(distance/1500);
 
-		//levelSound.volume*=0.1; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
+    //levelSound.volume*=0.1; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
 
 
-	}
+  }
 
   loadLevel(){
     //get the data in the file in a string
@@ -417,7 +468,7 @@ class Level{
         var posX=x;
         var posY=y;
 
-				var pos=y*(this.width) + x;
+        var pos=y*(this.width) + x;
 
 
         switch (this.sprites[pos]) {
@@ -442,36 +493,36 @@ class Level{
             this.assetsAnimated.push(grass);
             break;
 
-					case array[4]: //shooterRight
+          case array[4]: //shooterRight
             var shooter=new Shooter(posX,posY-this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
             this.shooters.push(shooter);
-						break;
+            break;
 
-					case array[5]: //shooterLeft
-						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
+          case array[5]: //shooterLeft
+            var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
             this.shooters.push(shooter);
-						break;
+            break;
 
-					case array[6]: //ground
-						var asset=new Component(posX,posY-this.imagens.ground.naturalHeight,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
-						this.assets.push(asset);
-						break;
+          case array[6]: //ground
+            var asset=new Component(posX,posY-this.imagens.ground.naturalHeight,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
+            this.assets.push(asset);
+            break;
 
-					case array[7]: //groundRight
-						var asset=new Component(posX,posY-this.imagens.groundRight.naturalHeight,this.imagens.groundRight.naturalWidth,this.imagens.groundRight.naturalHeight,this.imagens.groundRight);
-						this.assets.push(asset);
-						break;
+          case array[7]: //groundRight
+            var asset=new Component(posX,posY-this.imagens.groundRight.naturalHeight,this.imagens.groundRight.naturalWidth,this.imagens.groundRight.naturalHeight,this.imagens.groundRight);
+            this.assets.push(asset);
+            break;
 
-					case array[8]: //groundLeft
-						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
-						this.assets.push(asset);
-						break;
+          case array[8]: //groundLeft
+            var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
+            this.assets.push(asset);
+            break;
 
-					case array[9]: //lamp
+          case array[9]: //lamp
             var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,Math.round(15/fator),16,0);
             this.assetsAnimated.push(lamp);
             break;
-					case array[10]: //plataformaIce
+          case array[10]: //plataformaIce
             var asset=new Component(posX,posY-this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce.naturalWidth,this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce);
             this.assets.push(asset);
             break;
@@ -488,14 +539,14 @@ class Level{
             this.assets.push(asset);
             break;
 
-					case array[13]: //bridgeRight
-						var asset=new Component(posX,posY-this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight.naturalWidth,this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight);
-						this.assets.push(asset);
-					  break;
+          case array[13]: //bridgeRight
+            var asset=new Component(posX,posY-this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight.naturalWidth,this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight);
+            this.assets.push(asset);
+            break;
 
-					case array[14]: //bridgeLeft
-						var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
-						this.assets.push(asset);
+          case array[14]: //bridgeLeft
+            var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
+            this.assets.push(asset);
             break;
 
           default:
@@ -531,21 +582,21 @@ class Level{
 
   //reads data from a file and returns it
   read(file_path) {
-      var allText = ""
-      var rawFile = new XMLHttpRequest();
+    var allText = ""
+    var rawFile = new XMLHttpRequest();
 
-      rawFile.onreadystatechange = function () {
-          if (rawFile.readyState === 4) {
-              if (rawFile.status === 200 || rawFile.status === 0) {
-                 allText = rawFile.responseText;
-              }
-          }
+    rawFile.onreadystatechange = function () {
+      if (rawFile.readyState === 4) {
+        if (rawFile.status === 200 || rawFile.status === 0) {
+          allText = rawFile.responseText;
+        }
       }
+    }
 
-      rawFile.open("GET", file_path, false);
-      rawFile.send(null);
+    rawFile.open("GET", file_path, false);
+    rawFile.send(null);
 
-      return allText;
+    return allText;
   }
 
 }

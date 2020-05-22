@@ -4,7 +4,7 @@
 
 class Level {
 
-  constructor(imagens, sounds, path, background, character, levelSound) {
+  constructor(imagens, sounds, path, background, character, levelSound,hasStory,story) {
     this.charX;
     this.charY;
 
@@ -28,6 +28,9 @@ class Level {
     this.timeLevel = 0;
     this.timePaused = 0;
     this.timePausedIni = 0;
+    this.hasStory=hasStory;
+    this.story=story;
+    this.slide = 0;
   }
 
 
@@ -74,9 +77,15 @@ class Level {
     //var camera=new Camera(0,0,1066,600);
     var mapa = { x: 0, y: 0, width: self.width, height: self.height };
 
-    var gamestate = "run";
+    if (this.hasStory){
+      var gamestate="story";
+    }
+    else{
+      var gamestate = "run";
+      ctx.canvas.addEventListener("bulletFired",bulletFiredHandler);
+    }
 
-    canvas.addEventListener("bulletFired", bulletFiredHandler);
+    
     document.addEventListener("keyup", keyUpLevelHandler);
     canvas.removeEventListener("click", canvas.eventListeners.click);
     canvas.removeEventListener("mousemove", canvas.eventListeners.mouseMove);
@@ -126,7 +135,11 @@ class Level {
         nivel.loadLevel();
         nivel.run();
       }
-
+      else if(gamestate == "story"){
+        gamestate = self.tellStory(ctx,camera,self.story, gamestate, bulletFiredHandler);
+        id=requestAnimationFrame(render);
+      }
+      
       else if (gamestate == "run") {
         var timePassed = time - lastFrame;
 
@@ -197,9 +210,27 @@ class Level {
     if (gamestate == "end") {//para o menu de final de nivel
       return "finished";
     }
+    if (gamestate == "story"){//incrementar a string a ser mostrada na historia
+      this.slide ++
+      return gamestate
+    }
 
     return gamestate;
   }
+
+
+  tellStory(ctx,camera, story, gamestate, bulletFiredHandler){//s é um array de strings com a história, slide e o numero da string a ser mostrada
+    if (this.slide < story.length){
+      camera.drawStoryFrame(ctx, story[this.slide]);
+      return gamestate//retornar o mesmo gamestate que entrou, basicamente vai ser "story"
+    }
+    else{
+      ctx.canvas.addEventListener("bulletFired",bulletFiredHandler);
+      return "run"//comecar a correr o nivel porque a historia acabou
+    }
+  }
+
+  
 
   mouseLevelHandlerOuter(ev, ctx, elementos, imagens) {
     var x = ev.offsetX;
