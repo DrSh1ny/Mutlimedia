@@ -168,7 +168,7 @@ class Camera{
   drawEndLevelMenu(ctx, time){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //mudar a cor da canvas
-    ctx.fillStyle='rgba(0, 0, 0, 0.87)';
+    ctx.fillStyle='rgba(0, 0, 0, 0.60)';
     ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
 
     ctx.font = '30px Xirod';
