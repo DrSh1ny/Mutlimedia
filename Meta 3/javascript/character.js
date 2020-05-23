@@ -254,7 +254,7 @@ class Character {
                    
                 }
                 else{
-                    character.posY=asset.posY+asset.height;
+                    character.posY>=asset.posY+asset.height;
                     character.speedY=0;
                 }
             }
