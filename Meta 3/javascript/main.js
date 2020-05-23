@@ -477,6 +477,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>1000){
                 background=imagens.background2;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa7.json";
                 break;
             }
@@ -494,6 +495,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>1000){
                 background=imagens.background2;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa8.json";
                 break;
             }
@@ -511,6 +513,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>1000){
                 background=imagens.background2;
+                personagem=imagens.luisCamoes;
                 path="../resources/mapa9.json";
                 break;
             }
