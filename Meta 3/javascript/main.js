@@ -252,7 +252,7 @@ function keyMenu(canvas,elements,imagens,sounds){
             document.removeEventListener("keyup", keyUpHandler);
             canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
             canvas.addEventListener("click",canvas.eventListeners.click);
-
+            //drawElements(ctx,mainMenu(canvas,elementos,imagens),imagens);
             
             setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
             
@@ -265,7 +265,7 @@ function keyMenu(canvas,elements,imagens,sounds){
     document.addEventListener("keyup", keyUpHandler);
     
 
-    return mainMenu(canvas,elements,imagens);
+    return mainMenu(canvas,elementos,imagens);
 }
 
 function typeBindedKeys(canvas,imagens,elementos,keys,selected){
@@ -334,7 +334,7 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
 
                 case "Opcao":
                     sounds.buttonSound.play();
-                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds)
                     setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
                     
                     return elementos;
@@ -347,8 +347,12 @@ function canvasClickHandler(ev, elements,imagens,canvas, sounds){
                     return elementos;
 
                 case "Help":
-                    ajuda();
-                    return elements;
+                    var elementos = helpMenu(canvas, imagens, sounds);
+                    return elementos;
+
+                case "Creditos":
+                    var elementos = creditosMenu(canvas, imagens, sounds);
+                    return elementos;
 
                 case "minus":
                     Object.keys(sounds).forEach(function(key,index) {
@@ -454,17 +458,20 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
     var personagem=imagens.afonso1;
     var levelSound=sons.levelSound2;
     var path="../resources/mapa1.json";
-
+    var hasStory=null;
+    var story=null;
     canvas.style.cursor="default";
     
     switch (nivel) {
         case "um":
             if(x<400){
+                hasStory=1;
+                story=["teste"];
                 break;
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
-                personagem=imagens.luisCamoes;
+                personagem=imagens.padeira;
                 path="../resources/mapa4.json";
                 break;
             }
@@ -481,7 +488,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
-                personagem=imagens.luisCamoes;
+                personagem=imagens.padeira;
                 path="../resources/mapa5.json";
                 break;
             }
@@ -498,7 +505,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 background=imagens.background1;
-                personagem=imagens.luisCamoes;
+                personagem=imagens.padeira;
                 path="../resources/mapa6.json";
                 break;
             }
@@ -512,7 +519,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             break;
     }
 
-    var nivel=new Level(imagens,sons,path,background,personagem,levelSound);
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound,hasStory,story);
     nivel.loadLevel();
     var elementos=nivel.run();
     return elementos;
@@ -541,15 +548,32 @@ function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
 
 }
 
-function ajuda(){
-    var nWindow = window.open("","","width = 700, height = 150");
-    nWindow.document.write("<h1><b>Instruções de Jogo</b></h1>A personagem tem <b>3 vidas</b>. Quando estas chegam a 0, é game over!<br>A personagem consegue <b>saltar</b>, <b>andar</b> para a direita ou esquerda e <b>disparar</b> projécteis.<br>As teclas variam consoante as suas bindings que podem ser vistas no menu de bindings nas opcões.<br>")
-  }
+function helpMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    var instrucoes=new Component(0,0,imagens.instrucoes.naturalWidth,imagens.instrucoes.naturalHeight,imagens.instrucoes,imagens.instrucoes);
+    elementos.push(voltar);
+    elementos.push(instrucoes);
+    
+
+    return elementos;
+}
+
+function creditosMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    var creditos=new Component(0,0,imagens.creditosInfo.naturalWidth,imagens.creditosInfo.naturalHeight,imagens.creditosInfo,imagens.creditosInfo);
+    elementos.push(voltar);
+    elementos.push(creditos);
+    
+
+    return elementos;
+}
 
   function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var resourcesImg=["padeira","pauLeft","pauRight","creditosInfo","instrucoes","bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
 	var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;

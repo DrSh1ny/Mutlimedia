@@ -1,551 +1,655 @@
-'use strict';
+"use strict";
+
+(function()
+{
+    window.addEventListener("load", loadingScreen);
+}());
 
 
-
-class Level{
-
-  constructor(imagens,sounds,path,background,character,levelSound){
-    this.charX;
-    this.charY;
+function main(imagens, sounds){
 
 
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
 
-    this.sprites
-    this.assets;
-    this.assetsAnimated;
-    this.shooters;
-
-		this.imagens=imagens;
-    this.sounds=sounds;
-
-    this.path=path;
-    this.background=background;
-    this.character=character;
-    this.levelSound=levelSound;
-
-    this.timeIni = 0;
-    this.timeLevel = 0;
-    this.timePaused = 0;
-    this.timePausedIni = 0;
-  }
+    var elements = new Array()
+    var imagens=imagens;
+    var sounds = sounds;
 
 
-  run(){
-    var canvas=document.getElementById("canvas");
-    var ctx=canvas.getContext("2d");
-    var nw=canvas.width;
-    var nh=canvas.height;
-    var assets=this.assets; //todos os componenentes do nivel e o character incluido excluindo os shooters
-    var assetsAnimated=this.assetsAnimated; //assets c/ animacoes
-    var shooters=this.shooters;
-		var bullets=new Array();  //bullet containment
-
-		var imagens=this.imagens;
-    var sounds=this.sounds;
-    var volumeInicial=sounds.levelSound2.volume;
-		var levelSound=this.levelSound;
-    var elementos=menuNiveis(canvas,[],this.imagens); //para apresentar quando o nivel acabar
-		var endPoint=this.endPoint;
-		var self=this;
-    var elementosNivel=new Array();
-    //for character movement
-    var id;
-    var d = new Date();
-    var lastFrame =d.getTime();
-
-    //for the time spent in the level
-    this.timeIni = d.getTime();
-
-
-    switch (this.character) {
-      case imagens.afonso1:
-        var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds,4,10,this.width);
-        break;
+    var clickHandler=function(ev){
+        elements=canvasClickHandler(ev,elements,imagens,canvas, sounds);
+        drawElements(ctx,elements,imagens);
     }
-    //var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
-    assets.push(char);
 
-    //camera
-    var camera=new Camera(0,0,800,450);
-    //var camera=new Camera(0,0,1066,600);
-    var mapa = {x:0, y:0, width:self.width, height:self.height};
+    var mouseMoveHandler=function(ev) {
+        canvasMouseMoveHandlder(ev,elements,imagens,canvas);
+    }
 
-    var gamestate="run";
+    canvas.eventListeners={click:clickHandler , mouseMove:mouseMoveHandler};
 
-    canvas.addEventListener("bulletFired",bulletFiredHandler);
-    document.addEventListener("keyup",keyUpLevelHandler);
+    ctx.imageSmoothingEnabled = false;
+    canvas.style.backgroundImage = "url('../resources/background.png')";
+    elements=mainMenu(canvas,elements,imagens);
+    drawElements(ctx,elements,imagens);
+
+
+    canvas.addEventListener("click",clickHandler);
+    canvas.addEventListener("mousemove",mouseMoveHandler);
+
+
+}
+
+
+function mainMenu(canvas,elements,imagens){
+    var height = canvas.height;
+    var width = canvas.width;
+
+
+    var elementos= new Array();
+
+
+    var botaoJogar = new Component(2*width/5,2.5*height/4,300,60,imagens.Jogar,imagens.JogarHover);
+    var botaoOpcao = new Component(width/7,2.51*height/4,300,60,imagens.Opcao,imagens.OpcaoHover);
+    var botaoCreditos = new Component(10*width/15,2.5*height/4,300,60,imagens.Creditos,imagens.CreditosHover);
+
+    elementos.push(botaoJogar);
+    elementos.push(botaoOpcao);
+    elementos.push(botaoCreditos);
+    return elementos;
+
+}
+
+function optionsMenu(canvas,elements,imagens,stateVolume){
+    var height = canvas.height;
+    var width = canvas.width;
+
+    var elementos= new Array();
+
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minusHover);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plusHover);
+    var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
+    var Keybinding = new Component(10*width/15-20,height/2-50,200,100,imagens.Keybinding,imagens.KeybindingHover);
+    var Help = new Component(2*width/5,height/2-50,90,200,imagens.Help,imagens.Help);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+    elementos.push(minus);
+    elementos.push(plus);
+    elementos.push(Keybinding);
+    elementos.push(Help);
+    elementos.push(botaoVoltar);
+    elementos.push(volume)
+    return elementos
+}
+
+
+function menuModo(canvas,elements,imagens){
+    var height = canvas.height;
+    var width = canvas.width;
+
+
+    var elementos= new Array();
+
+
+    var botaoClassico = new Component(width/2-350,height/2,700,100,imagens.modo_classico,imagens.modo_classicoHover);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+
+    elementos.push(botaoClassico);
+    elementos.push(botaoVoltar);
+    return elementos;
+
+}
+
+function menuNiveis(canvas,elements,imagens){
+    var height = canvas.height;
+    var width = canvas.width;
+
+
+    var elementos= new Array();
+
+    var capitulo1 = new Component(50,height/4,400,80,imagens.capitulo1,imagens.capitulo1Hover,);
+    var capitulo2 = new Component(50+width/3,height/4,400,80,imagens.capitulo2,imagens.capitulo2Hover);
+    var capitulo3 = new Component(50+2*width/3,height/4,400,80,imagens.capitulo3,imagens.capitulo3Hover);
+
+    var um = new Component(60,350,80,80,imagens.um,imagens.umHover);
+    var dois = new Component(160,350,80,80,imagens.dois,imagens.doisHover);
+    var tres = new Component(260,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um2 = new Component(590,350,80,80,imagens.um,imagens.umHover);
+    var dois2 = new Component(690,350,80,80,imagens.dois,imagens.doisHover);
+    var tres2 = new Component(790,350,80,80,imagens.tres,imagens.tresHover);
+
+    var um3 = new Component(1120,350,80,80,imagens.um,imagens.umHover);
+    var dois3 = new Component(1220,350,80,80,imagens.dois,imagens.doisHover);
+    var tres3 = new Component(1320,350,80,80,imagens.tres,imagens.tresHover);
+
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+    elementos.push(capitulo1);
+    elementos.push(capitulo2);
+    elementos.push(capitulo3);
+
+    elementos.push(um);
+    elementos.push(dois);
+    elementos.push(tres);
+    elementos.push(um2);
+    elementos.push(dois2);
+    elementos.push(tres2);
+    elementos.push(um3);
+    elementos.push(dois3);
+    elementos.push(tres3);
+
+    elementos.push(botaoVoltar);
+    return elementos;
+
+}
+
+
+function optionsMenu(canvas,elements,imagens,sons){
+    var height = canvas.height;
+    var width = canvas.width;
+    var stateVolume=imagens.volumeMax;
+    var elementos= new Array();
+
+    var mediaVolume=0;
+    var i=0;
+    Object.keys(sons).forEach(function(key,index) {
+        mediaVolume+=sons[key].volume;
+        i++;
+    });
+
+    mediaVolume=mediaVolume/i;
+    if(mediaVolume<=0){
+        stateVolume=imagens.volumeMute;
+    }
+    else if(mediaVolume<0.3){
+        stateVolume=imagens.volumeMinium;
+    }
+    else if(mediaVolume<0.6){
+        stateVolume=imagens.volumeMedium;
+    }
+    else{
+        stateVolume=imagens.volumeMax;
+    }
+
+
+
+    var minus = new Component(width/7,height/2,50,20,imagens.minus,imagens.minusHover);
+    var plus = new Component(width/7+200,height/2-15,50,50,imagens.plus,imagens.plusHover);
+    var volume = new Component(width/7+50,height/2-70,150,150,stateVolume,stateVolume)
+    var Keybinding = new Component(9*width/15,height/2-30,600,70,imagens.Keybinding,imagens.KeybindingHover);
+    var Help = new Component(2*width/5,height/2-100,200,200,imagens.Help,imagens.HelpHover);
+    var botaoVoltar = new Component(10,height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+
+    var framerate1 = new Component(400,700,300,70,imagens["60hz"],imagens["60hzHover"]);
+    var framerate2 = new Component(width-800,685,330,100,imagens["144hz"],imagens["144hzHover"]);
+
+    elementos.push(framerate1);
+    elementos.push(framerate2);
+    elementos.push(minus);
+    elementos.push(plus);
+    elementos.push(Keybinding);
+    elementos.push(Help);
+    elementos.push(botaoVoltar);
+    elementos.push(volume)
+    return elementos
+}
+
+
+
+
+
+function drawElements(ctx,elements,imagens){
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    if (elements.length > 0 && elements[0].img.id == "Voltar"){
+
+        ctx.fillStyle='rgba(0, 0, 0, 0.60)';//escurecer o ecra
+        ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
+
+        ctx.font = '40px Xirod';
+        ctx.textAlign = "center";
+        ctx.fillStyle = 'white';
+
+        if (elements[1] == 1){//menu de ajuda
+            //Instrucoes
+            var strings = ["Instruções de Jogo", "A personagem tem: 3 vidas. Quando estas chegam a 0, é game over!", "A personagem consegue saltar, andar para a direita ou esquerda e disparar projécteis.", "As teclas variam consoante as suas bindings que podem ser vistas no menu de bindings nas opcões."];
+            ctx.fillText(strings[0], ctx.canvas.width/2, 180);
+            ctx.font = '30px Xirod';
+            for (let i = 1; i < strings.length; i++){
+                ctx.fillText(strings[i], ctx.canvas.width/2, i*70+180);
+            }
+        }
+        else{//menu de creditos
+            var strings = ["Creditos", "Francisco Fernandes", "Gabriel Fernandes", "Goncalo Coelho"];
+            ctx.fillText(strings[0], ctx.canvas.width/2, 180);
+            ctx.font = '30px Xirod';
+            for (let i = 1; i < strings.length; i++){
+                ctx.fillText(strings[i], ctx.canvas.width/2, i*70+180);
+            }
+        }
+        elements[0].render(ctx)//dar render do botao de voltar
+    }
+    else{
+        if(elements.length>0 && elements[0].img.id=="Jogar"){
+            ctx.drawImage(imagens.Logo,ctx.canvas.width/2-350,40,734,536);
+        }
+        for(let i=0;i<elements.length;i++){
+            elements[i].render(ctx);
+        }
+    }
+}
+
+function keyMenu(canvas,elements,imagens,sounds){
+    var selected=null;
+    var keys=canvas.keys;
+    var elementos=new Array();
+    var id;
+    var ctx=canvas.getContext("2d");
+
+    var esquerda=new Component(195,100,imagens.esquerda.naturalWidth,imagens.esquerda.naturalHeight,imagens.esquerda,imagens.esquerdaHover);
+    var direita=new Component(200,240,imagens.direita.naturalWidth,imagens.direita.naturalHeight,imagens.direita,imagens.direitaHover);
+    var saltar=new Component(197,380,imagens.saltar.naturalWidth,imagens.saltar.naturalHeight,imagens.saltar,imagens.saltarHover);
+    var atacar=new Component(200,520,imagens.atacar.naturalWidth,imagens.atacar.naturalHeight,imagens.atacar,imagens.atacarHover);
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    elementos.push(atacar);
+    elementos.push(saltar);
+    elementos.push(esquerda);
+    elementos.push(direita);
+
     canvas.removeEventListener("click",canvas.eventListeners.click);
     canvas.removeEventListener("mousemove",canvas.eventListeners.mouseMove);
-    canvas.addEventListener("click",clickLevelHandler);
-    canvas.addEventListener("mousemove",mouseMoveLevelHandler);
+    typeBindedKeys(canvas,imagens,elementos,keys,selected);
+
+    var mouseMoveHandler=function(ev) {
+        canvasMouseMoveHandlder(ev,elementos,imagens,canvas);
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
+    }
+
+    var keyUpHandler=function(ev){
+        keyUpHandlerOuter(ev,keys,selected);
+        selected=null;
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
+    }
+
+    var keyClickHandler=function(ev){
+        selected=keyClickHandlerOuter(ev,canvas,elementos,keys,selected);
+        typeBindedKeys(canvas,imagens,elementos,keys,selected);
+        if(selected=="Voltar"){
+            canvas.removeEventListener("mousemove",mouseMoveHandler);
+            canvas.removeEventListener("click",keyClickHandler);
+            document.removeEventListener("keyup", keyUpHandler);
+            canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
+            canvas.addEventListener("click",canvas.eventListeners.click);
 
 
+            setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
 
-    levelSound.volume*=0.3;
-    sounds.gun.volume*=0.1;
-    levelSound.play();
-
-
-    var flag = 0;
-    var d2 = new Date();
-
-    render();
-
-    function render(time){
-      gamestate = self.evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate);
-      if(gamestate=="end"){ //evaluate ending conditions
-        //eu queria que isto fosse executado so uma vez, por isso fiz assim, nao e o melhor, mas nao me lembrei de mais nada
-        if (flag == 0){
-          d2 = new Date();
-          gamestate = "end";
-          //stop the bots bullets
-          self.clearBotBullets(canvas, shooters, bulletFiredHandler);
         }
-        self.timeLevel = d2.getTime() - self.timeIni - self.timePaused;
-
-        //menu de fim de nivel
-        self.endLevelMenu(ctx, self.timeLevel);
-        id=requestAnimationFrame(render);
-        flag ++;
-      }
-      else if(gamestate == "finished"){
-        //quando o user clicar o gamestate vai passar a finished e voltamos para o menu principal
-        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
-      }
-      else if(gamestate=="restart"){
-        self.timeLevel = d.getTime() - self.timeIni - self.timePaused;
-        self.clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial);
-
-        self.clearBotBullets(canvas, shooters, bulletFiredHandler);
-
-        var nivel=new Level(imagens,sounds,self.path,self.background,self.character,self.levelSound);
-        nivel.loadLevel();
-        nivel.run();
-      }
-      else if(gamestate=="run"){
-        var timePassed=time-lastFrame;
-
-        self.shotsHandler(char,assets,shooters);
-        self.bulletHandler(char,bullets,assets,shooters,sounds);
-        self.soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound);
-        //character movement
-        char.move(char,timePassed,ctx);
-        //rendering of everything
-        camera.updateAnim(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,self.background);
-        camera.drawHUD(ctx,char,imagens);
-
-        lastFrame=time;//for move function
-        id=requestAnimationFrame(render);
-      }
-      else if(gamestate=="pause"){
-        camera.drawPauseMenu(imagens,char,assets,assetsAnimated,shooters,bullets,mapa,ctx,elementosNivel,self.background);
-        id=requestAnimationFrame(render);
-      }
-
-		}
-
-    function clickLevelHandler(ev){
-        gamestate=self.clickLevelHandlerOuter(ev,ctx,elementosNivel,imagens,gamestate);
-        return;}
-    function mouseMoveLevelHandler(ev){
-        self.mouseLevelHandlerOuter(ev,ctx,elementosNivel,imagens);
-        return;}
-    function keyUpLevelHandler(ev){
-      var resultado=self.keyUpLevelHandlerOuter(ev,gamestate,imagens,elementosNivel);
-        gamestate=resultado[0];
-        elementosNivel=resultado[1];
-      return;}
-
-    function bulletFiredHandler(ev){
-			var newBullet=self.bulletFiredHandlerOuter(ev,sounds,char);
-      bullets.push(newBullet);
     }
 
-    return elementos;
-  }
 
-  clearBotBullets(canvas, shooters, bulletFiredHandler){
-    for(let i=0;i<shooters.length;i++){
-      clearInterval(shooters[i].id);//stop bullet firing
+    canvas.addEventListener("mousemove",mouseMoveHandler);
+    canvas.addEventListener("click",keyClickHandler);
+    document.addEventListener("keyup", keyUpHandler);
+
+
+    return mainMenu(canvas,elements,imagens);
+}
+
+function typeBindedKeys(canvas,imagens,elementos,keys,selected){
+    var ctx=canvas.getContext("2d");
+
+    drawElements(ctx,elementos,imagens);
+    Object.keys(keys).forEach(function(key,index) {
+
+        if((selected=="direita" && key=="right") || (selected=="esquerda" && key=="left") ||  (selected=="saltar" && key=="jump") ||  (selected=="atacar" && key=="attack")){
+            ctx.fillStyle="#ffffff";
+            ctx.font = '48px xirod';
+        }
+        else{
+            ctx.fillStyle="#274547";
+            ctx.font = '48px xirod';
+        }
+        ctx.fillText(keys[key], 1000, 160+140*index);
+    });
+
+    if(selected!=null){
+        ctx.fillText("Pressione uma tecla!", 370, 700);
     }
-    canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
-  }
 
-  endLevelMenu(ctx, time){
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    //mudar a cor da canvas
-    ctx.fillStyle='rgba(0, 0, 0, 0.87)';
-    ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
+}
 
-    ctx.font = '30px Xirod';
-    ctx.textAlign = "center";
-    ctx.fillStyle = 'white';
+function keyUpHandlerOuter(ev,keys,selected){
+    switch (selected) {
+        case "direita":
+            keys.right=ev.code;
+            break;
+        case "esquerda":
+            keys.left=ev.code;
+            break;
+        case "saltar":
+            keys.jump=ev.code;
+            break;
+        case "atacar":
+            keys.attack=ev.code;
+            break;
+        default:
+            break;
+    }
+}
 
-    //mostrar o tempo que o user demorou no nivel
-    ctx.fillText("Time: " + time + "ms", ctx.canvas.width/2, ctx.canvas.height/2);
-
-    ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
-  }
-
-
-  clickLevelHandlerOuter(ev,ctx,elementos,imagens,gamestate){
-    if (gamestate == "pause"){
-      for(let i=0;i<elementos.length;i++){
+function keyClickHandlerOuter(ev,canvas,elementos,keys,selected){
+    for(let i=0;i<elementos.length;i++){
         if (elementos[i].mouseOverBoundingBox(ev)){
-          switch (elementos[i].img.id) {
-            case "sair":
-              return "end";
-            case "reiniciar":
-              return "restart";
-            default:
-              return gamestate;
-          }
+            return elementos[i].img.id;
         }
-      }
     }
-    if (gamestate == "end"){//para o menu de final de nivel
-      //console.log("entrou");
-      //gamestate = "finished";
-      return "finished";
-    }
-    return gamestate;
-  }
+    return null;
+}
 
-  mouseLevelHandlerOuter(ev,ctx,elementos,imagens){
+function canvasClickHandler(ev, elements,imagens,canvas, sounds){
     var x=ev.offsetX;
     var y=ev.offsetY;
+    for(let i=0;i<elements.length;i++){
+        if (elements[i].mouseOverBoundingBox(ev)){
 
+            switch (elements[i].img.id) {
+
+                case "Jogar":
+                    var elementos=menuModo(canvas,elements,imagens);
+                    sounds.buttonSound.play();
+                    return elementos;
+
+                case "Opcao":
+                    sounds.buttonSound.play();
+                    var elementos=optionsMenu(canvas,elements,imagens,imagens.volumeMax)
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+
+                    return elementos;
+
+                case "Keybinding":
+                    sounds.buttonSound.play();
+                    var elementos=keyMenu(canvas,elements,imagens,sounds);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+
+                    return elementos;
+
+                case "Help":
+                    var elementos = helpMenu(canvas, imagens, sounds);
+                    return elementos;
+
+                case "Creditos":
+                    var elementos = creditosMenu(canvas, imagens, sounds);
+                    return elementos;
+
+                case "minus":
+                    Object.keys(sounds).forEach(function(key,index) {
+                        sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume-0.1));
+                    });
+                    sounds.buttonSound.play();
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds);
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+
+                    return elementos;
+
+                case "plus":
+                    Object.keys(sounds).forEach(function(key,index) {
+                        sounds[key].volume=Math.max(0,Math.min(1,sounds[key].volume+0.1));
+                    });
+                    sounds.buttonSound.play();
+                    var elementos=optionsMenu(canvas,elements,imagens,sounds);
+
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+
+
+                    return elementos;
+
+                case "Voltar":
+                    var elementos=mainMenu(canvas,elements,imagens);
+                    sounds.buttonSound.play();
+
+                    return elementos;
+
+                case "modo_classico":
+                    var elementos=menuNiveis(canvas,elements,imagens);
+                    sounds.buttonSound.play();
+
+                    return elementos;
+
+                case "um":
+
+                    return chooseLevel(x,y,imagens,sounds,"um",canvas);
+                case "dois":
+                    return chooseLevel(x,y,imagens,sounds,"dois",canvas);
+                case "tres":
+                    return chooseLevel(x,y,imagens,sounds,"tres",canvas);
+
+                case "60hz":
+                    canvas.framerate=60;
+                    sounds.buttonSound.play();
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+                    return elements;
+
+                case "144hz":
+                    canvas.framerate=144;
+                    sounds.buttonSound.play();
+                    setCookie(sounds.shout.volume,canvas.keys.jump,canvas.keys.left,canvas.keys.right,canvas.keys.attack,canvas.framerate,0);
+                    return elements;
+
+                default:
+                    return elements;
+
+            }
+        }
+    }
+
+    return elements;
+}
+
+function setCookie(sound,jump,left,right,shoot,framerate,intro){
+    localStorage.setItem("sound", sound);
+    localStorage.setItem("jump", jump);
+    localStorage.setItem("left", left);
+    localStorage.setItem("right", right);
+    localStorage.setItem("shoot", shoot);
+    localStorage.setItem("framerate", framerate);
+    localStorage.setItem("intro", intro);
+}
+
+function getCookie(){
+    var valores=new Array();
+    valores.push(localStorage.getItem("sound"));
+    valores.push(localStorage.getItem("jump"));
+    valores.push(localStorage.getItem("left"));
+    valores.push(localStorage.getItem("right"));
+    valores.push(localStorage.getItem("shoot"));
+    valores.push(localStorage.getItem("framerate"));
+    valores.push(localStorage.getItem("intro"));
+    return valores;
+}
+
+
+function applyCookie(valores,sons,canvas){
+    Object.keys(sons).forEach(function(key,index) {
+        sons[key].volume=Math.max(0,Math.min(1,valores[0]));
+    });
+    canvas.keys.jump=valores[1];
+    canvas.keys.left=valores[2];
+    canvas.keys.right=valores[3];
+    canvas.keys.attack=valores[4];
+    canvas.framerate=Number(valores[5]);
+}
+
+
+function chooseLevel(x,y,imagens,sons,nivel,canvas){
+    var background=imagens.background;
+    var personagem=imagens.afonso1;
+    var levelSound=sons.levelSound2;
+    var path="../resources/mapa1.json";
+    var hasStory=null;
+    var story=null;
+    canvas.style.cursor="default";
+
+    switch (nivel) {
+        case "um":
+            if(x<400){
+                hasStory=1;
+                story=["teste"];
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                personagem=imagens.luisCamoes;
+                path="../resources/mapa4.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa7.json";
+                break;
+            }
+            break;
+        case "dois":
+            if(x<400){
+                path="../resources/mapa2.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                personagem=imagens.luisCamoes;
+                path="../resources/mapa5.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa8.json";
+                break;
+            }
+            break;
+        case "tres":
+            if(x<400){
+                path="../resources/mapa3.json";
+                break;
+            }
+            else if(x>400 & x<1000){
+                background=imagens.background1;
+                personagem=imagens.luisCamoes;
+                path="../resources/mapa6.json";
+                break;
+            }
+            else if(x>1000){
+                background=imagens.background2;
+                path="../resources/mapa9.json";
+                break;
+            }
+            break;
+        default:
+            break;
+    }
+
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound,hasStory,story);
+    nivel.loadLevel();
+    var elementos=nivel.run();
+    return elementos;
+
+}
+
+function canvasMouseMoveHandlder(ev,elementos,imagens,canvas) {
+    var x=ev.offsetX;
+    var y=ev.offsetY;
+    var hovered=false;
+    var ctx=canvas.getContext("2d");
     for(let i=0;i<elementos.length;i++){
         if (elementos[i].mouseOverBoundingBox(ev)){
             canvas.style.cursor = "pointer";
             elementos[i].hover=true;
+            drawElements(ctx,elementos,imagens);
             return;
 
         }
         elementos[i].hover=false;
 
+    }
     drawElements(ctx,elementos,imagens);
     canvas.style.cursor = "default";
 
-    }
-
-  }
-
-  clearLevel(canvas,assets,assetsAnimated,shooters,bullets,bulletFiredHandler,keyUpLevelHandler,sounds,imagens,id,elementos,levelSound,volumeInicial){
-    var ctx=canvas.getContext("2d");
-    /*
-    for(let i=0;i<shooters.length;i++){
-      clearInterval(shooters[i].id);//stop bullet firing
-    }
-    */
-    document.removeEventListener("keyup",keyUpLevelHandler);
-    //canvas.removeEventListener("bulletFired",bulletFiredHandler); //stop bullet firing listener
-    canvas.addEventListener("click",canvas.eventListeners.click);
-    canvas.addEventListener("mousemove",canvas.eventListeners.mouseMove);
-    Object.keys(sounds).forEach(function(key,index) {
-      sounds[key].volume=volumeInicial;
-    });
-    drawElements(ctx,elementos,imagens);	//draw end of level screen/menu
-    levelSound.pause();
-    levelSound.currentTime = 0;
-    cancelAnimationFrame(id);	//stop rendering
-  }
-
-  keyUpLevelHandlerOuter(ev,gamestate,imagens,elementos){//passar o tempo em que entrou em pausa
-    var d = new Date();
-
-    if(ev.code=="Escape"){
-      if(gamestate=="run"){
-        var elementos=new Array();
-        var sair=new Component(500,450,imagens.sair.naturalWidth,imagens.sair.naturalHeight,imagens.sair,imagens.sairHover);
-        var reiniciar=new Component(500,330,imagens.reiniciar.naturalWidth,imagens.reiniciar.naturalHeight,imagens.reiniciar,imagens.reiniciarHover);
-        elementos.push(sair);
-        elementos.push(reiniciar);
-        //save the time when the pause was started
-        this.timePausedIni = d.getTime();
-
-        return ["pause",elementos]
-
-      }
-      if(gamestate=="pause"){
-        //calculate the time paused and sum it to the time that the game was paused (useful when the game is paused multiple times)
-        this.timePaused += d.getTime() - this.timePausedIni;
-
-        return ["run",[]]
-      }
-    }
-    return [gamestate,elementos];
-  }
-
-  shotsHandler(char,assets,shooters) {
-    for (let i=0;i<char.shots.length;i++){
-      char.shots[i].posX+=char.shots[i].velocityX;
-      char.shots[i].posY+=char.shots[i].velocityY;
-
-      var range = char.bulletsRange;
-      var distanceTraveled = Math.sqrt(Math.pow(Math.abs(char.shots[i].posX - char.shots[i].xIni), 2) + Math.pow(Math.abs(char.shots[i].posY - char.shots[i].yIni), 2));
-      //para que nao se sobreponham a outros sprites (colocar um parametro na bala para saber se ja tocou em algum sprite, se sim, essa bala, mesmo que aqui não deve fazer nada, nem ser mostrada, nem dar dano)
-      if(distanceTraveled > range){
-        char.shots.shift();
-        continue;
-      }
-
-      //se o projetil colidir com um asset
-      for(let j=0;j<assets.length-1;j++){
-        if(assets[j].checkPixelCollisionComponent(assets[j],char.shots[i])){
-          char.shots.splice(i,1);
-          return;
-        }
-      }
-      //se o projetil colidir com um shooter --> remover shooter e cancelar o seu lancamento de projeteis
-      for(let j=0;j<shooters.length;j++){
-        if(shooters[j].checkPixelCollisionComponent(shooters[j],char.shots[i])){
-          char.shots.splice(i,1);
-          clearInterval(shooters[j].id);
-          shooters.splice(j,1);
-          return;
-          }
-        }
-
-      }
-    }
-
-
-
-	//reach end | out of lives | out of level bounds
-	evaluateEnding(char,assets,assetsAnimated,bullets,endPoint,mapa, gamestate){
-    //mostrar o menu de fim de nível
-    //mostrar tempo e ranking, depois ir para o menu de niveis
-    if(gamestate != "finished"){
-  		if(char.checkPixelCollisionSpriteAnimated(char,endPoint)){
-  			return "end";
-  		}
-
-      if(char.posY+char.height>=mapa.y+mapa.height){
-        return "end";
-      }
-
-  		if(char.lives<1){
-  				return "end";
-  			}
-      return gamestate
-    }
-    else{
-      return "finished";
-    }
-	}
-
-	//some shooter fired a bullet
-	bulletFiredHandlerOuter(ev,sons,char){
-    var xDistance=Math.abs(char.posX-ev.bullet.posX);
-		var yDistance=Math.abs(char.posY-ev.bullet.posY);
-		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
-		var final=1-(distance/1500);
-    sons.gun.volume=Math.max(0,sons.levelSound2.volume*final);
-    sons.gun.play();
-		return ev.bullet;
-	}
-
-
-  bulletHandler(char,bullets,assets,shooters,sons){   //check collition of bullets
-
-		for(let i=0;i<bullets.length;i++){
-			bullets[i].move();
-
-			if(bullets[i].checkPixelCollisionCharacter(char,bullets[i])){
-				bullets.splice(i,1);
-        char.lives--;
-        sons.shout.play();
-        continue;
-      }
-
-      for(let j=0;j<assets.length-1;j++){
-        if(bullets[i].shooter!=assets[j] && assets[j].checkPixelCollisionComponent(assets[j],bullets[i])){
-          bullets.splice(i,1);
-          break;
-        }
-      }
-
-    }
 
 }
 
-	soundHandler(char,assets,assetsAnimated,shooters,endPoint,sounds,levelSound){
-		var xDistance=Math.abs(char.posX-endPoint.posX);
-		var yDistance=Math.abs(char.posY-endPoint.posY);
-		var distance=Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2));
-		var final=1-(distance/1500);
+function helpMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    elementos.push(1);
 
-		//levelSound.volume*=0.1; /*Math.sqrt(Math.pow(xDistance,2)+Math.pow(yDistance,2))/2000*/;
+    return elementos;
+}
+
+function creditosMenu(canvas, imagens, sounds){
+    var elementos = new Array();
+    var voltar=new Component(10,canvas.height-50,300,50,imagens.Voltar,imagens.VoltarHover);
+    elementos.push(voltar);
+    elementos.push(2);
+
+    return elementos;
+}
 
 
-	}
+function loadingScreen() {
+    var imagens={}; //onde vao ser guardadas todas as imagens do programa
+    var sounds = {};
+    var resourcesImg=["bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+    var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
+    var toLoad=resourcesImg.length + resourcesSound.length;
+    var loaded=0;
 
-  loadLevel(){
-    //get the data in the file in a string
-    var text = this.read(this.path);
 
+    for(let i=0,l=resourcesImg.length;i<l;i++){
+        let source=resourcesImg[i];
+        let imagem=new Image();
 
-    //parse the string using JSON.parse()
-    var obj = JSON.parse(text);
-
-    //need to know framerate to set projectile and animation velocity
-    var canvas = document.getElementById("canvas");
-    var fator=1;
-    if(canvas.framerate==60){
-      fator=2.4;
+        imagens[source]=imagem;
+        imagem.id=source;
+        imagem.addEventListener("load", resourcesLoadedHandler);
+        imagem.src="../resources/"+source+".png";
     }
 
-    //assign the data to the respective atribute of the level
-    this.charX = obj.properties[0].value;
-    this.charY = obj.properties[1].value;
-    this.sprites = obj.layers[0].data;
-    this.width=obj.width;
-    this.height=obj.height;
+    for(let i=0,l=resourcesSound.length;i<l;i++){
+        let source = resourcesSound[i];
+        let sound = new Audio();
 
-    var array=this.getIDS(obj);
-    //more can be added as long as the constructor and the level file are updated
-    //translate the matrix into an array of components
-
-
-    this.assets=new Array();
-    this.assetsAnimated=new Array();
-    this.shooters=new Array();
-
-    for(let x=0;x<this.width;x++){
-      for(let y=0;y<this.height;y++){
-        var posX=x;
-        var posY=y;
-
-				var pos=y*(this.width) + x;
+        sounds[source] = sound;
+        sound.id = source;
+        sound.src = "../resources/sounds/" + source + ".mp3";
+        resourcesLoadedHandler();
+    }
 
 
-        switch (this.sprites[pos]) {
-          case array[0]: //caixa1
-            var asset=new Component(posX,posY-this.imagens.box1.naturalHeight,this.imagens.box1.naturalWidth,this.imagens.box1.naturalHeight,this.imagens.box1);
-            this.assets.push(asset);
-            break;
+    function resourcesLoadedHandler(ev){
+        loaded++;
 
-          case array[1]: //caixa2
-            var asset=new Component(posX,posY-this.imagens.box2.naturalHeight,this.imagens.box2.naturalWidth,this.imagens.box2.naturalHeight,this.imagens.box2);
-            this.assets.push(asset);
-            break;
+        if(loaded==toLoad){
+            var valores=getCookie();
+            var canvas = document.getElementById("canvas");
+            canvas.keys={left:"ArrowLeft",right:"ArrowRight",jump:"Space",attack:"KeyE"};
+            canvas.framerate=60;
+            if(valores[0]!=null){
+                applyCookie(valores,sounds,canvas);
+            }
 
-          case array[2]: //plataforma
-            var asset=new Component(posX,posY-this.imagens.plataforma.naturalHeight,this.imagens.plataforma.naturalWidth,this.imagens.plataforma.naturalHeight,this.imagens.plataforma);
-            this.assets.push(asset);
-            break;
+            if(!valores[6]){
+                intro(imagens,sounds);
+            }
+            else{
+                main(imagens, sounds);
+            }
 
 
-          case array[3]: //grass
-            var grass=new ComponentAnimated(posX,posY-this.imagens.grass.naturalHeight,this.imagens.grass.naturalWidth/3,this.imagens.grass.naturalHeight,this.imagens.grass,Math.round(60/fator),3,Math.round(Math.random()*2));
-            this.assetsAnimated.push(grass);
-            break;
 
-					case array[4]: //shooterRight
-            var shooter=new Shooter(posX,posY-this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight.naturalWidth,this.imagens.shooterRight.naturalHeight,this.imagens.shooterRight,1500,Math.round(3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-            this.shooters.push(shooter);
-						break;
-
-					case array[5]: //shooterLeft
-						var shooter=new Shooter(posX,posY-this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft.naturalWidth,this.imagens.shooterLeft.naturalHeight,this.imagens.shooterLeft,1500,Math.round(-3*fator),0,this.imagens.bullet.naturalWidth,this.imagens.bullet.naturalHeight,this.imagens.bullet);
-            this.shooters.push(shooter);
-						break;
-
-					case array[6]: //ground
-						var asset=new Component(posX,posY-this.imagens.ground.naturalHeight,this.imagens.ground.naturalWidth,this.imagens.ground.naturalHeight,this.imagens.ground);
-						this.assets.push(asset);
-						break;
-
-					case array[7]: //groundRight
-						var asset=new Component(posX,posY-this.imagens.groundRight.naturalHeight,this.imagens.groundRight.naturalWidth,this.imagens.groundRight.naturalHeight,this.imagens.groundRight);
-						this.assets.push(asset);
-						break;
-
-					case array[8]: //groundLeft
-						var asset=new Component(posX,posY-this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft.naturalWidth,this.imagens.groundLeft.naturalHeight,this.imagens.groundLeft);
-						this.assets.push(asset);
-						break;
-
-					case array[9]: //lamp
-            var lamp=new ComponentAnimated(posX,posY-this.imagens.lamp.naturalHeight,this.imagens.lamp.naturalWidth/16,this.imagens.lamp.naturalHeight,this.imagens.lamp,Math.round(15/fator),16,0);
-            this.assetsAnimated.push(lamp);
-            break;
-					case array[10]: //plataformaIce
-            var asset=new Component(posX,posY-this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce.naturalWidth,this.imagens.plataformaIce.naturalHeight,this.imagens.plataformaIce);
-            this.assets.push(asset);
-            break;
-
-          case array[11]: //end2
-            console.log("WTF");
-            var endPoint=new ComponentAnimated(posX,posY-this.imagens.end2.naturalHeight,this.imagens.end2.naturalWidth/8,this.imagens.end2.naturalHeight,this.imagens.end2,Math.round(20/fator),8,0);
-            this.assetsAnimated.push(endPoint);
-            this.endPoint=endPoint;
-            break;
-
-          case array[12]: //bridge
-            var asset=new Component(posX,posY-this.imagens.bridge.naturalHeight,this.imagens.bridge.naturalWidth,this.imagens.bridge.naturalHeight,this.imagens.bridge);
-            this.assets.push(asset);
-            break;
-
-					case array[13]: //bridgeRight
-						var asset=new Component(posX,posY-this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight.naturalWidth,this.imagens.bridgeRight.naturalHeight,this.imagens.bridgeRight);
-						this.assets.push(asset);
-					  break;
-
-					case array[14]: //bridgeLeft
-						var asset=new Component(posX,posY-this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft.naturalWidth,this.imagens.bridgeLeft.naturalHeight,this.imagens.bridgeLeft);
-						this.assets.push(asset);
-            break;
-
-          default:
-            break;
         }
-
-      }
     }
 
-
-  }
-
-  getIDS(obj){
-    var array=["box1","box2","plataforma","grass","shooterRight","shooterLeft","ground","groundRight","groundLeft","lamp","plataformaIce","end2","bridge","bridgeRight","bridgeLeft"];
-    var tilesets=obj.tilesets;
-
-
-    for(let i=0;i<array.length;i++){
-      for(let j=0;j<tilesets.length;j++){
-        var name=tilesets[j].name;
-        if(name==array[i]){
-          console.log(array[i]);
-          console.log(name);
-
-          array[i]=tilesets[j].firstgid;
-        }
-      }
-    }
-
-    return array;
-
-  }
-
-  //reads data from a file and returns it
-  read(file_path) {
-      var allText = ""
-      var rawFile = new XMLHttpRequest();
-
-      rawFile.onreadystatechange = function () {
-          if (rawFile.readyState === 4) {
-              if (rawFile.status === 200 || rawFile.status === 0) {
-                 allText = rawFile.responseText;
-              }
-          }
-      }
-
-      rawFile.open("GET", file_path, false);
-      rawFile.send(null);
-
-      return allText;
-  }
 
 }
