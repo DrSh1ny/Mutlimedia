@@ -14,17 +14,17 @@ class Character {
         this.framerate=canvas.framerate;
         if(this.framerate==144){//144hz monitor
 
-        this.speedX = 0;
-        this.speedY = 0;
-        this.acelX = 2;
-        this.acelYUp = 0.2;
-        this.acelYDown=0.5;
-        this.frictionX=0.92;
-        this.airFriction=0.96;
-        this.speedLimitX=2;
-        this.speedLimitY=30;
-        this.boostX=30;
-        this.boostY=8;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.acelX = 2;
+            this.acelYUp = 0.2;
+            this.acelYDown=0.5;
+            this.frictionX=0.89;
+            this.airFriction=0.96;
+            this.speedLimitX=2;
+            this.speedLimitY=30;
+            this.boostX=30;
+            this.boostY=8;
         }
         else{ //60hz monitor
             this.speedX = 0;
@@ -32,7 +32,7 @@ class Character {
             this.acelX = 4.8;
             this.acelYUp = 1.5;
             this.acelYDown=3.75;
-            this.frictionX=0.87;
+            this.frictionX=0.84;
             this.airFriction=0.92;
             this.speedLimitX=4;
             this.speedLimitY=25;
