@@ -465,19 +465,22 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
     switch (nivel) {
         case "um":
             if(x<400){
-                hasStory=1;
-                story=["teste"];
                 break;
             }
             else if(x>400 & x<1000){
-                background=imagens.background1;
+                hasStory=1;
+                story=["Vendo o grande sucesso(br)alcançado por Dom Afonso Henriques,(br)o cientista não hesitou em(br)trazer do passado mais heróis.(br)","O próximo a ser escolhido(br)seria alguém pelo qual(br)ninguém esperaria...(br)alguém capaz de feitos(br)inconcebíveis!","De repente, todo o laboratorio(br)se encheu de um delicioso(br)cheiro a pão acabado de fazer.(br)Era a Padeira de Aljobarrota!(br)"];
+                background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa4.json";
                 break;
             }
             else if(x>1000){
+                hasStory=1;
+                story=["O cientista não se acomodou.(br)Apressou-se a invocar(br)mais e mais heróis.(br)Cada um deles peculiar.(br)Um esperava ser bem sucedido(br)usando apenas palavras!(br)Nem podia ser de outra forma,(br)vamos Luís Vaz de Camões!(br)"];
                 background=imagens.background2;
                 personagem=imagens.luisCamoes;
+                levelSound=sons.levelSound1;
                 path="../resources/mapa7.json";
                 break;
             }
@@ -488,7 +491,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 break;
             }
             else if(x>400 & x<1000){
-                background=imagens.background1;
+                background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa5.json";
                 break;
@@ -496,6 +499,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             else if(x>1000){
                 background=imagens.background2;
                 personagem=imagens.luisCamoes;
+                levelSound=sons.levelSound1;
                 path="../resources/mapa8.json";
                 break;
             }
@@ -506,7 +510,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 break;
             }
             else if(x>400 & x<1000){
-                background=imagens.background1;
+                background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa6.json";
                 break;
@@ -514,6 +518,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             else if(x>1000){
                 background=imagens.background2;
                 personagem=imagens.luisCamoes;
+                levelSound=sons.levelSound1;
                 path="../resources/mapa9.json";
                 break;
             }
@@ -576,8 +581,8 @@ function creditosMenu(canvas, imagens, sounds){
   function loadingScreen() {
     var imagens={}; //onde vao ser guardadas todas as imagens do programa
 	var sounds = {};
-    var resourcesImg=["padeira","pauLeft","pauRight","creditosInfo","instrucoes","bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
-	var	resourcesSound = ["intro","shout","gun","sword1","sword2","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
+    var resourcesImg=["background3","background4","padeira","pauLeft","pauRight","creditosInfo","instrucoes","bookRight","bookLeft","luisCamoes","comecar","comecarHover","bridge","bridgeRight","bridgeLeft","reiniciar","reiniciarHover","sair","sairHover","swordRight","swordLeft","144hz","144hzHover","60hz","60hzHover","esquerdaHover","direitaHover","saltarHover","atacarHover","esquerda","direita","saltar","atacar","end2","plataformaIce","lamp","groundRight","groundLeft","ground","heart","pause","shooterRight","shooterLeft","bullet","Help","HelpHover","volumeMax","volumeMedium","volumeMinium","volumeMute","end","grass","back","Logo","um","dois","tres","quatro","cinco","seis","umHover","doisHover","tresHover","quatroHover","cincoHover","seisHover","afonso","afonso1","background","background1","background2","box1","capitulo1","capitulo1Hover","capitulo2","capitulo2Hover","capitulo3","capitulo3Hover","Creditos","CreditosHover","IronBar","Jogar","JogarHover","Keybinding","KeybindingHover","minus","minusHover","modo_classico","modo_classicoHover","modo_infinito","modo_infinitoHover","Opcao","OpcaoHover","plataforma","plus","plusHover","Som","SomHover","Voltar","VoltarHover","box2"]
+	var	resourcesSound = ["intro","shout1","shout","gun","sword1","sword2","levelSound3","levelSound2","levelSound1","levelButtonSound", "buttonSound"];
     var toLoad=resourcesImg.length + resourcesSound.length;
     var loaded=0;
 

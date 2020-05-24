@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth,bulletImageLeft,bulletImageRight) {
+    constructor(posX, posY, width, height, img,assets,shooters,imagens,sons,nFrames,framePeriod,levelWidth,bulletImageLeft,bulletImageRight,hitSound) {
         this.posX = posX;
         this.posY = posY;
         this.lastX= posX;
@@ -35,7 +35,7 @@ class Character {
             this.frictionX=0.84;
             this.airFriction=0.92;
             this.speedLimitX=4;
-            this.speedLimitY=25;
+            this.speedLimitY=20;
             this.boostX=40;
             this.boostY=26;
         }
@@ -62,7 +62,7 @@ class Character {
         this.sons=sons;
         this.assets=assets; //todos os assets do nivel e o proprio character em ultimo
         this.shooters=shooters;
-
+        this.hitSound=hitSound;
         var keyDownHandler = function (ev) {
             self.keyDown(ev, self);
         }

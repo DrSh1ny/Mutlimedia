@@ -63,15 +63,15 @@ class Level {
 
     switch (this.character) {
       case imagens.afonso1:
-        var char = new Character(Number(this.charX), Number(this.charY), 64, 88, this.imagens.afonso1, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.swordLeft,imagens.swordRight);
+        var char = new Character(Number(this.charX), Number(this.charY), 64, 88, this.imagens.afonso1, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.swordLeft,imagens.swordRight,sounds.shout);
         break;
 
       case imagens.luisCamoes:
-        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.luisCamoes, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.bookLeft,imagens.bookRight);
+        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.luisCamoes, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.bookLeft,imagens.bookRight,sounds.shout);
         break;
       
       case imagens.padeira:
-        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.padeira, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.pauLeft,imagens.pauRight);
+        var char = new Character(Number(this.charX), Number(this.charY),43,84, this.imagens.padeira, assets, shooters, imagens, sounds, 4, 10, this.width,imagens.pauLeft,imagens.pauRight,sounds.shout1);
         break;
     }
     //var char=new Character(Number(this.charX),Number(this.charY),64,88,this.imagens.afonso1,assets,shooters,imagens,sounds);
@@ -382,7 +382,7 @@ class Level {
       if (bullets[i].checkPixelCollisionCharacter(char, bullets[i])) {
         bullets.splice(i, 1);
         char.lives--;
-        sons.shout.play();
+        char.hitSound.play();
         continue;
       }
 
