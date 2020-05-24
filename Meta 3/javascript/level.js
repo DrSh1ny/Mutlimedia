@@ -131,13 +131,15 @@ class Level {
         id = requestAnimationFrame(render);
         flag++;
         elementosNivel = [];
-
       }
+
+
       else if (gamestate == "finished") {
         //quando o user clicar o gamestate vai passar a finished e voltamos para o menu principal
         self.clearLevel(canvas, assets, assetsAnimated, shooters, bullets, bulletFiredHandler, keyUpLevelHandler, sounds, imagens, id, elementos, levelSound, volumeInicial);
-
       }
+
+
       else if (gamestate == "restart") {
         self.timeLevel = d.getTime() - self.timeIni - self.timePaused;
         self.clearLevel(canvas, assets, assetsAnimated, shooters, bullets, bulletFiredHandler, keyUpLevelHandler, sounds, imagens, id, elementos, levelSound, volumeInicial);
@@ -146,11 +148,14 @@ class Level {
         nivel.loadLevel();
         nivel.run();
       }
+
+
       else if(gamestate == "story"){
         gamestate = self.tellStory(ctx,camera,self.story, gamestate, bulletFiredHandler);
         id=requestAnimationFrame(render);
       }
       
+
       else if (gamestate == "run") {
         var timePassed = time - lastFrame;
 
@@ -164,6 +169,8 @@ class Level {
         lastFrame = time;//for move function
         id = requestAnimationFrame(render);
       }
+
+      
       else if (gamestate == "pause") { //menu pausa
         camera.drawPauseMenu(imagens, char, assets, assetsAnimated, shooters, bullets, mapa, ctx, elementosNivel, self.background);
         id = requestAnimationFrame(render);

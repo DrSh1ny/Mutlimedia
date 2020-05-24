@@ -140,7 +140,7 @@ function optionsMenu(canvas,elements,imagens,sons){
     var elementos= new Array();
     var mediaVolume=0;
     var i=0;
-    
+
     Object.keys(sons).forEach(function(key,index) {
         mediaVolume+=sons[key].volume;
         i++;
@@ -376,7 +376,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             }
             else if(x>400 & x<1000){
                 hasStory=1;
-                story=["Vendo o grande sucesso(br)alcançado por Dom Afonso Henriques,(br)o cientista não hesitou em(br)trazer do passado mais heróis.(br)","O próximo a ser escolhido(br)seria alguém pelo qual(br)ninguém esperaria...(br)alguém capaz de feitos(br)inconcebíveis!","De repente, todo o laboratorio(br)se encheu de um delicioso(br)cheiro a pão acabado de fazer.(br)Era a Padeira de Aljobarrota!(br)"];
+                story=["Vendo o grande sucesso(br)alcançado por Dom Afonso Henriques,(br)o cientista não hesitou em(br)trazer do passado mais heróis.(br)","O próximo a ser escolhido(br)seria alguém pelo qual(br)ninguém esperaria...(br)alguém capaz de feitos(br)inconcebíveis!","De repente, todo o laboratorio(br)se encheu de um delicioso(br)cheiro a pão acabado de fazer.(br)Era a Padeira de Aljubarrota!(br)"];
                 background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa4.json";
