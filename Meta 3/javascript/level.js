@@ -569,7 +569,7 @@ class Level {
     }else{
       text.push(newRanking);
     }
-    while(text.length > 10){
+    while(text.length > 6){
       text.pop();
     }
     var allText = "";
