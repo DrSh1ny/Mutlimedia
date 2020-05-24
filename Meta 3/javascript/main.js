@@ -458,6 +458,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
     var personagem=imagens.afonso1;
     var levelSound=sons.levelSound2;
     var path="../resources/mapa1.json";
+    var rankPath="../resources/rank1.txt"
     var hasStory=null;
     var story=null;
     canvas.style.cursor="default";
@@ -473,6 +474,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa4.json";
+                rankPath="../resources/rank4.txt"
                 break;
             }
             else if(x>1000){
@@ -482,18 +484,21 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 personagem=imagens.luisCamoes;
                 levelSound=sons.levelSound1;
                 path="../resources/mapa7.json";
+                rankPath="../resources/rank7.txt"
                 break;
             }
             break;
         case "dois":
             if(x<400){
                 path="../resources/mapa2.json";
+                rankPath="../resources/rank2.txt"
                 break;
             }
             else if(x>400 & x<1000){
                 background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa5.json";
+                rankPath="../resources/rank5.txt"
                 break;
             }
             else if(x>1000){
@@ -501,18 +506,21 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 personagem=imagens.luisCamoes;
                 levelSound=sons.levelSound1;
                 path="../resources/mapa8.json";
+                rankPath="../resources/rank8.txt"
                 break;
             }
             break;
         case "tres":
             if(x<400){
                 path="../resources/mapa3.json";
+                rankPath="../resources/rank3.txt"
                 break;
             }
             else if(x>400 & x<1000){
                 background=imagens.background3;
                 personagem=imagens.padeira;
                 path="../resources/mapa6.json";
+                rankPath="../resources/rank6.txt"
                 break;
             }
             else if(x>1000){
@@ -520,6 +528,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
                 personagem=imagens.luisCamoes;
                 levelSound=sons.levelSound1;
                 path="../resources/mapa9.json";
+                rankPath="../resources/rank9.txt"
                 break;
             }
             break;
@@ -527,7 +536,7 @@ function chooseLevel(x,y,imagens,sons,nivel,canvas){
             break;
     }
 
-    var nivel=new Level(imagens,sons,path,background,personagem,levelSound,hasStory,story);
+    var nivel=new Level(imagens,sons,path,background,personagem,levelSound,hasStory,story,rankPath);
     nivel.loadLevel();
     var elementos=nivel.run();
     return elementos;

@@ -4,13 +4,13 @@
 
 class Level {
 
-  constructor(imagens, sounds, path, background, character, levelSound,hasStory,story) {
+  constructor(imagens, sounds, path, background, character, levelSound,hasStory,story,rankPath) {
     this.charX;
     this.charY;
 
 
-
-    this.sprites
+    this.rankPath = rankPath;
+    this.sprites;
     this.assets;
     this.assetsAnimated;
     this.shooters;
@@ -102,7 +102,7 @@ class Level {
     levelSound.volume *= 0.3;
     sounds.gun.volume *= 0.1;
     levelSound.play();
-
+    var flag2 = true;
     var flag = 0;
     var d2 = new Date();
 
@@ -121,7 +121,13 @@ class Level {
         self.timeLevel = d2.getTime() - self.timeIni - self.timePaused;
 
         //menu de fim de nivel
-        camera.drawEndLevelMenu(ctx, self.timeLevel);
+        var finalRanking = self.getRankings();
+        camera.drawEndLevelMenu(ctx, self.timeLevel,finalRanking);
+        if(flag2 && char.getLives()){
+          var userName = prompt("What is your name");
+          self.setRankings(finalRanking,userName+" "+String(self.timeLevel/1000));
+          flag2 = false;
+        }
         id = requestAnimationFrame(render);
         flag++;
         elementosNivel = [];
@@ -166,7 +172,7 @@ class Level {
     }
 
     function clickLevelHandler(ev) {
-      gamestate = self.clickLevelHandlerOuter(ev, ctx, elementosNivel, imagens, gamestate);
+      gamestate = self.clickLevelHandlerOuter(ev, ctx, elementosNivel, imagens, gamestate,char);
     }
 
     function mouseMoveLevelHandler(ev) {
@@ -198,11 +204,12 @@ class Level {
 
 
 
-  clickLevelHandlerOuter(ev, ctx, elementos, imagens, gamestate) {
+  clickLevelHandlerOuter(ev, ctx, elementos, imagens, gamestate,char) {
     for (let i = 0; i < elementos.length; i++) {
       if (elementos[i].mouseOverBoundingBox(ev)) {
         switch (elementos[i].img.id) {
           case "sair":
+            char.setLives(0)
             return "end";
           case "reiniciar":
             return "restart";
@@ -349,6 +356,7 @@ class Level {
       }
 
       if (char.posY + char.height >= mapa.y + mapa.height) {
+        char.setLives(0)
         return "end";
       }
 
@@ -544,11 +552,54 @@ class Level {
 
   }
 
+  getRankings(){
+    var path = this.rankPath;
+    var text = localStorage.getItem(path)
+    //var text = this.read(path);
+    return text;
+  }
+
+  setRankings(stringRankings,newRanking){
+    var path = this.rankPath;
+    var text = new Array();
+    if(stringRankings != null){
+      text = stringRankings.split("<br>").filter(function(el) {return el.length != 0});
+      text.push(newRanking);
+      text.sort(function(a,b){return (a.split(" ")[1]-b.split(" ")[1])});
+    }else{
+      text.push(newRanking);
+    }
+    while(text.length > 5){
+      text.pop();
+    }
+    var allText = "";
+    text.forEach(element => {
+      allText += element+"<br>";
+    });
+    console.log(allText)
+    localStorage.setItem(path,allText);
+    /*var rawFile = new XMLHttpRequest();
+    
+    var allText = ""
+    rawFile.onreadystatechange = function () {
+      if (rawFile.readyState === 4) {
+        if (rawFile.status === 200 || rawFile.status === 0) {
+          for (let i = 1; i <= 10; i++) {
+            allText = allText + text[i-1]+"\n";
+      
+          }
+        }
+      }
+    }
+    rawFile.open('PUT', path, true);
+    rawFile.send(allText);*/
+  }
+
   //reads data from a file and returns it
   read(file_path) {
     var allText = ""
     var rawFile = new XMLHttpRequest();
-
+    
     rawFile.onreadystatechange = function () {
       if (rawFile.readyState === 4) {
         if (rawFile.status === 200 || rawFile.status === 0) {
