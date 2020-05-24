@@ -90,6 +90,13 @@ class Character {
 
     }
 
+    setLives(life){
+        this.lives = 0;
+    }
+    getLives(){
+        return this.lives;
+    }
+
     render(ctx) {
         var row=this.getRow();
         var frameWidth=this.img.naturalWidth/this.nFrames; 

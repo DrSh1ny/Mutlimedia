@@ -165,7 +165,7 @@ class Camera{
 
   }
 
-  drawEndLevelMenu(ctx, time){
+  drawEndLevelMenu(ctx, time,finalText){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //mudar a cor da canvas
     ctx.fillStyle='rgba(0, 0, 0, 0.60)';
@@ -176,9 +176,18 @@ class Camera{
     ctx.fillStyle = 'white';
 
     //mostrar o tempo que o user demorou no nivel
-    ctx.fillText("Tempo decorrido:",ctx.canvas.width/2, ctx.canvas.height/2)
+    ctx.fillText("Tempo decorrido:",ctx.canvas.width/2, ctx.canvas.height/2-100)
      
-    ctx.fillText(time/1000 + " segundos", ctx.canvas.width/2, ctx.canvas.height/2+40);
+    ctx.fillText(time/1000 + " segundos", ctx.canvas.width/2, ctx.canvas.height/2-60);
+    ctx.fillText("Ranking", ctx.canvas.width/2, ctx.canvas.height/2);
+    if(finalText != null){
+      var text = finalText.split("<br>").filter(function(el) {return el.length != 0});;
+      
+      for (let index = 0; index < text.length; index++) {
+        ctx.fillText(text[index],ctx.canvas.width/2, ctx.canvas.height/2+80+40*index)
+        
+      };
+    }
     ctx.fillText("Clique para continuar.", ctx.canvas.width/2, 800);
   }
 
